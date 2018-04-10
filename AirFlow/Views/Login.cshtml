@@ -1,0 +1,18 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+    Layout = "LoginBase.cshtml";
+}
+
+@* the fun starts here *@
+
+<h1>Login</h1>
+
+
+@if (Umbraco.MemberIsLoggedOn())
+{
+    { Html.RenderPartial("~/Views/Partial/Auth/_Logout"); }
+}
+else
+{
+    { Html.RenderPartial("~/Views/Partials/Auth/_Login.cshtml", new UserLoginViewModel()); }
+}

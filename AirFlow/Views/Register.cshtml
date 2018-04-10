@@ -1,0 +1,9 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+
+@{
+    Layout = "LoginBase.cshtml";
+}
+
+<h1>User registration</h1>
+
+@{Html.RenderPartial("~/Views/Partials/Auth/_Register.cshtml", new UserRegistrationViewModel());}

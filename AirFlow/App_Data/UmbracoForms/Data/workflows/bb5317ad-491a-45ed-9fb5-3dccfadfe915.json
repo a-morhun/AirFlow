@@ -1,0 +1,16 @@
+{
+  "id": "bb5317ad-491a-45ed-9fb5-3dccfadfe915",
+  "name": "Send template email to artem.morhun@valtech.com",
+  "form": "55b4a5ce-c383-4103-9a76-70ca2af3b493",
+  "active": true,
+  "workflowTypeId": "17c61629-d984-4e86-b43b-a8407b3efea9",
+  "executesOn": "Submitted",
+  "settings": {
+    "Email": "artem.morhun@valtech.com",
+    "SenderEmail": "",
+    "Subject": "The Form '{form_name}' was submitted",
+    "RazorViewFilePath": "Forms/Emails/Example-Template.cshtml",
+    "Attachment": ""
+  },
+  "sortOrder": 1
+}

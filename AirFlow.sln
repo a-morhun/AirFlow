@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirFlow", "AirFlow\AirFlow.csproj", "{2E5A082C-7768-4586-B95A-0DCFD889DBA0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirFlow.Tests", "AirFlow.Tests\AirFlow.Tests.csproj", "{83602D9C-DF34-43D7-9912-034F373AC58B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{2E5A082C-7768-4586-B95A-0DCFD889DBA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E5A082C-7768-4586-B95A-0DCFD889DBA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E5A082C-7768-4586-B95A-0DCFD889DBA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83602D9C-DF34-43D7-9912-034F373AC58B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83602D9C-DF34-43D7-9912-034F373AC58B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83602D9C-DF34-43D7-9912-034F373AC58B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83602D9C-DF34-43D7-9912-034F373AC58B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

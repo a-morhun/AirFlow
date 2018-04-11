@@ -9,7 +9,7 @@ namespace AirFlow.Models.Auth
         public string Email { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public string Username { get; set; }
 
         [Required]
         public string Password { get; set; }

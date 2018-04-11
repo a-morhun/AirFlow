@@ -5,14 +5,13 @@
 
 @* the fun starts here *@
 
-<h1>Login</h1>
-
-
 @if (Umbraco.MemberIsLoggedOn())
 {
-    { Html.RenderPartial("~/Views/Partial/Auth/_Logout"); }
+    <h1>Welcome, @User.Identity.Name</h1>
+    { Html.RenderPartial("~/Views/Partials/Auth/_Logout.cshtml"); }
 }
 else
 {
+    <h1>Login</h1>
     { Html.RenderPartial("~/Views/Partials/Auth/_Login.cshtml", new UserLoginViewModel()); }
 }

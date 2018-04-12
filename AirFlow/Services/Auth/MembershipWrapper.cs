@@ -1,7 +1,6 @@
-﻿using AirFlow.Services.Abstract;
-using System.Web.Security;
+﻿using System.Web.Security;
 
-namespace AirFlow.Services
+namespace AirFlow.Services.Auth
 {
     public class MembershipWrapper : IMembership
     {

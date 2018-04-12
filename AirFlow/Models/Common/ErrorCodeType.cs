@@ -3,6 +3,10 @@
     public enum ErrorCodeType
     {
         UnknownError,
-        MemberAlreadyExists
+
+        MemberAlreadyExists,
+        MemberNotFound,
+
+        ConfirmationTokenInOutDated
     }
 }

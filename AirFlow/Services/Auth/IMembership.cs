@@ -1,4 +1,4 @@
-﻿namespace AirFlow.Services.Abstract
+﻿namespace AirFlow.Services.Auth
 {
     public interface IMembership
     {

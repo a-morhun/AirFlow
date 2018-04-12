@@ -1,6 +1,5 @@
 ﻿using AirFlow.App_Start;
-using AirFlow.Services;
-using AirFlow.Services.Abstract;
+using AirFlow.Services.Auth;
 using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;

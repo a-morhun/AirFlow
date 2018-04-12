@@ -1,7 +1,6 @@
 ﻿using AirFlow.Models.Auth;
 using AirFlow.Models.Common;
-using AirFlow.Services;
-using AirFlow.Services.Abstract;
+using AirFlow.Services.Auth;
 using System.Web.Mvc;
 using Umbraco.Web.Mvc;
 
@@ -19,9 +18,9 @@ namespace AirFlow.Controllers
         /// </summary>
         public AuthController()
         {
-            _authService = new AuthService(Services.MemberService, Services.MemberTypeService);
             _formsAuthentication = new FormsAuthenticationWrapper();
             _membership = new MembershipWrapper();
+            _authService = new AuthService();
         }
 
         public AuthController(
@@ -64,37 +63,19 @@ namespace AirFlow.Controllers
             return Redirect("/login");
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [AllowAnonymous]
-        public ActionResult Register(UserRegistrationViewModel registrationRequest)
+        [HttpGet]
+        // TODO: Deal with routes
+        [Route("/registration/confirm")]
+        public ActionResult ConfirmEmail(string token)
         {
-            if (!ModelState.IsValid)
+            Result confirmationResult = _authService.ConfirmEmail(token);
+
+            if (confirmationResult.IsSuccess)
             {
-                return CurrentUmbracoPage();
+                return Content("Email confirmed");
             }
 
-            Result result = _authService.Register(registrationRequest);
-
-            if (result.IsSuccess)
-            {
-                var registrationResult = result as RegistrationResult;
-
-                if (registrationResult.ShouldAutoLogin)
-                {
-                    SetAuthCookie(registrationRequest.Username);
-                    return Redirect("/");
-                }
-
-                return Redirect("/login");
-            }
-
-            return Content(result.ErrorMessage);
-        }
-
-        private void SetAuthCookie(string username)
-        {
-            _formsAuthentication.SetAuthCookie(username, createPersistentCookie: false);
+            return Content("Error:" + confirmationResult.ErrorMessage);
         }
     }
 }

@@ -1,30 +1,28 @@
-﻿using AirFlow.Services.Abstract;
-using AirFlow.Services;
+﻿using AirFlow.Services.Auth;
 using AirFlow.Models.Common;
 using AirFlow.Models.Auth;
 using NUnit.Framework;
 using NSubstitute;
 using System;
+using AirFlow.Models.Account;
+using AirFlow.Services.Account;
 using Umbraco.Core.Services;
 using Umbraco.Core.Models;
 
 namespace AirFlow.Tests.Services
 {
     [TestFixture]
-    public class AuthServiceTests
+    public class AccountServiceTests
     {
         private IMemberService _memberService;
-        private IMemberTypeService _memberTypeService;
         private IMember _member;
-        private IAuthService _authService;
+        private IAccountService _accountService;
 
         [OneTimeSetUp]
         public void SetUpOnce()
         {
             _memberService = Substitute.For<IMemberService>();
-            _memberTypeService = Substitute.For<IMemberTypeService>();
-
-            _authService = new AuthService(_memberService, _memberTypeService);
+            _accountService = new AccountService(_memberService);
         }
 
         [SetUp]
@@ -39,17 +37,17 @@ namespace AirFlow.Tests.Services
         public void Register_ValtechUkUser_RegisteredAndShouldAutologinResultReturned()
         {
             // Arrange
-            var user = new UserRegistrationViewModel
+            var user = new UserToRegister(new UserRegistrationViewModel
             {
                 Email = $"some@{Common.ValtechUkDomain}",
                 Username = "username",
                 Password = "password"
-            };
+            });
             ArrangeNewUserCondition();
             _memberService.CreateMemberWithIdentity(user.Username, user.Email, user.Username, Common.DefaultMemberType).Returns(_member);
 
             // Act
-            RegistrationResult result = _authService.Register(user) as RegistrationResult;
+            RegistrationResult result = _accountService.Register(user) as RegistrationResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -61,17 +59,17 @@ namespace AirFlow.Tests.Services
         public void Register_OtherUser_RegisteredAndShouldNotAutologinResultReturned()
         {
             // Arrange
-            var user = new UserRegistrationViewModel
+            var user = new UserToRegister(new UserRegistrationViewModel
             {
                 Email = "some@other.com",
                 Username = "username",
                 Password = "password"
-            };
+            });
             ArrangeNewUserCondition();
             _memberService.CreateMemberWithIdentity(user.Username, user.Email, user.Username, Common.DefaultMemberType).Returns(_member);
 
             // Act
-            RegistrationResult result = _authService.Register(user) as RegistrationResult;
+            RegistrationResult result = _accountService.Register(user) as RegistrationResult;
 
             // Assert
             Assert.IsNotNull(result);
@@ -97,7 +95,7 @@ namespace AirFlow.Tests.Services
                 .Returns(x => { throw new Exception(); });
 
             // Act
-            Result result = _authService.Register(new UserRegistrationViewModel() { Email = string.Empty }) as Result;
+            Result result = _accountService.Register(new UserToRegister(new UserRegistrationViewModel() { Email = string.Empty })) as Result;
 
             // Assert
             Assert.IsNotNull(result);
@@ -112,7 +110,7 @@ namespace AirFlow.Tests.Services
             _memberService.Exists(Arg.Any<string>()).Returns(true);
 
             // Act
-            Result result = _authService.Register(new UserRegistrationViewModel() { Email = string.Empty });
+            Result result = _accountService.Register(new UserToRegister(new UserRegistrationViewModel() { Email = string.Empty }));
 
             // Assert
             Assert.IsNotNull(result);
@@ -128,7 +126,7 @@ namespace AirFlow.Tests.Services
             _memberService.GetByEmail(Arg.Any<string>()).Returns(_member);
 
             // Act
-            Result result = _authService.Register(new UserRegistrationViewModel() { Email = string.Empty });
+            Result result = _accountService.Register(new UserToRegister(new UserRegistrationViewModel() { Email = string.Empty }));
 
             // Assert
             Assert.IsNotNull(result);

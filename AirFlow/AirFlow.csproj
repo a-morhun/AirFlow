@@ -416,6 +416,7 @@
     <Compile Include="Services\Abstract\IAuthService.cs" />
     <Compile Include="Services\Abstract\IFormsAuthentication.cs" />
     <Compile Include="Services\Abstract\IMembership.cs" />
+    <Compile Include="Services\Abstract\ITokenGenerator.cs" />
     <Compile Include="Services\AuthService.cs" />
     <Compile Include="Services\FormsAuthenticationWrapper.cs" />
     <Compile Include="Services\MembershipWrapper.cs" />
@@ -432,6 +433,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AirFlow.Data\AirFlow.Data.csproj">
+      <Project>{83990f61-bef1-4b4a-b593-5bfdeda25604}</Project>
+      <Name>AirFlow.Data</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

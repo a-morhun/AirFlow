@@ -3,7 +3,7 @@ using PetaPoco;
 
 namespace AirFlow.Data.Models
 {
-    [TableName("AirFlowMemberSecurity")]
+    [TableName("airFlowMemberRegistration")]
     public class AirFlowUserSecurity
     {
         [Column(name: "nodeId")]
@@ -18,13 +18,7 @@ namespace AirFlow.Data.Models
         [Column(name: "confirmation_token_expiration")]
         public DateTime ConfirmationExpirationDate { get; set; }
 
-        [Column(name: "login_type")]
-        public int LoginType { get; set; }
-
-        [Column(name: "login_token")]
-        public string LoginToken { get; set; }
-
-        [Column(name: "login_token_expiration")]
-        public DateTime? LoginTokenExpirationDate { get; set; }
+        [Column(name: "confirmation_date")]
+        public DateTime? ConfirmationDate { get; set; }
     }
 }

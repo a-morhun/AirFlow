@@ -38,7 +38,7 @@ namespace AirFlow.Tests.Controllers
             request.Cookies.Returns(new HttpCookieCollection());
             httpContext.Request.Returns(request);
 
-            _accountController = new AccountController(_accountService, _formsAuthentication, _membership);
+            _accountController = new AccountController(_accountService, _formsAuthentication);
             _accountController.ControllerContext = new ControllerContext(httpContext, new RouteData(), _accountController);
         }
 

@@ -6,6 +6,9 @@
 
         MemberAlreadyExists,
         MemberNotFound,
+        MemberHasNotConfirmedEmail,
+        MemberHasAlreadyConfirmedEmail,
+        MemberProvidedInvalidLoginCredentials,
 
         ConfirmationTokenInOutDated
     }

@@ -1,4 +1,4 @@
-﻿using AirFlow.Data.Abstract;
+﻿using AirFlow.Data;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
 
@@ -25,14 +25,6 @@ namespace AirFlow.Models.Account
 
         public virtual IMember Register(UserToRegister user)
         {
-            IMember registeredUser = CreateMember(user);
-            SaveSecurityInfo(registeredUser.Id, out string _);
-
-            return registeredUser;
-        }
-
-        protected IMember CreateMember(UserToRegister user)
-        {
             IMember registeredUser = MemberService.CreateMemberWithIdentity(user.Username, user.Email, user.Name, DetermineMemberType().Alias);
             SetMemberApproval(registeredUser);
             MemberService.SavePassword(registeredUser, user.Password);
@@ -42,12 +34,7 @@ namespace AirFlow.Models.Account
             return registeredUser;
         }
 
-        protected abstract void SaveSecurityInfo(int userId, out string token);
-
-        protected virtual void SetMemberApproval(IMember member)
-        {
-            member.IsApproved = true;
-        }
+        protected abstract void SetMemberApproval(IMember member);
 
         private IMemberType DetermineMemberType()
         {

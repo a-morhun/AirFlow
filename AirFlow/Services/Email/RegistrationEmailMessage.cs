@@ -9,7 +9,7 @@ namespace AirFlow.Services.Email
         private string bodyTemplate =
             "<h4 style=\"text-align: center;\">Thank you for your registrastion in <strong>AirFlow</strong>!</h4>" +
             "<p>Please, confirm you email address using following link:</p>" +
-            "<p style=\"text-align: center;\"><a href=\"http://localhost:51356/registration/confirm?token={0}\">{1}</a></p>" +
+            "<p style=\"text-align: center;\"><a href=\"http://localhost:51356/auth/registration/confirm?token={0}\">{1}</a></p>" +
             "<p><strong>Attention! The link will have been expired by {2}</strong></p>" +
             "<p>Do not respond to this email - it was auto-generated. If you have received it mistakely just ignore it. </p>";
 

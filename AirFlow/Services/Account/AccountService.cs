@@ -1,6 +1,8 @@
 ﻿using AirFlow.Models.Auth;
 using AirFlow.Models.Common;
 using AirFlow.Models.Account;
+using AirFlow.ServiceContainers;
+using Autofac;
 using System;
 using Umbraco.Core.Services;
 using Umbraco.Core.Models;
@@ -25,7 +27,7 @@ namespace AirFlow.Services.Account
 
             try
             {
-                IUserRegistration userRegistration = UserRegistrationFactory.GetUserRegistrationStrategy(user.Type);
+                IUserRegistration userRegistration = AirFlowServiceContainer.Container.ResolveKeyed<IUserRegistration>(user.Type);
                 IMember registeredUser = userRegistration.Register(user);
                 return new RegistrationResult(shouldAutoLogin: registeredUser.IsApproved);
             }

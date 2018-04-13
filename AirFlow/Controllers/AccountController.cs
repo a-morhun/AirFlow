@@ -13,19 +13,7 @@ namespace AirFlow.Controllers
         private readonly IAccountService _accountServicee;
         private readonly IFormsAuthentication _formsAuthentication;
 
-        /// <summary>
-        /// TODO: remove when an issue with IOC configuration will be fixed
-        /// </summary>
-        public AccountController()
-        {
-            _accountServicee = new AccountService(Services.MemberService);
-            _formsAuthentication = new FormsAuthenticationWrapper();
-        }
-
-        public AccountController(
-            IAccountService accountService,
-            IFormsAuthentication formsAuthentication,
-            IMembership membership)
+        public AccountController(IAccountService accountService, IFormsAuthentication formsAuthentication)
         {
             _accountServicee = accountService;
             _formsAuthentication = formsAuthentication;

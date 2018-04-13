@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Net.Mail;
-using AirFlow.Data.Abstract;
+using AirFlow.Data;
 using AirFlow.Data.Models;
 using AirFlow.Services.Auth;
 using AirFlow.Services.Email;
@@ -29,15 +29,15 @@ namespace AirFlow.Models.Account
 
         public override IMember Register(UserToRegister user)
         {
-            IMember registeredUser = CreateMember(user);
+            IMember registeredUser = base.Register(user);
 
-            SaveSecurityInfo(registeredUser.Id, out string token);
+            SaveRegistrationConfirmation(registeredUser.Id, out string token);
             SendConfirmationEmail(token, registeredUser.Email);
 
             return registeredUser;
         }
 
-        protected override void SaveSecurityInfo(int userId, out string token)
+        private void SaveRegistrationConfirmation(int userId, out string token)
         {
             token = _tokenGenerator.Generate();
 

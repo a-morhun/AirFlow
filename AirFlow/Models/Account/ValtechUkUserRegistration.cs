@@ -1,5 +1,5 @@
-﻿using AirFlow.Data.Abstract;
-using AirFlow.Data.Models;
+﻿using AirFlow.Data;
+using Umbraco.Core.Models;
 using Umbraco.Core.Services;
 
 namespace AirFlow.Models.Account
@@ -11,15 +11,9 @@ namespace AirFlow.Models.Account
         {
         }
 
-        protected override void SaveSecurityInfo(int userId, out string token)
+        protected override void SetMemberApproval(IMember member)
         {
-            token = null;
-            var airflowMember = new AirFlowUserSecurity()
-            {
-                UserId = userId,
-            };
-
-            Repository.Save(airflowMember);
+            member.IsApproved = true;
         }
     }
 }

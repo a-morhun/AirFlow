@@ -1,7 +1,6 @@
 ﻿using System;
 using AirFlow.Data;
 using AirFlow.Data.Models;
-using AirFlow.Models.Account;
 using AirFlow.Models.Auth;
 using AirFlow.Models.Common;
 
@@ -27,20 +26,17 @@ namespace AirFlow.Services.Auth
                 return new LoginResult(ErrorCodeType.MemberNotFound);
             }
 
-            if (user.Type == UserType.Regular)
+            if (!_userSecurityRepository.IsEmailConfirmed(user.Email))
             {
-                if (!_userSecurityRepository.IsEmailConfirmed(user.Email))
-                {
-                    return new LoginResult(ErrorCodeType.MemberHasNotConfirmedEmail);
-                }
+                return new LoginResult(ErrorCodeType.MemberHasNotConfirmedEmail);
             }
 
-            if (_membership.ValidateUser(username, user.Password))
+            if (!_membership.ValidateUser(username, user.Password))
             {
-                return new LoginResult(username);
+                return new LoginResult(ErrorCodeType.MemberProvidedInvalidLoginCredentials);
             }
 
-            return new LoginResult(ErrorCodeType.MemberProvidedInvalidLoginCredentials);
+            return new LoginResult(username);
         }
 
         public Result ConfirmEmail(string token)

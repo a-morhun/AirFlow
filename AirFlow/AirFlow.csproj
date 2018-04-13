@@ -613,8 +613,6 @@
     <Compile Include="Controllers\AuthController.cs" />
     <Compile Include="Models\Account\IUserRegistration.cs" />
     <Compile Include="Models\Account\UserRegistration.cs" />
-    <Compile Include="Models\Account\ValtechUkUserRegistration.cs" />
-    <Compile Include="Models\Account\RegularUserRegistration.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

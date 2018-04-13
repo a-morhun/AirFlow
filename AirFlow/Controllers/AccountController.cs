@@ -33,14 +33,6 @@ namespace AirFlow.Controllers
 
             if (result.IsSuccess)
             {
-                var registrationResult = result as RegistrationResult;
-
-                if (registrationResult.ShouldAutoLogin)
-                {
-                    _formsAuthentication.SetAuthCookie(registrationRequest.Username, createPersistentCookie: false);
-                    return Redirect("/");
-                }
-
                 return Redirect("/login");
             }
 

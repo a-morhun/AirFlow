@@ -58,9 +58,7 @@ namespace AirFlow
             builder.RegisterType<MembershipWrapper>().As<IMembership>();
             builder.RegisterType<TokenGenerator>().As<ITokenGenerator>();
             builder.RegisterType<SmtpEmailSender>().As<IEmailSender>();
-
-            builder.RegisterType<ValtechUkUserRegistration>().Keyed<IUserRegistration>(UserType.ValtechUk);
-            builder.RegisterType<RegularUserRegistration>().Keyed<IUserRegistration>(UserType.Regular);
+            builder.RegisterType<UserRegistration>().As<IUserRegistration>();
         }
 
         private static void RegisterUmbracoServices(ContainerBuilder builder)

@@ -1,0 +1,38 @@
+﻿@inherits UmbracoTemplatePage
+@{
+    ViewBag.Title = "AirFlow";
+    Layout = null;
+}
+@* the fun starts here *@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+
+    <header>
+        <div>Air flow management portal</div>
+    </header>
+    <nav class="nav-auth">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a id="nav-link-login" class="nav-link" href="/login">Login</a>
+            </li>
+            <li class="nav-item">
+                <a id="nav-link-signup" class="nav-link" href="/register">Sign Up!</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="content-auth-body">
+        @RenderBody()
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -5,6 +5,8 @@
 
 @* the fun starts here *@
 
-<h1>Welcome to AirFlow!</h1>
+<h1>Welcome to AirFlow, @User.Identity.Name !</h1>
+
+@{ Html.RenderPartial("~/Views/Partials/Auth/_Logout.cshtml"); }
 
 @RenderBody()

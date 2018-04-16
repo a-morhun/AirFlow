@@ -1,8 +1,8 @@
 ﻿using AirFlow.App_Start;
 using System;
 using System.Web.Optimization;
-using Umbraco.Web;
 using System.Web.Routing;
+using Umbraco.Web;
 
 namespace AirFlow
 {
@@ -12,7 +12,7 @@ namespace AirFlow
         {
             base.OnApplicationStarted(sender, e);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);  
             AutofacConfig.Configure();
         }
     }

@@ -1,0 +1,12 @@
+﻿@model ResultViewModel
+    
+<div class="alert alert-@(Model.IsSuccess ? "success" : "danger")" role="alert">
+    @Model.Message
+</div>
+
+@if (@Model.IsSuccess)
+{
+    <script type="text/javascript">
+        document.getElementById("registration-form").reset();
+    </script>
+}

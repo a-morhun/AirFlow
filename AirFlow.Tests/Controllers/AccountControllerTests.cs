@@ -19,7 +19,7 @@ namespace AirFlow.Tests.Controllers
         private IAccountService _accountService;
         private IFormsAuthentication _formsAuthentication;
         private IMembership _membership;
-        private AccountController _accountController;
+        private AccountSurfaceController _accountController;
 
         private string responseTypeMismatchFormat = "response is not type of {0} or missing at all";
         private string redirectUrlMismatchFormat = "Url for redirect should be {0}";
@@ -38,7 +38,7 @@ namespace AirFlow.Tests.Controllers
             request.Cookies.Returns(new HttpCookieCollection());
             httpContext.Request.Returns(request);
 
-            _accountController = new AccountController(_accountService, _formsAuthentication);
+            _accountController = new AccountSurfaceController(_accountService, _formsAuthentication);
             _accountController.ControllerContext = new ControllerContext(httpContext, new RouteData(), _accountController);
         }
 

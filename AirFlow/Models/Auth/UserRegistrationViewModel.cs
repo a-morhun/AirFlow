@@ -14,7 +14,13 @@ namespace AirFlow.Models.Auth
         [Required]
         public string Name { get; set; }
 
-        [Required]
+        [Required]        
+        [MinLength(10)]
         public string Password { get; set; }
+
+        [Required]
+        [Display(Name = "Confirm password")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
     }
 }

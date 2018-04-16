@@ -1,9 +1,14 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+﻿@inherits UmbracoTemplatePage
 
 @{
-    Layout = "LoginBase.cshtml";
+    Layout = "AuthAndAccountBase.cshtml";
 }
 
-<h1>User registration</h1>
-
 @{Html.RenderPartial("~/Views/Partials/Account/_Register.cshtml", new UserRegistrationViewModel());}
+
+@section scripts
+{
+    <script type="text/javascript">
+        setLinkAsActive('nav-link-signup');
+    </script>
+}

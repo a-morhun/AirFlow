@@ -43,14 +43,14 @@ namespace AirFlow.Services.Auth
         {
             ConfirmationToken confirmationInfo = _userSecurityRepository.GetByConfirmationToken(token);
 
+            if (confirmationInfo == null)
+            {
+                return new Result(ErrorCodeType.MemberNotFound);
+            }
+
             if (confirmationInfo.AlreadyConfirmed)
             {
                 return new Result(ErrorCodeType.MemberHasAlreadyConfirmedEmail);
-            }
-
-            if (confirmationInfo.ExpirationDate == DateTime.MinValue)
-            {
-                return new Result(ErrorCodeType.MemberNotFound);
             }
 
             if (DateTime.UtcNow >= confirmationInfo.ExpirationDate)

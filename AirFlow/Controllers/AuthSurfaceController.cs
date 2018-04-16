@@ -1,18 +1,20 @@
-﻿using AirFlow.Models.Auth;
+﻿using System.Threading;
+using AirFlow.Models.Auth;
 using AirFlow.Models.Common;
 using AirFlow.Services.Auth;
 using System.Web.Mvc;
+using Umbraco.Web;
 using Umbraco.Web.Mvc;
 
 namespace AirFlow.Controllers
 {
-    [RoutePrefix("auth")]
-    public class AuthController : SurfaceController
+    public class AuthSurfaceController : SurfaceController
     {
         private readonly IAuthService _authService;
         private readonly IFormsAuthentication _formsAuthentication;
+        private const string PartialErrorViewPath = "/Views/Partials/Auth/";
 
-        public AuthController(
+        public AuthSurfaceController(
             IAuthService authService,
             IFormsAuthentication formsAuthentication)
         {
@@ -21,14 +23,13 @@ namespace AirFlow.Controllers
         }
 
         [HttpPost]
-        [Route("login")]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
         public ActionResult Login(UserLoginViewModel loginRequest)
         {
             if (!ModelState.IsValid)
             {
-                return CurrentUmbracoPage();
+                return PartialView($"{PartialErrorViewPath}_LoginError.cshtml", "Please, verify input data");
             }
 
             LoginResult loginResult = _authService.Login(new UserToLogin(loginRequest));
@@ -36,10 +37,10 @@ namespace AirFlow.Controllers
             if (loginResult.IsSuccess)
             {
                 _formsAuthentication.SetAuthCookie(loginResult.Username, createPersistentCookie: true);
-                return Redirect("/");
+                return JavaScript("window.location = '/'");
             }
 
-            return Content(loginResult.ErrorCode.Value.ToString());
+            return PartialView($"{PartialErrorViewPath}_LoginError.cshtml", loginResult.ErrorCode.Value.ToString());
         }
 
         [HttpPost]
@@ -48,21 +49,25 @@ namespace AirFlow.Controllers
         public ActionResult Logout()
         {
             _formsAuthentication.SignOut();
-            return Redirect("/auth/login");
+            return Redirect("/");
         }
 
         [HttpGet]
-        [Route("registration/confirm")]
-        public ActionResult ConfirmEmail(string token = null)
+        public ActionResult ConfirmEmail(string token)
         {
-            Result confirmationResult = _authService.ConfirmEmail(token);
-
-            if (confirmationResult.IsSuccess)
+            if (string.IsNullOrEmpty(token))
             {
-                return Content("Email confirmed");
+                return View("/Views/ConfirmEmailFailure.cshtml");
             }
 
-            return Content("Error:" + confirmationResult.ErrorMessage);
+            Result confirmationResult = _authService.ConfirmEmail(token);
+
+            if (!confirmationResult.IsSuccess)
+            {
+                return View("/Views/ConfirmEmailFailure.cshtml");
+            }
+
+            return View("/Views/ConfirmEmailSuccess.cshtml");
         }
     }
 }

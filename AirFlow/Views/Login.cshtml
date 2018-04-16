@@ -1,6 +1,6 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+﻿@inherits UmbracoTemplatePage
 @{
-    Layout = "LoginBase.cshtml";
+    Layout = "AuthAndAccountBase.cshtml";
 }
 
 @* the fun starts here *@
@@ -12,6 +12,12 @@
 }
 else
 {
-    <h1>Login</h1>
     { Html.RenderPartial("~/Views/Partials/Auth/_Login.cshtml", new UserLoginViewModel()); }
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+        setLinkAsActive('nav-link-login');
+    </script>
 }

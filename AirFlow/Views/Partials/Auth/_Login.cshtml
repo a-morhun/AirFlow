@@ -1,17 +1,38 @@
 ﻿@model UserLoginViewModel
 
-
-@using (Html.BeginUmbracoForm("Login", "Auth", FormMethod.Post))
-{
-    @Html.AntiForgeryToken()
-    <div class="form-group">
-        @Html.LabelFor(m => m.Email)
-        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Password)
-        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-    </div>
-
-    <button type="submit" class="btn btn-info">Login</button>
+@{
+    var ajaxOptions = new AjaxOptions
+    {
+        HttpMethod = "POST",
+        UpdateTargetId = "ajax-result",
+        InsertionMode = InsertionMode.Replace,
+        OnBegin = "$('#ajax-result').html('<img src=\"" + Url.Content("~/Images/ajax-loader.gif") + "\" />')"
+    };
 }
+
+<div class="login-form">
+    @using (Ajax.BeginForm("Login", "AuthSurface", ajaxOptions))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group row">
+            @Html.LabelFor(m => m.Email, new { @class = "col-sm-3 col-form-label" })
+            <div class="col-sm-7">
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group row">
+            @Html.LabelFor(m => m.Password, new { @class = "col-sm-3 col-form-label" })
+            <div class="col-sm-7">
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="controls">
+            <button type="submit" class="btn btn-info">Login</button>
+        </div>
+    }
+
+    <div id="ajax-result"></div>
+
+</div>

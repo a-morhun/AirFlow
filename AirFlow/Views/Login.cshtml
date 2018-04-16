@@ -1,18 +1,23 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+﻿@inherits UmbracoTemplatePage
 @{
-    Layout = "LoginBase.cshtml";
+    Layout = "AuthAndAccountBase.cshtml";
 }
 
 @* the fun starts here *@
 
-<h1>Login</h1>
-
-
 @if (Umbraco.MemberIsLoggedOn())
 {
-    { Html.RenderPartial("~/Views/Partial/Auth/_Logout"); }
+    <h1>Welcome, @User.Identity.Name</h1>
+    { Html.RenderPartial("~/Views/Partials/Auth/_Logout.cshtml"); }
 }
 else
 {
     { Html.RenderPartial("~/Views/Partials/Auth/_Login.cshtml", new UserLoginViewModel()); }
+}
+
+@section scripts
+{
+    <script type="text/javascript">
+        setLinkAsActive('nav-link-login');
+    </script>
 }

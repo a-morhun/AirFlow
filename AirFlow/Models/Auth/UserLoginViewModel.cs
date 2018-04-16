@@ -5,7 +5,6 @@ namespace AirFlow.Models.Auth
     public class UserLoginViewModel
     {
         [Required]
-        [EmailAddress]
         public string Email { get; set; }
 
         [Required]

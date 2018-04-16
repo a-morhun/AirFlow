@@ -5,6 +5,12 @@ VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirFlow", "AirFlow\AirFlow.csproj", "{2E5A082C-7768-4586-B95A-0DCFD889DBA0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirFlow.Tests", "AirFlow.Tests\AirFlow.Tests.csproj", "{83602D9C-DF34-43D7-9912-034F373AC58B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirFlow.Data", "AirFlow.Data\AirFlow.Data.csproj", "{83990F61-BEF1-4B4A-B593-5BFDEDA25604}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "AirFlow.Db", "AirFlow.Db\AirFlow.Db.sqlproj", "{DB370867-BC2D-40FC-991C-6343E5DCBB9C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,20 @@ Global
 		{2E5A082C-7768-4586-B95A-0DCFD889DBA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E5A082C-7768-4586-B95A-0DCFD889DBA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E5A082C-7768-4586-B95A-0DCFD889DBA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83602D9C-DF34-43D7-9912-034F373AC58B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83602D9C-DF34-43D7-9912-034F373AC58B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83602D9C-DF34-43D7-9912-034F373AC58B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83602D9C-DF34-43D7-9912-034F373AC58B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83990F61-BEF1-4B4A-B593-5BFDEDA25604}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83990F61-BEF1-4B4A-B593-5BFDEDA25604}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83990F61-BEF1-4B4A-B593-5BFDEDA25604}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83990F61-BEF1-4B4A-B593-5BFDEDA25604}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB370867-BC2D-40FC-991C-6343E5DCBB9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB370867-BC2D-40FC-991C-6343E5DCBB9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB370867-BC2D-40FC-991C-6343E5DCBB9C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{DB370867-BC2D-40FC-991C-6343E5DCBB9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB370867-BC2D-40FC-991C-6343E5DCBB9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB370867-BC2D-40FC-991C-6343E5DCBB9C}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

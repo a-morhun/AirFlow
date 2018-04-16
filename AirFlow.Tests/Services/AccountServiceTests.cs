@@ -17,12 +17,14 @@ namespace AirFlow.Tests.Services
         private IMemberService _memberService;
         private IMember _member;
         private IAccountService _accountService;
+        private IUserRegistration _userRegistration;
 
         [OneTimeSetUp]
         public void SetUpOnce()
         {
             _memberService = Substitute.For<IMemberService>();
-            _accountService = new AccountService(_memberService);
+            _userRegistration = Substitute.For<IUserRegistration>();
+            _accountService = new AccountService(_memberService, _userRegistration);
         }
 
         [SetUp]

@@ -90,18 +90,29 @@
     <Reference Include="Umbraco.Core">
       <HintPath>..\AirFlow\bin\Umbraco.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Umbraco.Tests, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Our.Umbraco.Community.Tests.7.10.0\lib\Umbraco.Tests.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common.cs" />
-    <Compile Include="Controllers\AccountControllerTests.cs" />
+    <Compile Include="Controllers\AuthSurfaceControllerTests.cs" />
+    <Compile Include="Controllers\AccountSurfaceControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\AccountServiceTests.cs" />
+    <Compile Include="Services\Account\AccountServiceTests.cs" />
+    <Compile Include="Services\Account\UserRegistrationTests.cs" />
+    <Compile Include="Services\Auth\AuthServiceTests.cs" />
+    <Compile Include="Services\Auth\TokenGeneratorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AirFlow.Data\AirFlow.Data.csproj">
+      <Project>{83990F61-BEF1-4B4A-B593-5BFDEDA25604}</Project>
+      <Name>AirFlow.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AirFlow\AirFlow.csproj">
       <Project>{2e5a082c-7768-4586-b95a-0dcfd889dba0}</Project>
       <Name>AirFlow</Name>

@@ -1,6 +1,7 @@
-﻿using Umbraco.Core.Models;
+﻿using AirFlow.Models.Account;
+using Umbraco.Core.Models;
 
-namespace AirFlow.Models.Account
+namespace AirFlow.Services.Account
 {
     public interface IUserRegistration
     {

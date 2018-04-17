@@ -26,14 +26,14 @@ namespace AirFlow.Services.Auth
                 return new LoginResult(ErrorCodeType.MemberNotFound);
             }
 
-            if (!_userSecurityRepository.IsEmailConfirmed(user.Email))
-            {
-                return new LoginResult(ErrorCodeType.MemberHasNotConfirmedEmail);
-            }
-
             if (!_membership.ValidateUser(username, user.Password))
             {
                 return new LoginResult(ErrorCodeType.MemberProvidedInvalidLoginCredentials);
+            }
+
+            if (!_userSecurityRepository.IsEmailConfirmed(user.Email))
+            {
+                return new LoginResult(ErrorCodeType.MemberHasNotConfirmedEmail);
             }
 
             return new LoginResult(username);
@@ -67,7 +67,7 @@ namespace AirFlow.Services.Auth
                 return new Result(ErrorCodeType.UnknownError, e.Message);
             }
 
-            return new Result();
+            return Result.Success;
         }
     }
 }

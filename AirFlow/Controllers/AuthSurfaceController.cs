@@ -1,18 +1,19 @@
-﻿using System.Threading;
-using AirFlow.Models.Auth;
+﻿using AirFlow.Models.Auth;
 using AirFlow.Models.Common;
 using AirFlow.Services.Auth;
 using System.Web.Mvc;
-using Umbraco.Web;
 using Umbraco.Web.Mvc;
 
 namespace AirFlow.Controllers
 {
     public class AuthSurfaceController : SurfaceController
     {
+        private const string PartialViewLoginError = "/Views/Partials/Auth/_LoginError.cshtml";
+        private const string ViewConfirmationSuccess = "/Views/ConfirmEmailSuccess.cshtml";
+        private const string ViewConfirmationFailure = "/Views/ConfirmEmailFailure.cshtml";
+
         private readonly IAuthService _authService;
         private readonly IFormsAuthentication _formsAuthentication;
-        private const string PartialErrorViewPath = "/Views/Partials/Auth/";
 
         public AuthSurfaceController(
             IAuthService authService,
@@ -29,18 +30,18 @@ namespace AirFlow.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return PartialView($"{PartialErrorViewPath}_LoginError.cshtml", "Please, verify input data");
+                return PartialView(PartialViewLoginError, new ResultViewModel("Please, verify input data", isSuccess: false));
             }
 
             LoginResult loginResult = _authService.Login(new UserToLogin(loginRequest));
 
-            if (loginResult.IsSuccess)
+            if (loginResult.IsFailure)
             {
-                _formsAuthentication.SetAuthCookie(loginResult.Username, createPersistentCookie: true);
-                return JavaScript("window.location = '/'");
+                return PartialView(PartialViewLoginError, new ResultViewModel(loginResult.ErrorCode.Value.ToString(), isSuccess: false));
             }
 
-            return PartialView($"{PartialErrorViewPath}_LoginError.cshtml", loginResult.ErrorCode.Value.ToString());
+            _formsAuthentication.SetAuthCookie(loginResult.Username, createPersistentCookie: true);
+            return JavaScript("window.location = '/'");
         }
 
         [HttpPost]
@@ -57,17 +58,17 @@ namespace AirFlow.Controllers
         {
             if (string.IsNullOrEmpty(token))
             {
-                return View("/Views/ConfirmEmailFailure.cshtml");
+                return View(ViewConfirmationFailure);
             }
 
             Result confirmationResult = _authService.ConfirmEmail(token);
 
-            if (!confirmationResult.IsSuccess)
+            if (confirmationResult.IsFailure)
             {
-                return View("/Views/ConfirmEmailFailure.cshtml");
+                return View(ViewConfirmationFailure);
             }
 
-            return View("/Views/ConfirmEmailSuccess.cshtml");
+            return View(ViewConfirmationSuccess);
         }
     }
 }

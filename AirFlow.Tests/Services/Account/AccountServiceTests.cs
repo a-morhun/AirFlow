@@ -9,7 +9,7 @@ using AirFlow.Services.Account;
 using Umbraco.Core.Services;
 using Umbraco.Core.Models;
 
-namespace AirFlow.Tests.Services
+namespace AirFlow.Tests.Account.Services
 {
     [TestFixture]
     public class AccountServiceTests
@@ -49,12 +49,12 @@ namespace AirFlow.Tests.Services
             _memberService.CreateMemberWithIdentity(user.Username, user.Email, user.Username, Common.DefaultMemberType).Returns(_member);
 
             // Act
-            RegistrationResult result = _accountService.Register(user) as RegistrationResult;
+            Result result = _accountService.Register(user) as Result;
 
             // Assert
             Assert.IsNotNull(result);
             AssertMemberService(user.Password);
-            Assert.IsTrue(result.ShouldAutoLogin);
+            Assert.IsTrue(result.IsSuccess);
         }
 
         [Test]
@@ -71,12 +71,12 @@ namespace AirFlow.Tests.Services
             _memberService.CreateMemberWithIdentity(user.Username, user.Email, user.Username, Common.DefaultMemberType).Returns(_member);
 
             // Act
-            RegistrationResult result = _accountService.Register(user) as RegistrationResult;
+            Result result = _accountService.Register(user) as Result;
 
             // Assert
             Assert.IsNotNull(result);
             AssertMemberService(user.Password);
-            Assert.IsFalse(result.ShouldAutoLogin);
+            Assert.IsFalse(result.IsSuccess);
             Assert.IsFalse(_member.IsApproved);
         }
 

@@ -1,24 +1,21 @@
-﻿using System.Web.Mvc;
-using AirFlow.Models.Account;
+﻿using AirFlow.Models.Account;
 using AirFlow.Models.Auth;
 using AirFlow.Models.Common;
 using AirFlow.Services.Account;
-using AirFlow.Services.Auth;
+using System.Web.Mvc;
 using Umbraco.Web.Mvc;
 
 namespace AirFlow.Controllers
 {
     public class AccountSurfaceController : SurfaceController
     {
-        private readonly IAccountService _accountServicee;
-        private readonly IFormsAuthentication _formsAuthentication;
         private const string PartialMessageViewPath = "/Views/Partials/Account/_RegistrationResult.cshtml";
 
+        private readonly IAccountService _accountService;
 
-        public AccountSurfaceController(IAccountService accountService, IFormsAuthentication formsAuthentication)
+        public AccountSurfaceController(IAccountService accountService)
         {
-            _accountServicee = accountService;
-            _formsAuthentication = formsAuthentication;
+            _accountService = accountService;
         }
 
         [HttpPost]
@@ -31,9 +28,9 @@ namespace AirFlow.Controllers
                 return PartialView(PartialMessageViewPath, new ResultViewModel("Please, verify input data", isSuccess: false));
             }
 
-            Result result = _accountServicee.Register(new UserToRegister(registrationRequest));
+            Result result = _accountService.Register(new UserToRegister(registrationRequest));
 
-            if (!result.IsSuccess)
+            if (result.IsFailure)
             {
                 return PartialView(PartialMessageViewPath, new ResultViewModel(result.ErrorMessage, isSuccess: false));
             }

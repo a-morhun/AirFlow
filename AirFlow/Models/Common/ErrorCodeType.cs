@@ -8,8 +8,9 @@
         MemberNotFound,
         MemberHasNotConfirmedEmail,
         MemberHasAlreadyConfirmedEmail,
-        MemberProvidedInvalidLoginCredentials,
+        MemberIsNotApprovedOrInvalidCredentials,
 
-        ConfirmationTokenInOutDated
+        ConfirmationTokenIsExpired,
+        ConfirmationTokenInfoNotFound
     }
 }

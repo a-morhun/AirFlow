@@ -1,7 +1,7 @@
-﻿using System;
-using System.Linq;
-using AirFlow.Data.Models;
+﻿using AirFlow.Data.Models;
 using PetaPoco;
+using System;
+using System.Linq;
 
 namespace AirFlow.Data
 {
@@ -33,16 +33,12 @@ namespace AirFlow.Data
 
         public void ConfirmEmail(int userId)
         {
-            var dto = new AirFlowUserSecurity
-            {
-                UserId = userId,
-                EmailConfirmed = true,
-                ConfirmationDate = DateTime.UtcNow
-            };
+            var dto = (UserId: userId, EmailConfirmed: true, ConfirmationDate: DateTime.UtcNow);
+            const string query = "UPDATE airFlowMemberRegistration SET email_confirmed = @0, confirmation_date = @1 WHERE nodeId = @2;";
 
             using (var db = new Database(ConnectionStringName))
             {
-                db.Execute("UPDATE airFlowMemberRegistration SET email_confirmed = @0, confirmation_date = @1 WHERE nodeId = @2;", true, DateTime.UtcNow, userId);
+                db.Execute(query, dto.EmailConfirmed, dto.ConfirmationDate, dto.UserId);
             }
         }
 

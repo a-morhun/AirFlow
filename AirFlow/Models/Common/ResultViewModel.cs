@@ -9,6 +9,8 @@ namespace AirFlow.Models.Common
 
         public bool IsSuccess { get; }
 
+        public bool IsFailure => !IsSuccess;
+
         public ResultViewModel(string message, bool isSuccess)
         {
             Message = message;

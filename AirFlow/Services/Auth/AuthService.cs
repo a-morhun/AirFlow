@@ -26,14 +26,14 @@ namespace AirFlow.Services.Auth
                 return new LoginResult(ErrorCodeType.MemberNotFound);
             }
 
+            if (!_membership.ValidateUser(username, user.Password))
+            {
+                return new LoginResult(ErrorCodeType.MemberIsNotApprovedOrInvalidCredentials);
+            }
+
             if (!_userSecurityRepository.IsEmailConfirmed(user.Email))
             {
                 return new LoginResult(ErrorCodeType.MemberHasNotConfirmedEmail);
-            }
-
-            if (!_membership.ValidateUser(username, user.Password))
-            {
-                return new LoginResult(ErrorCodeType.MemberProvidedInvalidLoginCredentials);
             }
 
             return new LoginResult(username);
@@ -45,7 +45,7 @@ namespace AirFlow.Services.Auth
 
             if (confirmationInfo == null)
             {
-                return new Result(ErrorCodeType.MemberNotFound);
+                return new Result(ErrorCodeType.ConfirmationTokenInfoNotFound);
             }
 
             if (confirmationInfo.AlreadyConfirmed)
@@ -55,7 +55,7 @@ namespace AirFlow.Services.Auth
 
             if (DateTime.UtcNow >= confirmationInfo.ExpirationDate)
             {
-                return new Result(ErrorCodeType.ConfirmationTokenInOutDated);
+                return new Result(ErrorCodeType.ConfirmationTokenIsExpired);
             }
 
             try
@@ -67,7 +67,7 @@ namespace AirFlow.Services.Auth
                 return new Result(ErrorCodeType.UnknownError, e.Message);
             }
 
-            return new Result();
+            return Result.Success;
         }
     }
 }

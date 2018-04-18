@@ -2,21 +2,22 @@
 using System.Net.Mail;
 using AirFlow.Data;
 using AirFlow.Data.Models;
+using AirFlow.Models.Account;
 using AirFlow.Services.Auth;
 using AirFlow.Services.Email;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
 
-namespace AirFlow.Models.Account
+namespace AirFlow.Services.Account
 {
     public class UserRegistration : IUserRegistration
     {
         private const string DefaultMemberType = "Member";
         private const string RegularMemberGroup = "Regular";
 
-        protected readonly IMemberService MemberService;
-        protected readonly IMemberTypeService MemberTypeService;
-        protected readonly IUserSecurityRepository Repository;
+        private readonly IMemberService _memberService;
+        private readonly IMemberTypeService _memberTypeService;
+        private readonly IUserSecurityRepository _repository;
         private readonly ITokenGenerator _tokenGenerator;
         private readonly IEmailSender _emailSender;
 
@@ -29,29 +30,27 @@ namespace AirFlow.Models.Account
             ITokenGenerator tokenGenerator,
             IEmailSender emailSender)
         {
-            MemberService = memberService;
-            MemberTypeService = memberTypeService;
-            Repository = securityRepository;
+            _memberService = memberService;
+            _memberTypeService = memberTypeService;
+            _repository = securityRepository;
             _tokenGenerator = tokenGenerator;
             _emailSender = emailSender;
         }
 
-        public IMember Register(UserToRegister user)
+        public void Register(UserToRegister user)
         {
             IMember registeredUser = CreateMember(user);
             SaveRegistrationConfirmation(registeredUser.Id, out string token);
             SendConfirmationEmail(token, registeredUser.Email);
-
-            return registeredUser;
         }
 
         private IMember CreateMember(UserToRegister user)
         {
-            IMember registeredUser = MemberService.CreateMemberWithIdentity(user.Username, user.Email, user.Name, DetermineMemberType().Alias);
+            IMember registeredUser = _memberService.CreateMemberWithIdentity(user.Username, user.Email, user.Name, DetermineMemberTypeAlias());
             registeredUser.IsApproved = user.Type == UserType.ValtechUk;
-            MemberService.SavePassword(registeredUser, user.Password);
-            MemberService.Save(registeredUser);
-            MemberService.AssignRole(registeredUser.Id, RegularMemberGroup);
+            _memberService.SavePassword(registeredUser, user.Password);
+            _memberService.Save(registeredUser);
+            _memberService.AssignRole(registeredUser.Id, RegularMemberGroup);
 
             return registeredUser;
         }
@@ -67,7 +66,7 @@ namespace AirFlow.Models.Account
                 UserId = userId,
             };
 
-            Repository.Save(airflowMember);
+            _repository.Save(airflowMember);
         }
 
         private void SendConfirmationEmail(string token, string userEmail)
@@ -76,9 +75,9 @@ namespace AirFlow.Models.Account
             _emailSender.Send(message);
         }
 
-        private IMemberType DetermineMemberType()
+        private string DetermineMemberTypeAlias()
         {
-            return MemberTypeService.Get(DefaultMemberType);
+            return _memberTypeService.Get(DefaultMemberType).Alias;
         }
     }
 }

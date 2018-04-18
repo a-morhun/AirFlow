@@ -6,7 +6,8 @@
         HttpMethod = "POST",
         UpdateTargetId = "ajax-result",
         InsertionMode = InsertionMode.Replace,
-        OnBegin = "$('#ajax-result').html('<img src=\"" + Url.Content("~/Images/ajax-loader.gif") + "\" />')"
+        OnBegin = "$('#ajax-result').html('<img src=\"" + Url.Content("~/Images/ajax-loader.gif") + "\" />')",
+        OnFailure = "$('#ajax-result').html(ServerError)"
     };
 }
 

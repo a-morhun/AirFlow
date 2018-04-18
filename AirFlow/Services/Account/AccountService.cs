@@ -18,20 +18,25 @@ namespace AirFlow.Services.Account
 
         public Result Register(UserToRegister user)
         {
-            if (_memberService.Exists(user.Username) || _memberService.GetByEmail(user.Email) != null)
+            if (!CanRegister(user))
             {
                 return new Result(ErrorCodeType.MemberAlreadyExists, "Already exists");
             }
 
             try
             {
-                 _userRegistration.Register(user);
-                return new Result();
+                _userRegistration.Register(user);
+                return Result.Success;
             }
             catch (Exception e)
             {
                 return new Result(ErrorCodeType.UnknownError, e.Message);
             }
+        }
+
+        private bool CanRegister(UserToRegister user)
+        {
+            return _memberService.GetByEmail(user.Email) == null;
         }
     }
 }

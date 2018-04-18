@@ -623,21 +623,19 @@
     <Compile Include="Models\Common\ResultViewModel.cs" />
     <Compile Include="Models\Auth\LoginResult.cs" />
     <Compile Include="Models\Auth\UserToLogin.cs" />
-    <Compile Include="Routing\AirFlowSegmentProvider.cs" />
     <Compile Include="App_Start\AutofacConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="Controllers\AccountSurfaceController.cs" />
     <Compile Include="Controllers\AuthSurfaceController.cs" />
-    <Compile Include="Models\Account\IUserRegistration.cs" />
-    <Compile Include="Models\Account\UserRegistration.cs" />
+    <Compile Include="Services\Account\IUserRegistration.cs" />
+    <Compile Include="Services\Account\UserRegistration.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Account\User.cs" />
     <Compile Include="Models\Account\UserToRegister.cs" />
     <Compile Include="Models\Account\UserType.cs" />
-    <Compile Include="Models\Auth\RegistrationResult.cs" />
     <Compile Include="Models\Auth\UserLoginViewModel.cs" />
     <Compile Include="Models\Auth\UserRegistrationViewModel.cs" />
     <Compile Include="Models\Common\ErrorCodeType.cs" />

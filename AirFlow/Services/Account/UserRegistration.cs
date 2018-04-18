@@ -3,6 +3,7 @@ using System.Net.Mail;
 using AirFlow.Data;
 using AirFlow.Data.Models;
 using AirFlow.Models.Account;
+using AirFlow.Models.Auth;
 using AirFlow.Services.Auth;
 using AirFlow.Services.Email;
 using Umbraco.Core.Models;
@@ -40,7 +41,7 @@ namespace AirFlow.Services.Account
         public void Register(UserToRegister user)
         {
             IMember registeredUser = CreateMember(user);
-            SaveRegistrationConfirmation(registeredUser.Id, out string token);
+            SaveRegistrationConfirmation(registeredUser.Id, user.LoginType, out string token);
             SendConfirmationEmail(token, registeredUser.Email);
         }
 
@@ -55,29 +56,32 @@ namespace AirFlow.Services.Account
             return registeredUser;
         }
 
-        private void SaveRegistrationConfirmation(int userId, out string token)
+        private string DetermineMemberTypeAlias()
+        {
+            return _memberTypeService.Get(DefaultMemberType).Alias;
+        }
+
+        private void SaveRegistrationConfirmation(int userId, LoginType type, out string token)
         {
             token = _tokenGenerator.Generate();
 
-            var airflowMember = new AirFlowUserSecurity()
+            var registration = new UserRegistrationDto
             {
                 ConfirmationToken = token,
                 ConfirmationExpirationDate = _expirationTokenDateTime,
                 UserId = userId,
+                LoginType = (byte)type
             };
 
-            _repository.Save(airflowMember);
+            _repository.Save(registration);
         }
 
         private void SendConfirmationEmail(string token, string userEmail)
         {
-            MailMessage message = new RegistrationEmailMessage(userEmail, token, _expirationTokenDateTime);
-            _emailSender.Send(message);
-        }
+            MailMessage message = ConfirmationEmailMessageFactory.ConstructConfirmationMessage(
+                EmailMessageType.EmailConfirmation, userEmail, token, _expirationTokenDateTime);
 
-        private string DetermineMemberTypeAlias()
-        {
-            return _memberTypeService.Get(DefaultMemberType).Alias;
+            _emailSender.Send(message);
         }
     }
 }

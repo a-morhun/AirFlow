@@ -1,6 +1,4 @@
-﻿using AirFlow.Models.Auth;
-
-namespace AirFlow.Models.Account
+﻿namespace AirFlow.Models.Account
 {
     public class UserToRegister : User
     {
@@ -12,6 +10,7 @@ namespace AirFlow.Models.Account
             Password = registrationRequest.Password;
             Email = registrationRequest.Email;
             Name = registrationRequest.Name;
+            LoginType = registrationRequest.LoginType;
         }
     }
 }

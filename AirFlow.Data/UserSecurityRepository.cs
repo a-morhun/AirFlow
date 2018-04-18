@@ -7,22 +7,20 @@ namespace AirFlow.Data
 {
     public class UserSecurityRepository : IUserSecurityRepository
     {
-        public const string ConnectionStringName = "umbracoDbDSN";
-
-        public void Save(AirFlowUserSecurity dto)
+        public void Save(UserRegistrationDto dto)
         {
-            using (var db = new Database(ConnectionStringName))
+            using (var db = new Database(Config.ConnectionStringName))
             {
                 db.Insert(dto);
             }
         }
 
-        public ConfirmationToken GetByConfirmationToken(string confirmationToken)
+        public ConfirmationToken GetConfirmationTokenDetails(string confirmationToken)
         {
-            using (var db = new Database(ConnectionStringName))
+            using (var db = new Database(Config.ConnectionStringName))
             {
                 var sql = Sql.Builder
-                    .Select("nodeId AS UserId, " +
+                    .Select("nodeId AS ForUserId, " +
                             "confirmation_token_expiration AS ExpirationDate," +
                             "email_confirmed AS AlreadyConfirmed")
                     .From("airFlowMemberRegistration")
@@ -36,7 +34,7 @@ namespace AirFlow.Data
             var dto = (UserId: userId, EmailConfirmed: true, ConfirmationDate: DateTime.UtcNow);
             const string query = "UPDATE airFlowMemberRegistration SET email_confirmed = @0, confirmation_date = @1 WHERE nodeId = @2;";
 
-            using (var db = new Database(ConnectionStringName))
+            using (var db = new Database(Config.ConnectionStringName))
             {
                 db.Execute(query, dto.EmailConfirmed, dto.ConfirmationDate, dto.UserId);
             }
@@ -44,7 +42,7 @@ namespace AirFlow.Data
 
         public bool IsEmailConfirmed(string email)
         {
-            using (var db = new Database(ConnectionStringName))
+            using (var db = new Database(Config.ConnectionStringName))
             {
                 var sql = Sql.Builder
                     .Select("A.email_confirmed")

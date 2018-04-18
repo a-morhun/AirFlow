@@ -107,7 +107,7 @@ namespace AirFlow.Tests.Services.Account
 
         private void AsserrIfConfirmationDataWasSaved()
         {
-            _repository.Received(1).Save(Arg.Is<AirFlowUserSecurity>(a =>
+            _repository.Received(1).Save(Arg.Is<UserRegistrationDto>(a =>
                 a.UserId == RegisteredMemberId &&
                 a.ConfirmationToken == GeneratedToken &&
                 a.ConfirmationExpirationDate > DateTime.UtcNow));

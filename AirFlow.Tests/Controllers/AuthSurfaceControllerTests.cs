@@ -39,7 +39,7 @@ namespace AirFlow.Tests.Controllers
         #region Login
 
         [Test]
-        public void AuthSurfaceController_Login_ValidLoginRequest_ValidCredentials_Success()
+        public void AuthSurfaceController_Login_ValidLoginRequest_ValidCredentials_RegularLogin_Success()
         {
             // Arrange
             string expectedScript = "window.location = '/'";
@@ -50,8 +50,25 @@ namespace AirFlow.Tests.Controllers
             var result = _authController.Login(loginRequest) as JavaScriptResult;
 
             // Assert
+            _formsAuthentication.Received(1).SetAuthCookie(Username, createPersistentCookie: false);
             Assert.IsNotNull(result, Common.ShowResponseTypeMismatchMessage(typeof(JavaScriptResult)));
             Assert.AreEqual(expectedScript, result.Script, Common.ShowNotSatisfiedExpectationMessage(expectedScript, "Script"));
+        }
+
+        [Test]
+        public void AuthSurfaceController_Login_ValidLoginRequest_ValidCredentials_TwoFactorLogin_Success()
+        {
+            // Arrange
+            UserLoginViewModel loginRequest = GetUserLoginViewModel();
+            MockSuccessServiceLoginMethod(loginRequest, type: LoginType.TwoFactorEmail);
+
+            // Act
+            var result = _authController.Login(loginRequest) as PartialViewResult;
+
+            // Assert
+            _formsAuthentication.Received(0).SetAuthCookie(Username, createPersistentCookie: false);
+            var model = Common.AssertPartialViewResult<ResultViewModel>(result);
+            Assert.IsTrue(model.IsSuccess, Common.ShowNotSatisfiedExpectationMessage(true, "model.IsSuccess"));
         }
 
         [Test]
@@ -89,8 +106,8 @@ namespace AirFlow.Tests.Controllers
             Password = "password"
         };
 
-        private void MockSuccessServiceLoginMethod(UserLoginViewModel loginRequest, string username = Username) =>
-            _authService.Login(Arg.Is(ServiceLoginPredicate(loginRequest))).Returns(new LoginResult(username));
+        private void MockSuccessServiceLoginMethod(UserLoginViewModel loginRequest, string username = Username, LoginType type = LoginType.Regular) =>
+            _authService.Login(Arg.Is(ServiceLoginPredicate(loginRequest))).Returns(new LoginResult(username, type));
 
         private void MockFailureServiceRegisterMethod(UserLoginViewModel loginRequest, ErrorCodeType errorCode) =>
             _authService.Login(Arg.Is(ServiceLoginPredicate(loginRequest))).Returns(new LoginResult(errorCode));
@@ -163,6 +180,27 @@ namespace AirFlow.Tests.Controllers
 
             // Assert
             Common.AssertViewResult(result, expectedViewName);
+        }
+
+        #endregion
+
+        #region Confirm Login
+
+        private const string LoginToken = "token";
+
+        [Test]
+        public void AuthSurfaceController_ConfirmLogin_ValidToken_RedirectToHomePage()
+        {
+            // Arrange
+            string expectedUrl = "/";
+            _authService.ConfirmLogin(LoginToken).Returns(new LoginResult(Username, LoginType.TwoFactorEmail));
+
+            // Act
+            var result = _authController.ConfirmLogin(LoginToken) as RedirectResult;
+
+            // Assert
+            _formsAuthentication.Received(1).SetAuthCookie(Username, createPersistentCookie: false);
+            Common.AssertRedirectResult(result, expectedUrl);
         }
 
         #endregion

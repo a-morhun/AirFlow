@@ -11,6 +11,9 @@
         MemberIsNotApprovedOrInvalidCredentials,
 
         ConfirmationTokenIsExpired,
-        ConfirmationTokenInfoNotFound
+        ConfirmationTokenInfoNotFound,
+
+        LoginTokenInfoNotFound,
+        LoginTokenIsExpired
     }
 }

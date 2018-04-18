@@ -4,9 +4,9 @@ namespace AirFlow.Data
 {
     public interface IUserSecurityRepository
     {
-        void Save(AirFlowUserSecurity dto);
+        void Save(UserRegistrationDto dto);
 
-        ConfirmationToken GetByConfirmationToken(string confirmationToken);
+        ConfirmationToken GetConfirmationTokenDetails(string confirmationToken);
 
         void ConfirmEmail(int userId);
 

@@ -38,6 +38,12 @@
             </div>
         </div>
         <div class="form-group row">
+            @Html.LabelFor(m => m.LoginType, new { @class = "col-sm-4 col-form-label" })
+            <div class="col-sm-7">
+                @Html.EnumDropDownListFor(m => m.LoginType, "Select login type", new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group row">
             @Html.LabelFor(m => m.Password, new { @class = "col-sm-4 col-form-label" })
             <div class="col-sm-7">
                 @Html.PasswordFor(m => m.Password, new { @class = "form-control" })

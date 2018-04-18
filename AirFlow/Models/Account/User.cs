@@ -1,4 +1,6 @@
-﻿namespace AirFlow.Models.Account
+﻿using AirFlow.Models.Auth;
+
+namespace AirFlow.Models.Account
 {
     public class User
     {
@@ -11,6 +13,8 @@
         public string Email { get; set; }
 
         public UserType Type => DetermineType();
+
+        public LoginType LoginType { get; set; }
 
         public bool IsEmailConfirmed { get; set; }
 

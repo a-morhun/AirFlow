@@ -37,18 +37,16 @@ namespace AirFlow.Services.Account
             _emailSender = emailSender;
         }
 
-        public IMember Register(UserToRegister user)
+        public void Register(UserToRegister user)
         {
             IMember registeredUser = CreateMember(user);
             SaveRegistrationConfirmation(registeredUser.Id, out string token);
             SendConfirmationEmail(token, registeredUser.Email);
-
-            return registeredUser;
         }
 
         private IMember CreateMember(UserToRegister user)
         {
-            IMember registeredUser = _memberService.CreateMemberWithIdentity(user.Username, user.Email, user.Name, DetermineMemberType().Alias);
+            IMember registeredUser = _memberService.CreateMemberWithIdentity(user.Username, user.Email, user.Name, DetermineMemberTypeAlias());
             registeredUser.IsApproved = user.Type == UserType.ValtechUk;
             _memberService.SavePassword(registeredUser, user.Password);
             _memberService.Save(registeredUser);
@@ -77,9 +75,9 @@ namespace AirFlow.Services.Account
             _emailSender.Send(message);
         }
 
-        private IMemberType DetermineMemberType()
+        private string DetermineMemberTypeAlias()
         {
-            return _memberTypeService.Get(DefaultMemberType);
+            return _memberTypeService.Get(DefaultMemberType).Alias;
         }
     }
 }

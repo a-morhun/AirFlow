@@ -25,7 +25,7 @@ namespace AirFlow.Tests
         private const string NotSatisfiedExpectation = "Expected {0} for {1}";
 
         public static string ShowResponseTypeMismatchMessage(Type type) => string.Format(ResponseTypeMismatchFormat, type.Name);
-        public static string ShowNotSatisfiedExpectationMessage<T>(T expected, string target) => string.Format(NotSatisfiedExpectation, expected, target);
+        public static string ShowNotSatisfiedExpectationMessage<T>(T expected, object target) => string.Format(NotSatisfiedExpectation, expected, target);
 
         public static void SetUpUmbracoContext()
         {
@@ -49,7 +49,7 @@ namespace AirFlow.Tests
 
         public static void AssertViewResult(ViewResult result, string expectedViewName)
         {
-            Assert.IsNotNull(result, Common.ShowResponseTypeMismatchMessage(typeof(ViewResult)));
+            Assert.IsNotNull(result, ShowResponseTypeMismatchMessage(typeof(ViewResult)));
             Assert.AreEqual(expectedViewName, result.ViewName);
         }
 

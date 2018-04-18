@@ -1,25 +1,24 @@
-﻿using AirFlow.Services.Auth;
-using AirFlow.Models.Common;
+﻿using AirFlow.Models.Account;
 using AirFlow.Models.Auth;
+using AirFlow.Models.Common;
+using AirFlow.Services.Account;
 using NUnit.Framework;
 using NSubstitute;
 using System;
-using AirFlow.Models.Account;
-using AirFlow.Services.Account;
+using System.Linq.Expressions;
 using Umbraco.Core.Services;
 using Umbraco.Core.Models;
 
-namespace AirFlow.Tests.Account.Services
+namespace AirFlow.Tests.Services.Account
 {
     [TestFixture]
     public class AccountServiceTests
     {
         private IMemberService _memberService;
-        private IMember _member;
-        private IAccountService _accountService;
         private IUserRegistration _userRegistration;
+        private IAccountService _accountService;
 
-        [OneTimeSetUp]
+        [SetUp]
         public void SetUpOnce()
         {
             _memberService = Substitute.For<IMemberService>();
@@ -27,120 +26,82 @@ namespace AirFlow.Tests.Account.Services
             _accountService = new AccountService(_memberService, _userRegistration);
         }
 
-        [SetUp]
-        public void SetUp()
-        {
-            _member = Substitute.For<IMember>();
-        }
-
         #region Register
 
         [Test]
-        public void Register_ValtechUkUser_RegisteredAndShouldAutologinResultReturned()
+        public void AccountService_Register_CanRegister_Success()
         {
             // Arrange
-            var user = new UserToRegister(new UserRegistrationViewModel
-            {
-                Email = $"some@{Common.ValtechUkDomain}",
-                Username = "username",
-                Password = "password"
-            });
-            ArrangeNewUserCondition();
-            _memberService.CreateMemberWithIdentity(user.Username, user.Email, user.Username, Common.DefaultMemberType).Returns(_member);
+            IMember existedMember = null;
+            UserToRegister user = GetUserToRegister();
+            _memberService.GetByEmail(user.Email).Returns(existedMember);
 
             // Act
-            Result result = _accountService.Register(user) as Result;
+            Result registrationResult = _accountService.Register(user);
 
             // Assert
-            Assert.IsNotNull(result);
-            AssertMemberService(user.Password);
-            Assert.IsTrue(result.IsSuccess);
+            Assert.IsNotNull(registrationResult, Common.ShowResponseTypeMismatchMessage(typeof(Result)));
+            Assert.IsTrue(registrationResult.IsSuccess, Common.ShowNotSatisfiedExpectationMessage(true, "registrationResult.IsSuccess"));
+            _userRegistration.Received(1).Register(Arg.Is(RegistrationPredicate(user)));
         }
 
         [Test]
-        public void Register_OtherUser_RegisteredAndShouldNotAutologinResultReturned()
+        public void AccountService_Register_CanNotRegister_Failure()
         {
             // Arrange
-            var user = new UserToRegister(new UserRegistrationViewModel
-            {
-                Email = "some@other.com",
-                Username = "username",
-                Password = "password"
-            });
-            ArrangeNewUserCondition();
-            _memberService.CreateMemberWithIdentity(user.Username, user.Email, user.Username, Common.DefaultMemberType).Returns(_member);
+            IMember existedMember = Substitute.For<IMember>();
+            ErrorCodeType expectedError = ErrorCodeType.MemberAlreadyExists;
+            UserToRegister user = GetUserToRegister();
+            _memberService.GetByEmail(user.Email).Returns(existedMember);
 
             // Act
-            Result result = _accountService.Register(user) as Result;
+            Result registrationResult = _accountService.Register(user);
 
             // Assert
-            Assert.IsNotNull(result);
-            AssertMemberService(user.Password);
-            Assert.IsFalse(result.IsSuccess);
-            Assert.IsFalse(_member.IsApproved);
-        }
-
-        private void AssertMemberService(string password)
-        {
-            _memberService.Received(1).SavePassword(Arg.Any<IMember>(), password);
-            _memberService.Received(1).Save(Arg.Any<IMember>());
-            _memberService.Received(1).AssignRole(Arg.Any<int>(), Common.RegularMemberGroup);
+            Assert.IsNotNull(registrationResult, Common.ShowResponseTypeMismatchMessage(typeof(Result)));
+            Assert.IsTrue(registrationResult.IsFailure, Common.ShowNotSatisfiedExpectationMessage(true, "registrationResult.IsFailure"));
+            Assert.AreEqual(expectedError, registrationResult.ErrorCode, Common.ShowNotSatisfiedExpectationMessage(expectedError, registrationResult.ErrorCode));
+            _userRegistration.ReceivedWithAnyArgs(0).Register(null);
         }
 
         [Test]
-        public void Register_MemberServiceThrowsException_UnknownErrorReturned()
+        public void AccountService_Register_RegistrationFailed_Failure()
         {
             // Arrange
-            var expectedErrorCode = ErrorCodeType.UnknownError;
-            ArrangeNewUserCondition();
-            _memberService.CreateMemberWithIdentity(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>())
-                .Returns(x => { throw new Exception(); });
+            IMember existedMember = null;
+            ErrorCodeType expectedError = ErrorCodeType.UnknownError;
+            UserToRegister user = GetUserToRegister();
+            _memberService.GetByEmail(user.Email).Returns(existedMember);
+            UserRegistrationFailed(user);
 
             // Act
-            Result result = _accountService.Register(new UserToRegister(new UserRegistrationViewModel() { Email = string.Empty })) as Result;
+            Result registrationResult = _accountService.Register(user);
 
             // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(expectedErrorCode, result.ErrorCode);
+            Assert.IsNotNull(registrationResult, Common.ShowResponseTypeMismatchMessage(typeof(Result)));
+            Assert.IsTrue(registrationResult.IsFailure, Common.ShowNotSatisfiedExpectationMessage(true, "registrationResult.IsFailure"));
+            Assert.AreEqual(expectedError, registrationResult.ErrorCode, Common.ShowNotSatisfiedExpectationMessage(expectedError, registrationResult.ErrorCode));
+            _userRegistration.Received(1).Register(Arg.Is(RegistrationPredicate(user)));
         }
 
-        [Test]
-        public void Register_UserWithSameUsernameExists_ReturnMemberAlreadyExistsErrorCode()
+        private UserToRegister GetUserToRegister() => new UserToRegister(new UserRegistrationViewModel
         {
-            // Assert
-            var expectedErrorCode = ErrorCodeType.MemberAlreadyExists;
-            _memberService.Exists(Arg.Any<string>()).Returns(true);
+            Name = "name",
+            Password = "password",
+            Email = "email",
+            Username = "username"
+        });
 
-            // Act
-            Result result = _accountService.Register(new UserToRegister(new UserRegistrationViewModel() { Email = string.Empty }));
+        private void UserRegistrationFailed(UserToRegister user) =>
+            _userRegistration
+                .When(x => x.Register(Arg.Is(RegistrationPredicate(user))))
+                .Do(x => throw new Exception());
 
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(expectedErrorCode, result.ErrorCode);
-        }
-
-        [Test]
-        public void Register_UserWithSameEmailExists_ReturnMemberAlreadyExistsErrorCode()
-        {
-            // Assert
-            ErrorCodeType expectedErrorCode = ErrorCodeType.MemberAlreadyExists;
-            _memberService.Exists(Arg.Any<string>()).Returns(false);
-            _memberService.GetByEmail(Arg.Any<string>()).Returns(_member);
-
-            // Act
-            Result result = _accountService.Register(new UserToRegister(new UserRegistrationViewModel() { Email = string.Empty }));
-
-            // Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(expectedErrorCode, result.ErrorCode);
-        }
-
-        private void ArrangeNewUserCondition()
-        {
-            IMember member = null;
-            _memberService.Exists(Arg.Any<string>()).Returns(false);
-            _memberService.GetByEmail(Arg.Any<string>()).Returns(member);
-        }
+        private Expression<Predicate<UserToRegister>> RegistrationPredicate(UserToRegister user) =>
+            u => u.Email == user.Email &&
+                 u.Name == user.Name &&
+                 u.Password == user.Password &&
+                 u.Username == user.Username;
 
         #endregion
     }

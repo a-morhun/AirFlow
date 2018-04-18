@@ -89,16 +89,12 @@ namespace AirFlow.Tests.Controllers
             Password = "password"
         };
 
-        private void MockSuccessServiceLoginMethod(UserLoginViewModel loginRequest, string username = Username)
-        {
+        private void MockSuccessServiceLoginMethod(UserLoginViewModel loginRequest, string username = Username) =>
             _authService.Login(Arg.Is(ServiceLoginPredicate(loginRequest))).Returns(new LoginResult(username));
-        }
 
-        private void MockFailureServiceRegisterMethod(UserLoginViewModel loginRequest, ErrorCodeType errorCode)
-        {
+        private void MockFailureServiceRegisterMethod(UserLoginViewModel loginRequest, ErrorCodeType errorCode) =>
             _authService.Login(Arg.Is(ServiceLoginPredicate(loginRequest))).Returns(new LoginResult(errorCode));
-        }
-
+        
         private static Expression<Predicate<UserToLogin>> ServiceLoginPredicate(UserLoginViewModel loginRequest) =>
             r => r.Email == loginRequest.Email && r.Password == loginRequest.Password;
 
@@ -160,7 +156,7 @@ namespace AirFlow.Tests.Controllers
         {
             // Arrange
             string expectedViewName = "/Views/ConfirmEmailFailure.cshtml";
-            _authService.ConfirmEmail(ValidToken).Returns(new Result(ErrorCodeType.ConfirmationTokenInOutDated));
+            _authService.ConfirmEmail(ValidToken).Returns(new Result(ErrorCodeType.ConfirmationTokenIsExpired));
 
             // Act
             var result = _authController.ConfirmEmail(ValidToken) as ViewResult;

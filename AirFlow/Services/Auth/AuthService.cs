@@ -28,7 +28,7 @@ namespace AirFlow.Services.Auth
 
             if (!_membership.ValidateUser(username, user.Password))
             {
-                return new LoginResult(ErrorCodeType.MemberProvidedInvalidLoginCredentials);
+                return new LoginResult(ErrorCodeType.MemberIsNotApprovedOrInvalidCredentials);
             }
 
             if (!_userSecurityRepository.IsEmailConfirmed(user.Email))
@@ -45,7 +45,7 @@ namespace AirFlow.Services.Auth
 
             if (confirmationInfo == null)
             {
-                return new Result(ErrorCodeType.MemberNotFound);
+                return new Result(ErrorCodeType.ConfirmationTokenInfoNotFound);
             }
 
             if (confirmationInfo.AlreadyConfirmed)
@@ -55,7 +55,7 @@ namespace AirFlow.Services.Auth
 
             if (DateTime.UtcNow >= confirmationInfo.ExpirationDate)
             {
-                return new Result(ErrorCodeType.ConfirmationTokenInOutDated);
+                return new Result(ErrorCodeType.ConfirmationTokenIsExpired);
             }
 
             try

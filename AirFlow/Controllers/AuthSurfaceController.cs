@@ -8,9 +8,11 @@ namespace AirFlow.Controllers
 {
     public class AuthSurfaceController : SurfaceController
     {
-        private const string PartialViewLoginError = "/Views/Partials/Auth/_LoginError.cshtml";
-        private const string ViewConfirmationSuccess = "/Views/ConfirmEmailSuccess.cshtml";
-        private const string ViewConfirmationFailure = "/Views/ConfirmEmailFailure.cshtml";
+        private const string PartialViewLoginMessage = "/Views/Partials/Auth/_LoginMessage.cshtml";
+        private const string ViewEmailConfirmationSuccess = "/Views/ConfirmEmailSuccess.cshtml";
+        private const string ViewEmailConfirmationFailure = "/Views/ConfirmEmailFailure.cshtml";
+        private const string ViewLoginConfirmationFailure = "/Views/ConfirmLoginFailure.cshtml";
+        private const string HomePath = "/";
 
         private readonly IAuthService _authService;
         private readonly IFormsAuthentication _formsAuthentication;
@@ -30,18 +32,23 @@ namespace AirFlow.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return PartialView(PartialViewLoginError, new ResultViewModel("Please, verify input data", isSuccess: false));
+                return PartialView(PartialViewLoginMessage, new ResultViewModel("Please, verify input data", isSuccess: false));
             }
 
             LoginResult loginResult = _authService.Login(new UserToLogin(loginRequest));
 
             if (loginResult.IsFailure)
             {
-                return PartialView(PartialViewLoginError, new ResultViewModel(loginResult.ErrorCode.Value.ToString(), isSuccess: false));
+                return PartialView(PartialViewLoginMessage, new ResultViewModel(loginResult.ErrorCode.Value.ToString(), isSuccess: false));
             }
 
-            _formsAuthentication.SetAuthCookie(loginResult.Username, createPersistentCookie: true);
-            return JavaScript("window.location = '/'");
+            if (loginResult.Type == LoginType.Regular)
+            {
+                _formsAuthentication.SetAuthCookie(loginResult.Username, createPersistentCookie: false);
+                return JavaScript($"window.location = '{HomePath}'");
+            }
+
+            return PartialView(PartialViewLoginMessage, new ResultViewModel("Confirmation message was sent to your email", isSuccess: true));
         }
 
         [HttpPost]
@@ -50,7 +57,7 @@ namespace AirFlow.Controllers
         public ActionResult Logout()
         {
             _formsAuthentication.SignOut();
-            return Redirect("/");
+            return Redirect(HomePath);
         }
 
         [HttpGet]
@@ -58,17 +65,36 @@ namespace AirFlow.Controllers
         {
             if (string.IsNullOrEmpty(token))
             {
-                return View(ViewConfirmationFailure);
+                return View(ViewEmailConfirmationFailure);
             }
 
             Result confirmationResult = _authService.ConfirmEmail(token);
 
             if (confirmationResult.IsFailure)
             {
-                return View(ViewConfirmationFailure);
+                return View(ViewEmailConfirmationFailure);
             }
 
-            return View(ViewConfirmationSuccess);
+            return View(ViewEmailConfirmationSuccess);
+        }
+
+        [HttpGet]
+        public ActionResult ConfirmLogin(string token)
+        {
+            if (string.IsNullOrEmpty(token))
+            {
+                return View(ViewLoginConfirmationFailure);
+            }
+
+            LoginResult confirmationResult = _authService.ConfirmLogin(token);
+
+            if (confirmationResult.IsFailure)
+            {
+                return View(ViewLoginConfirmationFailure);
+            }
+
+            _formsAuthentication.SetAuthCookie(confirmationResult.Username, createPersistentCookie: false);
+            return Redirect(HomePath);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using AirFlow.Models.Auth;
 
-namespace AirFlow.Models.Auth
+namespace AirFlow.Models.Account
 {
     public class UserRegistrationViewModel
     {
@@ -17,6 +18,9 @@ namespace AirFlow.Models.Auth
         [Required]        
         [MinLength(10)]
         public string Password { get; set; }
+
+        [Display(Name = "Login type")]
+        public LoginType LoginType { get; set; }
 
         [Required]
         [Display(Name = "Confirm password")]

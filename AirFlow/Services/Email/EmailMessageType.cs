@@ -2,6 +2,7 @@
 {
     public enum EmailMessageType
     {
-        Registration
+        EmailConfirmation,
+        LoginConfirmation
     }
 }

@@ -41,11 +41,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthRepository.cs" />
+    <Compile Include="Config.cs" />
+    <Compile Include="IAuthRepository.cs" />
+    <Compile Include="ILoginRepository.cs" />
+    <Compile Include="IUserRepository.cs" />
     <Compile Include="IUserSecurityRepository.cs" />
+    <Compile Include="LoginRepository.cs" />
+    <Compile Include="Models\AdditionalLoginInfo.cs" />
     <Compile Include="Models\ConfirmationToken.cs" />
+    <Compile Include="Models\DTO\TwoFactorLoginDto.cs" />
     <Compile Include="Models\UmbracoMember.cs" />
+    <Compile Include="Models\Token.cs" />
+    <Compile Include="UserRepository.cs" />
     <Compile Include="UserSecurityRepository.cs" />
-    <Compile Include="Models\AirFlowUserSecurity.cs" />
+    <Compile Include="Models\DTO\UserRegistrationDto.cs" />
     <Compile Include="Models\Generated\Database.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

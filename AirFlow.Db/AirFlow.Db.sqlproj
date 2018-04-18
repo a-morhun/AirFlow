@@ -128,5 +128,6 @@
     <Build Include="Security\airflow-admin_1.sql" />
     <Build Include="Security\RoleMemberships.sql" />
     <Build Include="dbo\Tables\airFlowMemberRegistration.sql" />
+    <Build Include="dbo\Tables\airFlowTwoFactorLogin.sql" />
   </ItemGroup>
 </Project>

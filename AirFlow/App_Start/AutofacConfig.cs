@@ -1,5 +1,4 @@
 ﻿using AirFlow.Data;
-using AirFlow.Models.Account;
 using AirFlow.Services.Account;
 using AirFlow.Services.Auth;
 using AirFlow.Services.Email;
@@ -53,12 +52,23 @@ namespace AirFlow
         {
             builder.RegisterType<AccountService>().As<IAccountService>();
             builder.RegisterType<AuthService>().As<IAuthService>();
-            builder.RegisterType<UserSecurityRepository>().As<IUserSecurityRepository>();
             builder.RegisterType<FormsAuthenticationWrapper>().As<IFormsAuthentication>();
             builder.RegisterType<MembershipWrapper>().As<IMembership>();
             builder.RegisterType<TokenGenerator>().As<ITokenGenerator>();
             builder.RegisterType<SmtpEmailSender>().As<IEmailSender>();
+
+            builder.RegisterType<UserSecurityRepository>().As<IUserSecurityRepository>();
             builder.RegisterType<UserRegistration>().As<IUserRegistration>();
+            builder.RegisterType<UserRepository>().As<IUserRepository>();
+            builder.RegisterType<LoginRepository>().As<ILoginRepository>();
+            builder.RegisterType<AuthRepository>().As<IAuthRepository>();
+
+            builder.Register((c, p) => new EmailTypeLoginProcessor(
+                    p.Named<string>("userEmail"),
+                    c.Resolve<ILoginRepository>(),
+                    c.Resolve<ITokenGenerator>(),
+                    c.Resolve<IEmailSender>()))
+                .As<ITwoFactorLoginProcessor>();
         }
 
         private static void RegisterUmbracoServices(ContainerBuilder builder)

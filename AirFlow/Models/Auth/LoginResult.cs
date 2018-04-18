@@ -6,9 +6,16 @@ namespace AirFlow.Models.Auth
     {
         public string Username { get; }
 
+        public LoginType Type { get; }
+
         public LoginResult(string username)
         {
             Username = username;
+        }
+
+        public LoginResult(string username, LoginType type) : this(username)
+        {
+            Type = type;
         }
 
         public LoginResult(ErrorCodeType errorCode, string errorMessage = "") : base(errorCode, errorMessage)

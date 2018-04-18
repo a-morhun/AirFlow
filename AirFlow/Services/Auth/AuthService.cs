@@ -3,64 +3,80 @@ using AirFlow.Data;
 using AirFlow.Data.Models;
 using AirFlow.Models.Auth;
 using AirFlow.Models.Common;
+using AirFlow.ServiceContainers;
+using Autofac;
 
 namespace AirFlow.Services.Auth
 {
     public class AuthService : IAuthService
     {
-        private readonly IUserSecurityRepository _userSecurityRepository;
         private readonly IMembership _membership;
+        private readonly IUserRepository _userRepository;
+        private readonly IAuthRepository _authRepository;
 
-        public AuthService(IMembership membership, IUserSecurityRepository userSecurityRepository)
+        public AuthService(
+            IMembership membership,
+            IAuthRepository authRepository,
+            IUserRepository userRepository)
         {
             _membership = membership;
-            _userSecurityRepository = userSecurityRepository;
+            _authRepository = authRepository;
+            _userRepository = userRepository;
         }
 
         public LoginResult Login(UserToLogin user)
         {
-            string username = _membership.GetUserNameByEmail(user.Email);
+            AdditionalLoginInfo additionalInfo = _userRepository.GetAdditionalLoginInfo(user.Email);
 
-            if (string.IsNullOrEmpty(username))
+            if (additionalInfo == null)
             {
                 return new LoginResult(ErrorCodeType.MemberNotFound);
             }
 
-            if (!_membership.ValidateUser(username, user.Password))
+            if (!_membership.ValidateUser(additionalInfo.Username, user.Password))
             {
                 return new LoginResult(ErrorCodeType.MemberIsNotApprovedOrInvalidCredentials);
             }
 
-            if (!_userSecurityRepository.IsEmailConfirmed(user.Email))
+            if (!_authRepository.IsEmailConfirmed(user.Email))
             {
                 return new LoginResult(ErrorCodeType.MemberHasNotConfirmedEmail);
             }
 
-            return new LoginResult(username);
+            var type = (LoginType)additionalInfo.LoginType;
+
+            if (type == LoginType.TwoFactorEmail)
+            {
+                var processor = AirFlowServiceContainer.Container.Resolve<ITwoFactorLoginProcessor>(new NamedParameter("userEmail", user.Email));
+                processor.Process(additionalInfo.UserId);
+            }
+
+            return new LoginResult(additionalInfo.Username, type);
         }
+
 
         public Result ConfirmEmail(string token)
         {
-            ConfirmationToken confirmationInfo = _userSecurityRepository.GetByConfirmationToken(token);
+            ConfirmationToken tokedDetails = _authRepository.GetConfirmationTokenDetails(token);
 
-            if (confirmationInfo == null)
+            if (tokedDetails == null)
             {
                 return new Result(ErrorCodeType.ConfirmationTokenInfoNotFound);
             }
 
-            if (confirmationInfo.AlreadyConfirmed)
+            if (tokedDetails.AlreadyConfirmed)
             {
                 return new Result(ErrorCodeType.MemberHasAlreadyConfirmedEmail);
             }
 
-            if (DateTime.UtcNow >= confirmationInfo.ExpirationDate)
+            if (tokedDetails.IsExpired)
             {
                 return new Result(ErrorCodeType.ConfirmationTokenIsExpired);
             }
 
             try
             {
-                _userSecurityRepository.ConfirmEmail(confirmationInfo.UserId);
+                _authRepository.ConfirmEmail(tokedDetails.ForUserId);
             }
             catch (Exception e)
             {
@@ -68,6 +84,33 @@ namespace AirFlow.Services.Auth
             }
 
             return Result.Success;
+        }
+
+        public LoginResult ConfirmLogin(string token)
+        {
+            Token tokenDetails = _authRepository.GetLoginTokenDetails(token);
+
+            if (tokenDetails == null)
+            {
+                return new LoginResult(ErrorCodeType.LoginTokenInfoNotFound);
+            }
+
+            if (tokenDetails.IsExpired)
+            {
+                return new LoginResult(ErrorCodeType.LoginTokenIsExpired);
+            }
+
+            string username;
+            try
+            {
+                username = _authRepository.ConfirmLogin(tokenDetails.ForUserId);
+            }
+            catch (Exception e)
+            {
+                return new LoginResult(ErrorCodeType.UnknownError, e.Message);
+            }
+
+            return new LoginResult(username);
         }
     }
 }

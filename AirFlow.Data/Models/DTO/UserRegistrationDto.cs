@@ -4,7 +4,7 @@ using PetaPoco;
 namespace AirFlow.Data.Models
 {
     [TableName("airFlowMemberRegistration")]
-    public class AirFlowUserSecurity
+    public class UserRegistrationDto
     {
         [Column(name: "nodeId")]
         public int UserId { get; set; }
@@ -20,5 +20,8 @@ namespace AirFlow.Data.Models
 
         [Column(name: "confirmation_date")]
         public DateTime? ConfirmationDate { get; set; }
+
+        [Column(name: "login_type")]
+        public byte LoginType { get; set; }
     }
 }

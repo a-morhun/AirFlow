@@ -8,5 +8,7 @@ namespace AirFlow.Services.Auth
         LoginResult Login(UserToLogin user);
 
         Result ConfirmEmail(string token);
+
+        LoginResult ConfirmLogin(string token);
     }
 }

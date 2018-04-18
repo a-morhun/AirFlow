@@ -84,7 +84,8 @@ namespace AirFlow.Tests.Controllers
             {
                 Email = email,
                 Password = "password",
-                Username = "username"
+                Username = "username",
+                LoginType = LoginType.TwoFactorEmail
             };
 
         private void MockSuccessServiceRegisterMethod(UserRegistrationViewModel registrationRequest)
@@ -100,7 +101,8 @@ namespace AirFlow.Tests.Controllers
         private static Expression<Predicate<UserToRegister>> ServiceRegistrationPredicate(UserRegistrationViewModel registrationRequest) =>
             r => r.Email == registrationRequest.Email &&
                  r.Password == registrationRequest.Password &&
-                 r.Username == registrationRequest.Username;
+                 r.Username == registrationRequest.Username &&
+                 r.LoginType == LoginType.TwoFactorEmail;
     }
 
     #endregion

@@ -12,7 +12,7 @@
 }
 
 <div class="login-form">
-    @using (Ajax.BeginForm("Login", "AuthSurface", ajaxOptions))
+    @using (Ajax.BeginForm("Login", new { controller = "AuthSurface" }, ajaxOptions, new { id = "login-form"}))
     {
         @Html.AntiForgeryToken()
         <div class="form-group row">

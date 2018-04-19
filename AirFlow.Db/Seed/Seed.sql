@@ -3253,4 +3253,3 @@ GO
 ALTER TABLE [airFlowTwoFactorLogin] ADD CONSTRAINT [FK_airFlowTwoFactorLogin_cmsMember_nodeId] FOREIGN KEY ([nodeId]) REFERENCES [cmsMember]([nodeId]) ON DELETE CASCADE ON UPDATE NO ACTION;
 GO
 ALTER TABLE [airFlowMemberRegistration] ADD CONSTRAINT [FK_cmsMemberSecurity_cmsMember_nodeId] FOREIGN KEY ([nodeId]) REFERENCES [cmsMember]([nodeId]) ON DELETE CASCADE ON UPDATE NO ACTION;
-GO

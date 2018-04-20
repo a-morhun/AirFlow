@@ -1,10 +1,10 @@
-﻿using System;
+﻿using AirFlow.Data.Migrations.MirationUnit;
+using PetaPoco;
+using System;
 using System.Configuration;
 using System.Data.SqlServerCe;
 using System.Linq;
 using System.Reflection;
-using AirFlow.Data.Migrations.MirationUnit;
-using PetaPoco;
 
 namespace AirFlow.Data.Migrations
 {
@@ -17,7 +17,15 @@ namespace AirFlow.Data.Migrations
 
             foreach (var migration in migrations)
             {
-                RunBatches(migration);
+                Execute(migration);
+            }
+        }
+
+        private static int GetCurrentVersion()
+        {
+            using (var db = new Database(Config.ConnectionStringName))
+            {
+                return db.Fetch<int>("SELECT [version] FROM airFlowDbVersions").Single();
             }
         }
 
@@ -32,20 +40,12 @@ namespace AirFlow.Data.Migrations
                 .ToArray();
         }
 
-        private static int GetCurrentVersion()
-        {
-            using (var db = new Database(Config.ConnectionStringName))
-            {
-                return db.Fetch<int>("SELECT [version] FROM airFlowDbVersions").Single();
-            }
-        }
-
         public static void CreateVersionTable()
         {
-            RunBatches(new InitialMigration());
+            Execute(new InitialMigration());
         }
 
-        private static void RunBatches(Migration migration)
+        private static void Execute(Migration migration)
         {
             string connectionString = ConfigurationManager.ConnectionStrings[Config.ConnectionStringName].ConnectionString;
             using (var conn = new SqlCeConnection(connectionString))

@@ -1,13 +1,10 @@
 ﻿using AirFlow.App_Start;
+using AirFlow.Data.Migrations;
 using System;
 using System.Web.Optimization;
 using System.Web.Routing;
-using AirFlow.Data.Migrations;
 using Umbraco.Core;
-using Umbraco.Core.Persistence;
 using Umbraco.Web;
-using Umbraco.Core.Security;
-using Umbraco.Web.Security.Providers;
 
 namespace AirFlow
 {

@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using AirFlow.Data.Models;
 
 namespace AirFlow.Data.Migrations.MirationUnit
 {
@@ -19,10 +18,10 @@ namespace AirFlow.Data.Migrations.MirationUnit
 
         public virtual string[] GetSqlQueries()
         {
-            return GetSqlQueryBatches(this).ToArray();
+            return GetSqlQueries(this).ToArray();
         }
 
-        private IEnumerable<string> GetSqlQueryBatches(Migration migration)
+        private IEnumerable<string> GetSqlQueries(Migration migration)
         {
             var assembly = Assembly.GetExecutingAssembly();
             string sqlScriptResource = $"{assembly.GetName().Name}.Migrations.Scripts.{migration.GetType().Name}.sql";

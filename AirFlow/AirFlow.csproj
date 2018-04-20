@@ -106,6 +106,12 @@
     <Reference Include="Jumoo.uSync.BackOffice, Version=4.0.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\uSync.4.0.5\lib\net45\Jumoo.uSync.BackOffice.dll</HintPath>
     </Reference>
+    <Reference Include="Jumoo.uSync.Content, Version=4.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\uSync.ContentEdition.4.1.2\lib\net45\Jumoo.uSync.Content.dll</HintPath>
+    </Reference>
+    <Reference Include="Jumoo.uSync.ContentMappers, Version=4.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\uSync.ContentMappers.4.1.2\lib\net45\Jumoo.uSync.ContentMappers.dll</HintPath>
+    </Reference>
     <Reference Include="Jumoo.uSync.Core, Version=6.0.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\uSync.Core.6.0.5\lib\net45\Jumoo.uSync.Core.dll</HintPath>
     </Reference>
@@ -431,6 +437,8 @@
     <Content Include="App_Plugins\UmbracoForms\Xslt\Templates\Schema2\UmbracoContourListComments.xslt" />
     <Content Include="App_Plugins\UmbracoForms\Xslt\Templates\UmbracoContourListComments.xslt" />
     <Content Include="App_Plugins\UmbracoForms\Xslt\xml.xslt" />
+    <Content Include="App_Plugins\uSync.Content\uSyncDashboardContent.html" />
+    <Content Include="App_Plugins\uSync.Content\uSyncDashboardContentController.js" />
     <Content Include="App_Plugins\uSync\uSyncDashboard.css" />
     <Content Include="App_Plugins\uSync\uSyncDashboard.html" />
     <Content Include="App_Plugins\uSync\uSyncDashboardController.js" />
@@ -506,6 +514,7 @@
     <Content Include="config\uSyncCore.Config" />
     <Content Include="config\uSyncBackOffice.Config" />
     <Content Include="App_Plugins\uSync\package.manifest" />
+    <Content Include="App_Plugins\uSync.Content\package.manifest" />
     <None Include="packages.config" />
     <Content Include="Scripts\airflow\common.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />

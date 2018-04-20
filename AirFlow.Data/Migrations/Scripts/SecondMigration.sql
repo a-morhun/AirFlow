@@ -4,7 +4,8 @@
 	email_confirmed BIT NOT NULL,
 	confirmation_token NVARCHAR(64) NOT NULL,
 	confirmation_token_expiration DATETIME NOT NULL,
-	confirmation_date DATETIME
+	confirmation_date DATETIME,
+	[login_type] TINYINT NOT NULL
 );
 GO
 

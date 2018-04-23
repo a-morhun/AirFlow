@@ -55,15 +55,15 @@ namespace AirFlow
         private static void SetPublicAccessToHomePage()
         {
             var umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
-            IPublishedContent homeContent = umbracoHelper.TypedContentSingleAtXPath("//home");
+            var contentService = AirFlowServiceContainer.Container.Resolve<IContentService>();
 
-            if (homeContent == null)
+            IContent GetNodeByAlias(string alias)
             {
-                return;
+                IPublishedContent homeContent = umbracoHelper.TypedContentSingleAtXPath("//" + alias);
+                return contentService.GetById(homeContent.Id);
             }
 
-            var contentService = AirFlowServiceContainer.Container.Resolve<IContentService>();
-            IContent homeNode = contentService.GetById(homeContent.Id);
+            IContent homeNode = GetNodeByAlias("home");
             var publicAccessService = AirFlowServiceContainer.Container.Resolve<IPublicAccessService>();
 
             if (publicAccessService.IsProtected(homeNode))
@@ -71,15 +71,10 @@ namespace AirFlow
                 return;
             }
 
-            IPublishedContent loginContent = umbracoHelper.TypedContentSingleAtXPath("//" + "login");
-            IPublishedContent errorContent = umbracoHelper.TypedContentSingleAtXPath("//" + "error");
+            IContent loginNode = GetNodeByAlias("login");
+            IContent errorNode = GetNodeByAlias("error");
 
-            if (loginContent == null || errorContent == null)
-            {
-                return;
-            }
-
-            var entry = new PublicAccessEntry(new Guid(), homeContent.Id, loginContent.Id, errorContent.Id, new List<PublicAccessRule>());
+            var entry = new PublicAccessEntry(homeNode, loginNode, errorNode, new List<PublicAccessRule>());
 
             publicAccessService.Save(entry);
             publicAccessService.AddRule(homeNode, Constants.Conventions.PublicAccess.MemberRoleRuleType, UserRoleType.Regular.ToString());

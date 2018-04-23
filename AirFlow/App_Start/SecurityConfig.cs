@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Umbraco.Core;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
+using Umbraco.Web;
 
 namespace AirFlow
 {
@@ -53,19 +54,32 @@ namespace AirFlow
 
         private static void SetPublicAccessToHomePage()
         {
-            var contentService = AirFlowServiceContainer.Container.Resolve<IContentService>();
-            var publicAccessService = AirFlowServiceContainer.Container.Resolve<IPublicAccessService>();
+            var umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
+            IPublishedContent homeContent = umbracoHelper.TypedContentSingleAtXPath("//home");
 
-            IContent homeNode = contentService.GetById(1072);
-            IContent loginNode = contentService.GetById(1073);
-            IContent errorNode = contentService.GetById(1079);
+            if (homeContent == null)
+            {
+                return;
+            }
+
+            var contentService = AirFlowServiceContainer.Container.Resolve<IContentService>();
+            IContent homeNode = contentService.GetById(homeContent.Id);
+            var publicAccessService = AirFlowServiceContainer.Container.Resolve<IPublicAccessService>();
 
             if (publicAccessService.IsProtected(homeNode))
             {
                 return;
             }
 
-            var entry = new PublicAccessEntry(homeNode, loginNode, errorNode, new List<PublicAccessRule>());
+            IPublishedContent loginContent = umbracoHelper.TypedContentSingleAtXPath("//" + "login");
+            IPublishedContent errorContent = umbracoHelper.TypedContentSingleAtXPath("//" + "error");
+
+            if (loginContent == null || errorContent == null)
+            {
+                return;
+            }
+
+            var entry = new PublicAccessEntry(new Guid(), homeContent.Id, loginContent.Id, errorContent.Id, new List<PublicAccessRule>());
 
             publicAccessService.Save(entry);
             publicAccessService.AddRule(homeNode, Constants.Conventions.PublicAccess.MemberRoleRuleType, UserRoleType.Regular.ToString());

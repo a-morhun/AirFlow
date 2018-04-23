@@ -33,12 +33,19 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SqlServerCe_unofficial.4.0.8482.1\lib\net20\System.Data.SqlServerCe.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Umbraco.Core">
+      <HintPath>..\AirFlow\bin\Umbraco.Core.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthRepository.cs" />
@@ -48,11 +55,17 @@
     <Compile Include="IUserRepository.cs" />
     <Compile Include="IUserSecurityRepository.cs" />
     <Compile Include="LoginRepository.cs" />
+    <Compile Include="Migrations\MigrationManager.cs" />
+    <Compile Include="Migrations\MirationUnit\InitialMigration.cs" />
+    <Compile Include="Migrations\MirationUnit\Migration.cs" />
+    <Compile Include="Migrations\MirationUnit\SecondMigration.cs" />
     <Compile Include="Models\AdditionalLoginInfo.cs" />
     <Compile Include="Models\ConfirmationToken.cs" />
     <Compile Include="Models\DTO\TwoFactorLoginDto.cs" />
     <Compile Include="Models\UmbracoMember.cs" />
     <Compile Include="Models\Token.cs" />
+    <Compile Include="Models\SqlBatch.cs" />
+    <Compile Include="PetaPocoUnitOfWork.cs" />
     <Compile Include="UserRepository.cs" />
     <Compile Include="UserSecurityRepository.cs" />
     <Compile Include="Models\DTO\UserRegistrationDto.cs" />
@@ -70,6 +83,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Migrations\Scripts\InitialMigration.sql" />
+    <EmbeddedResource Include="Migrations\Scripts\SecondMigration.sql" />
     <Content Include="Models\Generated\Database.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Database.cs</LastGenOutput>

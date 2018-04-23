@@ -9,6 +9,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using AirFlow.ServiceContainers;
 using Umbraco.Core;
+using Umbraco.Core.Models;
 using Umbraco.Core.Services;
 using Umbraco.Forms.Web.Trees;
 using Umbraco.Web;
@@ -75,6 +76,9 @@ namespace AirFlow
         {
             builder.RegisterInstance(ApplicationContext.Current.Services.MemberService).As<IMemberService>();
             builder.RegisterInstance(ApplicationContext.Current.Services.MemberTypeService).As<IMemberTypeService>();
+            builder.RegisterInstance(ApplicationContext.Current.Services.MemberGroupService).As<IMemberGroupService>();
+            builder.RegisterInstance(ApplicationContext.Current.Services.ContentService).As<IContentService>();
+            builder.RegisterInstance(ApplicationContext.Current.Services.PublicAccessService).As<IPublicAccessService>();
         }
 
         private static void SetResolvers(ContainerBuilder builder)

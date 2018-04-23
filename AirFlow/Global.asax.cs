@@ -17,6 +17,7 @@ namespace AirFlow
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             AutofacConfig.Configure();
             MigrationManager.Process();
+            SecurityConfig.Initialize();
         }
 
         protected override void OnApplicationStarting(object sender, EventArgs e)

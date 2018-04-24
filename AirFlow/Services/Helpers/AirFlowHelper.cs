@@ -1,17 +1,15 @@
-﻿using AirFlow.ServiceContainers;
-using Autofac;
+﻿using AirFlow.Services.Containers;
 using System;
 using System.Linq;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
 using Umbraco.Web;
-using Umbraco.Web.Routing;
 
 namespace AirFlow.Services.Helpers
 {
     public class AirFlowHelper : IAirFlowHelper
     {
-        private IContentService ContentService => AirFlowServiceContainer.Container.Resolve<IContentService>();
+        private IContentService ContentService => AirFlowServiceContainer.Instance.GetInstance<IContentService>();
         private static Lazy<AirFlowHelper> _lazy = new Lazy<AirFlowHelper>(() => new AirFlowHelper());
 
         public static AirFlowHelper Instance => _lazy.Value;

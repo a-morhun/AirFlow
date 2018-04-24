@@ -7,9 +7,7 @@ using NSubstitute;
 using System;
 using System.Linq.Expressions;
 using System.Web.Mvc;
-using AirFlow.ServiceContainers;
 using AirFlow.Services.Helpers;
-using Autofac;
 using Umbraco.Web;
 using Umbraco.Web.Mvc;
 
@@ -35,11 +33,7 @@ namespace AirFlow.Tests.Controllers
             _formsAuthentication = Substitute.For<IFormsAuthentication>();
             _airFlowHelper = Substitute.For<IAirFlowHelper>();
 
-            _authController = new AuthSurfaceController(_authService, _formsAuthentication);
-
-            var builder = new ContainerBuilder();
-            builder.RegisterInstance(_airFlowHelper).As<IAirFlowHelper>();
-            AirFlowServiceContainer.SetContainer(builder.Build());
+            _authController = new AuthSurfaceController(_authService, _formsAuthentication, _airFlowHelper);
         }
 
         [TearDown]
@@ -74,7 +68,7 @@ namespace AirFlow.Tests.Controllers
         {
             // Arrange
             UserLoginViewModel loginRequest = GetUserLoginViewModel();
-            MockSuccessServiceLoginMethod(loginRequest, type: LoginType.TwoFactorEmail);
+            MockSuccessServiceLoginMethod(loginRequest, type: LoginType.TwoFactorViaEmail);
 
             // Act
             var result = _authController.Login(loginRequest) as PartialViewResult;
@@ -207,7 +201,7 @@ namespace AirFlow.Tests.Controllers
         {
             // Arrange
             ArrangeAirFlowHelper_GetContentId(AirFlowConstants.HomeContent, ExpectedContentId);
-            _authService.ConfirmLogin(LoginToken).Returns(new LoginResult(Username, LoginType.TwoFactorEmail));
+            _authService.ConfirmLogin(LoginToken).Returns(new LoginResult(Username, LoginType.TwoFactorViaEmail));
 
             // Act
             var result = _authController.ConfirmLogin(LoginToken) as RedirectToUmbracoPageResult;

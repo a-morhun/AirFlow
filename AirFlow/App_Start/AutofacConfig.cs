@@ -7,11 +7,10 @@ using Autofac.Integration.WebApi;
 using Autofac;
 using System.Web.Http;
 using System.Web.Mvc;
-using AirFlow.ServiceContainers;
+using AirFlow.Services.Containers;
 using AirFlow.Services.Helpers;
 using Umbraco.Core;
 using Umbraco.Core.Services;
-//using Umbraco.Forms.Web.Trees;
 using Umbraco.Web;
 using IEmailSender = AirFlow.Services.Email.IEmailSender;
 
@@ -36,10 +35,6 @@ namespace AirFlow
             builder.Register(c => UmbracoContext.Current).AsSelf();
             builder.RegisterControllers(umbracoAssembly);
             builder.RegisterApiControllers(umbracoAssembly);
-
-            //var umbracoFormsAssembly = typeof(DataSourceTreeController).Assembly;
-            //builder.RegisterControllers(umbracoFormsAssembly);
-            //builder.RegisterApiControllers(umbracoFormsAssembly);
         }
 
         private static void RegisterAirFlowControllers(ContainerBuilder builder)
@@ -65,13 +60,14 @@ namespace AirFlow
             builder.RegisterType<AuthRepository>().As<IAuthRepository>();
 
             builder.RegisterInstance(AirFlowHelper.Instance).As<IAirFlowHelper>();
+            builder.RegisterInstance(AirFlowServiceContainer.Instance).As<IServiceContainer>();
 
-            builder.Register((c, p) => new EmailTypeLoginProcessor(
+            builder.Register((c, p) => new EmailTypeLoginProvider(
                     p.Named<string>("userEmail"),
                     c.Resolve<ILoginRepository>(),
                     c.Resolve<ITokenGenerator>(),
                     c.Resolve<IEmailSender>()))
-                .As<ITwoFactorLoginProcessor>();
+                .As<ITwoFactorLoginProvider>();
         }
 
         private static void RegisterUmbracoServices(ContainerBuilder builder)

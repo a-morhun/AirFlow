@@ -4,14 +4,14 @@ using System.Net.Mail;
 
 namespace AirFlow.Services.Auth
 {
-    public class EmailTypeLoginProcessor : TwoFactorLoginProcessor
+    public class EmailTypeLoginProvider : TwoFactorLoginProvider
     {
         private readonly ITokenGenerator _tokenGenerator;
         private readonly IEmailSender _emailSender;
 
         private readonly string _userEmail;
 
-        public EmailTypeLoginProcessor(
+        public EmailTypeLoginProvider(
             string userEmail,
             ILoginRepository loginRepository,
             ITokenGenerator tokenGenerator,

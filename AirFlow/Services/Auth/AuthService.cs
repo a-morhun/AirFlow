@@ -1,10 +1,9 @@
-﻿using System;
-using AirFlow.Data;
+﻿using AirFlow.Data;
 using AirFlow.Data.Models;
 using AirFlow.Models.Auth;
 using AirFlow.Models.Common;
-using AirFlow.ServiceContainers;
-using Autofac;
+using AirFlow.Services.Containers;
+using System;
 
 namespace AirFlow.Services.Auth
 {
@@ -13,15 +12,18 @@ namespace AirFlow.Services.Auth
         private readonly IMembership _membership;
         private readonly IUserRepository _userRepository;
         private readonly IAuthRepository _authRepository;
+        private readonly IServiceContainer _serviceContainer;
 
         public AuthService(
             IMembership membership,
             IAuthRepository authRepository,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            IServiceContainer serviceContainer)
         {
             _membership = membership;
             _authRepository = authRepository;
             _userRepository = userRepository;
+            _serviceContainer = serviceContainer;
         }
 
         public LoginResult Login(UserToLogin user)
@@ -45,15 +47,14 @@ namespace AirFlow.Services.Auth
 
             var type = (LoginType)additionalInfo.LoginType;
 
-            if (type == LoginType.TwoFactorEmail)
+            if (type == LoginType.TwoFactorViaEmail)
             {
-                var processor = AirFlowServiceContainer.Container.Resolve<ITwoFactorLoginProcessor>(new NamedParameter("userEmail", user.Email));
-                processor.Process(additionalInfo.UserId);
+                var provider = _serviceContainer.GetInstance<ITwoFactorLoginProvider>(new ConstructorParameter("userEmail", user.Email));
+                provider.Process(additionalInfo.UserId);
             }
 
             return new LoginResult(additionalInfo.Username, type);
         }
-
 
         public Result ConfirmEmail(string token)
         {

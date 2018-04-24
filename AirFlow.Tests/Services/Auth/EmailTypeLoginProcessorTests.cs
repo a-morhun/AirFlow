@@ -18,7 +18,7 @@ namespace AirFlow.Tests.Services.Auth
         private ITokenGenerator _tokenGenerator;
         private IEmailSender _emailSender;
         private ILoginRepository _loginRepository;
-        private ITwoFactorLoginProcessor _loginProcessor;
+        private ITwoFactorLoginProvider _loginProcessor;
 
         [SetUp]
         public void SetUp()
@@ -27,7 +27,7 @@ namespace AirFlow.Tests.Services.Auth
             _emailSender = Substitute.For<IEmailSender>();
             _loginRepository = Substitute.For<ILoginRepository>();
 
-            _loginProcessor = new EmailTypeLoginProcessor(UserEmail, _loginRepository, _tokenGenerator, _emailSender);
+            _loginProcessor = new EmailTypeLoginProvider(UserEmail, _loginRepository, _tokenGenerator, _emailSender);
         }
 
         [Test]

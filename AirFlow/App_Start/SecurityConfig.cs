@@ -1,6 +1,5 @@
 ﻿using AirFlow.Models.Account;
-using AirFlow.ServiceContainers;
-using Autofac;
+using AirFlow.Services.Containers;
 using System;
 using System.Collections.Generic;
 using Umbraco.Core;
@@ -22,7 +21,7 @@ namespace AirFlow
 
         private static void CreateInitialMemberGroups()
         {
-            var memberGroupService = AirFlowServiceContainer.Container.Resolve<IMemberGroupService>();
+            var memberGroupService = AirFlowServiceContainer.Instance.GetInstance<IMemberGroupService>();
             foreach (IMemberGroup userRole in GetUserRoles())
             {
                 if (memberGroupService.GetByName(userRole.Name) == null)
@@ -55,7 +54,7 @@ namespace AirFlow
         private static void SetPublicAccessToHomePage()
         {
             var umbracoHelper = new UmbracoHelper(UmbracoContext.Current);
-            var contentService = AirFlowServiceContainer.Container.Resolve<IContentService>();
+            var contentService = AirFlowServiceContainer.Instance.GetInstance<IContentService>();
 
             IContent GetNodeByAlias(string alias)
             {
@@ -64,7 +63,7 @@ namespace AirFlow
             }
 
             IContent homeNode = GetNodeByAlias("home");
-            var publicAccessService = AirFlowServiceContainer.Container.Resolve<IPublicAccessService>();
+            var publicAccessService = AirFlowServiceContainer.Instance.GetInstance<IPublicAccessService>();
 
             if (publicAccessService.IsProtected(homeNode))
             {

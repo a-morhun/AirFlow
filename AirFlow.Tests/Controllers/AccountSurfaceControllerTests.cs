@@ -85,7 +85,7 @@ namespace AirFlow.Tests.Controllers
                 Email = email,
                 Password = "password",
                 Username = "username",
-                LoginType = LoginType.TwoFactorEmail
+                LoginType = LoginType.TwoFactorViaEmail
             };
 
         private void MockSuccessServiceRegisterMethod(UserRegistrationViewModel registrationRequest)
@@ -102,7 +102,7 @@ namespace AirFlow.Tests.Controllers
             r => r.Email == registrationRequest.Email &&
                  r.Password == registrationRequest.Password &&
                  r.Username == registrationRequest.Username &&
-                 r.LoginType == LoginType.TwoFactorEmail;
+                 r.LoginType == LoginType.TwoFactorViaEmail;
     }
 
     #endregion

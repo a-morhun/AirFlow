@@ -3,6 +3,6 @@
     public enum LoginType : byte
     {
         Regular = 0,
-        TwoFactorEmail
+        TwoFactorViaEmail
     }
 }

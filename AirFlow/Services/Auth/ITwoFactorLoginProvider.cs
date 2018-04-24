@@ -1,6 +1,6 @@
 ﻿namespace AirFlow.Services.Auth
 {
-    public interface ITwoFactorLoginProcessor
+    public interface ITwoFactorLoginProvider
     {
         void Process(int userId);
     }

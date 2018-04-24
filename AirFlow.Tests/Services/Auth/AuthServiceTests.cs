@@ -3,11 +3,10 @@ using AirFlow.Data.Models;
 using AirFlow.Models.Auth;
 using AirFlow.Models.Common;
 using AirFlow.Services.Auth;
-using System;
-using AirFlow.ServiceContainers;
-using Autofac;
+using AirFlow.Services.Containers;
 using NSubstitute;
 using NUnit.Framework;
+using System;
 
 namespace AirFlow.Tests.Services.Auth
 {
@@ -18,6 +17,7 @@ namespace AirFlow.Tests.Services.Auth
         private IAuthRepository _authRepository;
         private IAuthService _authService;
         private IUserRepository _userRepository;
+        private IServiceContainer _serviceContainer;
 
         [SetUp]
         public void SetUp()
@@ -25,8 +25,9 @@ namespace AirFlow.Tests.Services.Auth
             _membership = Substitute.For<IMembership>();
             _authRepository = Substitute.For<IAuthRepository>();
             _userRepository = Substitute.For<IUserRepository>();
+            _serviceContainer = Substitute.For<IServiceContainer>();
 
-            _authService = new AuthService(_membership, _authRepository, _userRepository);
+            _authService = new AuthService(_membership, _authRepository, _userRepository, _serviceContainer);
         }
 
         #region Login
@@ -45,11 +46,7 @@ namespace AirFlow.Tests.Services.Auth
         public void AuthService_Login_ExistingUser_ValidCredentialsAndUserApproved_ConfirmedEmail_2FAEmailLoginType_Success()
         {
             // Arrange
-            LoginType expectedLoginType = LoginType.TwoFactorEmail;
-
-            var builder = new ContainerBuilder();
-            builder.RegisterInstance(Substitute.For<ITwoFactorLoginProcessor>()).As<ITwoFactorLoginProcessor>();
-            AirFlowServiceContainer.SetContainer(builder.Build());
+            LoginType expectedLoginType = LoginType.TwoFactorViaEmail;
 
             // Arrange & Act & Assert
             AuthService_Login_ValidLoginProcess(expectedLoginType);

@@ -2,7 +2,7 @@
 using AirFlow.Models.Common;
 using AirFlow.Services.Auth;
 using System.Web.Mvc;
-using AirFlow.ServiceContainers;
+using AirFlow.Services.Containers;
 using AirFlow.Services.Helpers;
 using Umbraco.Web.Mvc;
 
@@ -14,15 +14,16 @@ namespace AirFlow.Controllers
 
         private readonly IAuthService _authService;
         private readonly IFormsAuthentication _formsAuthentication;
-
-        private IAirFlowHelper _airFlowHelper => AirFlowServiceContainer.GetInstance<IAirFlowHelper>();
+        private readonly IAirFlowHelper _airFlowHelper;
 
         public AuthSurfaceController(
             IAuthService authService,
-            IFormsAuthentication formsAuthentication)
+            IFormsAuthentication formsAuthentication,
+            IAirFlowHelper airFlowHelper)
         {
             _authService = authService;
             _formsAuthentication = formsAuthentication;
+            _airFlowHelper = airFlowHelper;
         }
 
         [HttpPost]

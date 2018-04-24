@@ -4,13 +4,13 @@ using AirFlow.Data.Models;
 
 namespace AirFlow.Services.Auth
 {
-    public abstract class TwoFactorLoginProcessor : ITwoFactorLoginProcessor
+    public abstract class TwoFactorLoginProvider : ITwoFactorLoginProvider
     {
         private readonly ILoginRepository _loginRepository;
 
         protected DateTime ExpirationDateTime = DateTime.UtcNow.AddMinutes(5);
 
-        protected TwoFactorLoginProcessor(ILoginRepository loginRepository)
+        protected TwoFactorLoginProvider(ILoginRepository loginRepository)
         {
             _loginRepository = loginRepository;
         }

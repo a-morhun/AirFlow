@@ -8,7 +8,7 @@ using  Umbraco.Web;
 using  Umbraco.ModelsBuilder;
 using  Umbraco.ModelsBuilder.Umbraco;
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "f5d4e05cfbb03f04")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "e80bb6e83ad5e3c4")]
 [assembly:System.Reflection.AssemblyVersion("0.0.0.1")]
 
 
@@ -144,16 +144,16 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 	}
 
-	/// <summary>EmailConfirmation</summary>
-	[PublishedContentModel("emailConfirmation")]
-	public partial class EmailConfirmation : PublishedContentModel
+	/// <summary>Confirmation</summary>
+	[PublishedContentModel("confirmation")]
+	public partial class Confirmation : PublishedContentModel
 	{
 #pragma warning disable 0109 // new is redundant
-		public new const string ModelTypeAlias = "emailConfirmation";
+		public new const string ModelTypeAlias = "confirmation";
 		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
 #pragma warning restore 0109
 
-		public EmailConfirmation(IPublishedContent content)
+		public Confirmation(IPublishedContent content)
 			: base(content)
 		{ }
 
@@ -164,13 +164,13 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 #pragma warning restore 0109
 
-		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<EmailConfirmation, TValue>> selector)
+		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<Confirmation, TValue>> selector)
 		{
 			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
 		}
 
 		///<summary>
-		/// Header: Enter header text for email confirmation result
+		/// header: Enter header for a confirmation message
 		///</summary>
 		[ImplementPropertyType("header")]
 		public string Header
@@ -179,21 +179,73 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 
 		///<summary>
-		/// IsSuccess: Choose confirmation status: success or failure
-		///</summary>
-		[ImplementPropertyType("isSuccess")]
-		public bool IsSuccess
-		{
-			get { return this.GetPropertyValue<bool>("isSuccess"); }
-		}
-
-		///<summary>
-		/// Message: Enter the result message of email confirmation
+		/// message: Enter message for a confirmation result
 		///</summary>
 		[ImplementPropertyType("message")]
 		public string Message
 		{
 			get { return this.GetPropertyValue<string>("message"); }
+		}
+
+		///<summary>
+		/// Success: Specify whether an operation was successful
+		///</summary>
+		[ImplementPropertyType("success")]
+		public bool Success
+		{
+			get { return this.GetPropertyValue<bool>("success"); }
+		}
+	}
+
+	/// <summary>Confirmation_Email</summary>
+	[PublishedContentModel("confirmation_email_success")]
+	public partial class Confirmation_email_success : Confirmation
+	{
+#pragma warning disable 0109 // new is redundant
+		public new const string ModelTypeAlias = "confirmation_email_success";
+		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
+#pragma warning restore 0109
+
+		public Confirmation_email_success(IPublishedContent content)
+			: base(content)
+		{ }
+
+#pragma warning disable 0109 // new is redundant
+		public new static PublishedContentType GetModelContentType()
+		{
+			return PublishedContentType.Get(ModelItemType, ModelTypeAlias);
+		}
+#pragma warning restore 0109
+
+		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<Confirmation_email_success, TValue>> selector)
+		{
+			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
+		}
+	}
+
+	/// <summary>Confirmation_Login</summary>
+	[PublishedContentModel("confirmation_Login")]
+	public partial class Confirmation_Login : Confirmation
+	{
+#pragma warning disable 0109 // new is redundant
+		public new const string ModelTypeAlias = "confirmation_Login";
+		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
+#pragma warning restore 0109
+
+		public Confirmation_Login(IPublishedContent content)
+			: base(content)
+		{ }
+
+#pragma warning disable 0109 // new is redundant
+		public new static PublishedContentType GetModelContentType()
+		{
+			return PublishedContentType.Get(ModelItemType, ModelTypeAlias);
+		}
+#pragma warning restore 0109
+
+		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<Confirmation_Login, TValue>> selector)
+		{
+			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
 		}
 	}
 

@@ -4,6 +4,8 @@ using System;
 using System.Linq;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
+using Umbraco.Web;
+using Umbraco.Web.Routing;
 
 namespace AirFlow.Services.Helpers
 {
@@ -23,5 +25,11 @@ namespace AirFlow.Services.Helpers
 
         public int GetContentId(string contentName, int level) =>
             GetContent(contentName, level)?.Id ?? -1;
+
+        public string GetContentUrl(UmbracoContext context, string contentName, int level)
+        {
+            IContent content = GetContent(contentName, level);
+            return context.UrlProvider.GetUrl(content.Id);
+        }
     }
 }

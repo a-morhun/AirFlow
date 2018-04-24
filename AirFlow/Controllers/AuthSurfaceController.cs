@@ -11,10 +11,6 @@ namespace AirFlow.Controllers
     public class AuthSurfaceController : SurfaceController
     {
         private const string PartialViewLoginMessage = "/Views/Partials/Auth/_LoginMessage.cshtml";
-        private const string ConfirmationSuccessContentName = "EmailConfirmationSuccess";
-        private const string ConfirmationFailureContentName = "EmailConfirmationFailure";
-        private const string ViewLoginConfirmationFailure = "/Views/ConfirmLoginFailure.cshtml";
-        private const string HomePath = "/";
 
         private readonly IAuthService _authService;
         private readonly IFormsAuthentication _formsAuthentication;
@@ -43,15 +39,13 @@ namespace AirFlow.Controllers
 
             if (loginResult.IsFailure)
             {
-                return PartialView(PartialViewLoginMessage, new ResultViewModel(loginResult.ErrorCode.Value.ToString(), isSuccess: false));
+                return PartialView(PartialViewLoginMessage, new ResultViewModel(loginResult.ErrorCode.ToString(), isSuccess: false));
             }
 
             if (loginResult.Type == LoginType.Regular)
             {
                 _formsAuthentication.SetAuthCookie(loginResult.Username, createPersistentCookie: false);
-
-                string homeUrl = UmbracoContext.UrlProvider.GetUrl(_airFlowHelper.GetContentId("Home"));
-                return JavaScript($"window.location = '{homeUrl}'");
+                return JavaScript($"window.location = '{GetContentUrl(AirFlowConstants.HomeContent)}'");
             }
             return PartialView(PartialViewLoginMessage, new ResultViewModel("Confirmation message was sent to your email", isSuccess: true));
         }
@@ -62,7 +56,7 @@ namespace AirFlow.Controllers
         public ActionResult Logout()
         {
             _formsAuthentication.SignOut();
-            return Redirect(HomePath);
+            return RedirectToUmbracoPage(_airFlowHelper.GetContentId("Login"));
         }
 
         [HttpGet]
@@ -70,17 +64,17 @@ namespace AirFlow.Controllers
         {
             if (string.IsNullOrEmpty(token))
             {
-                return RedirectToUmbracoPage(_airFlowHelper.GetContentId(ConfirmationFailureContentName));
+                return RedirectToUmbracoPage(GetContentId(AirFlowConstants.EmailConfirmationFailureContent));
             }
 
             Result confirmationResult = _authService.ConfirmEmail(token);
 
             if (confirmationResult.IsFailure)
             {
-                return RedirectToUmbracoPage(_airFlowHelper.GetContentId(ConfirmationFailureContentName));
+                return RedirectToUmbracoPage(GetContentId(AirFlowConstants.EmailConfirmationFailureContent));
             }
 
-            return RedirectToUmbracoPage(_airFlowHelper.GetContentId(ConfirmationSuccessContentName));
+            return RedirectToUmbracoPage(GetContentId(AirFlowConstants.EmailConfirmationSuccessContent));
         }
 
         [HttpGet]
@@ -88,18 +82,28 @@ namespace AirFlow.Controllers
         {
             if (string.IsNullOrEmpty(token))
             {
-                return View(ViewLoginConfirmationFailure);
+                return RedirectToUmbracoPage(GetContentId(AirFlowConstants.LoginConfirmationFailureContent));
             }
 
             LoginResult confirmationResult = _authService.ConfirmLogin(token);
 
             if (confirmationResult.IsFailure)
             {
-                return View(ViewLoginConfirmationFailure);
+                return RedirectToUmbracoPage(GetContentId(AirFlowConstants.LoginConfirmationFailureContent));
             }
 
             _formsAuthentication.SetAuthCookie(confirmationResult.Username, createPersistentCookie: false);
-            return Redirect(HomePath);
+            return RedirectToUmbracoPage(_airFlowHelper.GetContentId(AirFlowConstants.HomeContent));
+        }
+
+        private int GetContentId(string contentName)
+        {
+            return _airFlowHelper.GetContentId(contentName);
+        }
+
+        private string GetContentUrl(string contentName)
+        {
+            return _airFlowHelper.GetContentUrl(UmbracoContext, contentName);
         }
     }
 }

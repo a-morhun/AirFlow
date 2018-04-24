@@ -1,5 +1,6 @@
 ﻿using AirFlow.Models.Common;
 using Umbraco.Core.Models;
+using Umbraco.Web;
 
 namespace AirFlow.Services.Helpers
 {
@@ -8,5 +9,7 @@ namespace AirFlow.Services.Helpers
         IContent GetContent(string contentName, int level = AirFlowConstants.RootContentLevel);
 
         int GetContentId(string contentName, int level = AirFlowConstants.RootContentLevel);
+
+        string GetContentUrl(UmbracoContext context, string contentName, int level = AirFlowConstants.RootContentLevel);
     }
 }

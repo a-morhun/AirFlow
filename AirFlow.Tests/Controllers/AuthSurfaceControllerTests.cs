@@ -11,7 +11,9 @@ using AirFlow.ServiceContainers;
 using AirFlow.Services.Helpers;
 using Autofac;
 using Umbraco.Core.Services;
+using Umbraco.Web;
 using Umbraco.Web.Mvc;
+using Umbraco.Web.Routing;
 
 namespace AirFlow.Tests.Controllers
 {
@@ -23,12 +25,14 @@ namespace AirFlow.Tests.Controllers
         private IAuthService _authService;
         private IFormsAuthentication _formsAuthentication;
         private IAirFlowHelper _airFlowHelper;
+        private IUrlProvider _urlProvider;
         private AuthSurfaceController _authController;
 
         [SetUp]
         public void SetUp()
         {
-            Common.SetUpUmbracoContext();
+            _urlProvider = Substitute.For<IUrlProvider>();
+            Common.SetUpUmbracoContext(_urlProvider);
 
             _authService = Substitute.For<IAuthService>();
             _formsAuthentication = Substitute.For<IFormsAuthentication>();
@@ -53,9 +57,15 @@ namespace AirFlow.Tests.Controllers
         public void AuthSurfaceController_Login_ValidLoginRequest_ValidCredentials_RegularLogin_Success()
         {
             // Arrange
-            string expectedScript = "window.location = '/'";
+            string homeUrl = "/";
+            const int homePageId = 3;
+            string expectedScript = $"window.location = '{homeUrl}'";
             UserLoginViewModel loginRequest = GetUserLoginViewModel();
             MockSuccessServiceLoginMethod(loginRequest);
+            _airFlowHelper.GetContentId("Home").Returns(homePageId);
+
+            _urlProvider.GetUrl(Arg.Any<UmbracoContext>(), homePageId, Arg.Any<Uri>(), Arg.Any<UrlProviderMode>())
+                .Returns(homeUrl);
 
             // Act
             var result = _authController.Login(loginRequest) as JavaScriptResult;

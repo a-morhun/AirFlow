@@ -49,9 +49,10 @@ namespace AirFlow.Controllers
             if (loginResult.Type == LoginType.Regular)
             {
                 _formsAuthentication.SetAuthCookie(loginResult.Username, createPersistentCookie: false);
-                return JavaScript($"window.location = '{HomePath}'");
-            }
 
+                string homeUrl = UmbracoContext.UrlProvider.GetUrl(_airFlowHelper.GetContentId("Home"));
+                return JavaScript($"window.location = '{homeUrl}'");
+            }
             return PartialView(PartialViewLoginMessage, new ResultViewModel("Confirmation message was sent to your email", isSuccess: true));
         }
 

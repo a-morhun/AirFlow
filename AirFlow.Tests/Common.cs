@@ -28,7 +28,7 @@ namespace AirFlow.Tests
         public static string ShowResponseTypeMismatchMessage(Type type) => string.Format(ResponseTypeMismatchFormat, type.Name);
         public static string ShowNotSatisfiedExpectationMessage<T>(T expected, object target) => string.Format(NotSatisfiedExpectation, expected, target);
 
-        public static void SetUpUmbracoContext()
+        public static void SetUpUmbracoContext(IUrlProvider provider = null)
         {
             var applicationContext = new ApplicationContext(
                 CacheHelper.CreateDisabledCacheHelper(),
@@ -39,7 +39,7 @@ namespace AirFlow.Tests
                 applicationContext,
                 new WebSecurity(Substitute.For<HttpContextBase>(), applicationContext),
                 Substitute.For<IUmbracoSettingsSection>(),
-                Enumerable.Empty<IUrlProvider>(),
+                provider == null ? Enumerable.Empty<IUrlProvider>() : new [] { provider },
                 true);
         }
 

@@ -11,6 +11,7 @@ using AirFlow.ServiceContainers;
 using AirFlow.Services.Helpers;
 using Umbraco.Core;
 using Umbraco.Core.Services;
+//using Umbraco.Forms.Web.Trees;
 using Umbraco.Web;
 using IEmailSender = AirFlow.Services.Email.IEmailSender;
 
@@ -35,6 +36,10 @@ namespace AirFlow
             builder.Register(c => UmbracoContext.Current).AsSelf();
             builder.RegisterControllers(umbracoAssembly);
             builder.RegisterApiControllers(umbracoAssembly);
+
+            //var umbracoFormsAssembly = typeof(DataSourceTreeController).Assembly;
+            //builder.RegisterControllers(umbracoFormsAssembly);
+            //builder.RegisterApiControllers(umbracoFormsAssembly);
         }
 
         private static void RegisterAirFlowControllers(ContainerBuilder builder)

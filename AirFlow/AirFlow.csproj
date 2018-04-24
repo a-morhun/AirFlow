@@ -447,7 +447,6 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SecurityConfig.cs" />
-    <Compile Include="Controllers\ConfirmationController.cs" />
     <Compile Include="Models\Account\UserRoleType.cs" />
     <Compile Include="Models\Auth\LoginType.cs" />
     <Compile Include="Models\Common\AirFlowConfiguration.cs" />

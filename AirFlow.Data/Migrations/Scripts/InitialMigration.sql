@@ -633,9 +633,6 @@ GO
 INSERT INTO [umbracoMigration] ([id],[name],[createDate],[version]) VALUES (
 1,N'Umbraco',{ts '2018-04-20 14:40:14.813'},N'7.10.2');
 GO
-INSERT INTO [umbracoMigration] ([id],[name],[createDate],[version]) VALUES (
-100,N'UmbracoForms',{ts '2018-04-20 14:40:21.993'},N'7.0.0');
-GO
 SET IDENTITY_INSERT [umbracoMigration] OFF;
 GO
 SET IDENTITY_INSERT [umbracoLog] ON;
@@ -764,13 +761,7 @@ GO
 SET IDENTITY_INSERT [cmsMacroProperty] ON;
 GO
 INSERT INTO [cmsMacroProperty] ([id],[uniquePropertyId],[editorAlias],[macro],[macroPropertySortOrder],[macroPropertyAlias],[macroPropertyName]) VALUES (
-1,'6aea3d9a-eea6-47af-8c58-fa37cc49f414',N'UmbracoForms.FormPicker',1,0,N'FormGuid',N'Choose a form');
-GO
-INSERT INTO [cmsMacroProperty] ([id],[uniquePropertyId],[editorAlias],[macro],[macroPropertySortOrder],[macroPropertyAlias],[macroPropertyName]) VALUES (
-2,'83c70339-98a0-4111-853c-2f0d4014a4fc',N'UmbracoForms.ThemePicker',1,1,N'FormTheme',N'Theme');
-GO
-INSERT INTO [cmsMacroProperty] ([id],[uniquePropertyId],[editorAlias],[macro],[macroPropertySortOrder],[macroPropertyAlias],[macroPropertyName]) VALUES (
-3,'2d5fdda2-e19f-4103-b43e-269186fda969',N'Umbraco.TrueFalse',1,2,N'ExcludeScripts',N'Exclude Scripts');
+1,'2d5fdda2-e19f-4103-b43e-269186fda969',N'Umbraco.TrueFalse',1,2,N'ExcludeScripts',N'Exclude Scripts');
 GO
 SET IDENTITY_INSERT [cmsMacroProperty] OFF;
 GO

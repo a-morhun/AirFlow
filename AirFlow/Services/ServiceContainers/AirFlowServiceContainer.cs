@@ -10,5 +10,10 @@ namespace AirFlow.ServiceContainers
         {
             Container = container;
         }
+
+        public static T GetInstance<T>()
+        {
+            return Container.Resolve<T>();
+        }
     }
 }

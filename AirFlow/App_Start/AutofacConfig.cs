@@ -8,10 +8,10 @@ using Autofac;
 using System.Web.Http;
 using System.Web.Mvc;
 using AirFlow.ServiceContainers;
+using AirFlow.Services.Helpers;
 using Umbraco.Core;
-using Umbraco.Core.Models;
 using Umbraco.Core.Services;
-using Umbraco.Forms.Web.Trees;
+//using Umbraco.Forms.Web.Trees;
 using Umbraco.Web;
 using IEmailSender = AirFlow.Services.Email.IEmailSender;
 
@@ -37,9 +37,9 @@ namespace AirFlow
             builder.RegisterControllers(umbracoAssembly);
             builder.RegisterApiControllers(umbracoAssembly);
 
-            var umbracoFormsAssembly = typeof(DataSourceTreeController).Assembly;
-            builder.RegisterControllers(umbracoFormsAssembly);
-            builder.RegisterApiControllers(umbracoFormsAssembly);
+            //var umbracoFormsAssembly = typeof(DataSourceTreeController).Assembly;
+            //builder.RegisterControllers(umbracoFormsAssembly);
+            //builder.RegisterApiControllers(umbracoFormsAssembly);
         }
 
         private static void RegisterAirFlowControllers(ContainerBuilder builder)
@@ -63,6 +63,8 @@ namespace AirFlow
             builder.RegisterType<UserRepository>().As<IUserRepository>();
             builder.RegisterType<LoginRepository>().As<ILoginRepository>();
             builder.RegisterType<AuthRepository>().As<IAuthRepository>();
+
+            builder.RegisterInstance(AirFlowHelper.Instance).As<IAirFlowHelper>();
 
             builder.Register((c, p) => new EmailTypeLoginProcessor(
                     p.Named<string>("userEmail"),

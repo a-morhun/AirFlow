@@ -7,6 +7,11 @@ using NSubstitute;
 using System;
 using System.Linq.Expressions;
 using System.Web.Mvc;
+using AirFlow.ServiceContainers;
+using AirFlow.Services.Helpers;
+using Autofac;
+using Umbraco.Web;
+using Umbraco.Web.Mvc;
 
 namespace AirFlow.Tests.Controllers
 {
@@ -14,20 +19,27 @@ namespace AirFlow.Tests.Controllers
     public class AuthSurfaceControllerTests
     {
         private const string Username = "username";
+        private const int ExpectedContentId = 1;
 
         private IAuthService _authService;
         private IFormsAuthentication _formsAuthentication;
+        private IAirFlowHelper _airFlowHelper;
         private AuthSurfaceController _authController;
 
         [SetUp]
-        public void SetUpOnce()
+        public void SetUp()
         {
             Common.SetUpUmbracoContext();
 
             _authService = Substitute.For<IAuthService>();
             _formsAuthentication = Substitute.For<IFormsAuthentication>();
+            _airFlowHelper = Substitute.For<IAirFlowHelper>();
 
             _authController = new AuthSurfaceController(_authService, _formsAuthentication);
+
+            var builder = new ContainerBuilder();
+            builder.RegisterInstance(_airFlowHelper).As<IAirFlowHelper>();
+            AirFlowServiceContainer.SetContainer(builder.Build());
         }
 
         [TearDown]
@@ -42,9 +54,11 @@ namespace AirFlow.Tests.Controllers
         public void AuthSurfaceController_Login_ValidLoginRequest_ValidCredentials_RegularLogin_Success()
         {
             // Arrange
-            string expectedScript = "window.location = '/'";
+            string homeUrl = "/";
+            string expectedScript = $"window.location = '{homeUrl}'";
             UserLoginViewModel loginRequest = GetUserLoginViewModel();
             MockSuccessServiceLoginMethod(loginRequest);
+            _airFlowHelper.GetContentUrl(Arg.Any<UmbracoContext>(), "Home").Returns(homeUrl);
 
             // Act
             var result = _authController.Login(loginRequest) as JavaScriptResult;
@@ -111,7 +125,7 @@ namespace AirFlow.Tests.Controllers
 
         private void MockFailureServiceRegisterMethod(UserLoginViewModel loginRequest, ErrorCodeType errorCode) =>
             _authService.Login(Arg.Is(ServiceLoginPredicate(loginRequest))).Returns(new LoginResult(errorCode));
-        
+
         private static Expression<Predicate<UserToLogin>> ServiceLoginPredicate(UserLoginViewModel loginRequest) =>
             r => r.Email == loginRequest.Email && r.Password == loginRequest.Password;
 
@@ -122,15 +136,15 @@ namespace AirFlow.Tests.Controllers
         [Test]
         public void AuthSurfaceController_Logout_Success()
         {
-            // Arrangee
-            string expectedRedirectUrl = "/login";
+            // Arrange
+            ArrangeAirFlowHelper_GetContentId("Login", ExpectedContentId);
 
             // Act
-            var result = _authController.Logout() as RedirectResult;
+            var result = _authController.Logout() as RedirectToUmbracoPageResult;
 
             // Assert
             _formsAuthentication.Received(1).SignOut();
-            Common.AssertRedirectResult(result, expectedRedirectUrl);
+            Common.AssertRedirectToUmbracoPageResult(result, ExpectedContentId);
         }
 
         #endregion
@@ -143,14 +157,14 @@ namespace AirFlow.Tests.Controllers
         public void AuthSurfaceController_ConfirmEmail_ValidToken_Success()
         {
             // Arrange
-            string expectedViewName = "/Views/ConfirmEmailSuccess.cshtml";
             _authService.ConfirmEmail(ValidToken).Returns(Result.Success);
+            ArrangeAirFlowHelper_GetContentId(AirFlowConstants.EmailConfirmationSuccessContent, ExpectedContentId);
 
             // Act
-            var result = _authController.ConfirmEmail(ValidToken) as ViewResult;
+            var result = _authController.ConfirmEmail(ValidToken) as RedirectToUmbracoPageResult;
 
             // Assert
-            Common.AssertViewResult(result, expectedViewName);
+            Common.AssertRedirectToUmbracoPageResult(result, ExpectedContentId);
         }
 
         [TestCase("")]
@@ -158,28 +172,28 @@ namespace AirFlow.Tests.Controllers
         public void AuthSurfaceController_ConfirmEmail_TokenIsMissingOrEmpty_Success(string token)
         {
             // Arrange
-            string expectedViewName = "/Views/ConfirmEmailFailure.cshtml";
+            ArrangeAirFlowHelper_GetContentId(AirFlowConstants.EmailConfirmationFailureContent, ExpectedContentId);
 
             // Act
-            var result = _authController.ConfirmEmail(token) as ViewResult;
+            var result = _authController.ConfirmEmail(token) as RedirectToUmbracoPageResult;
 
             // Assert
-            Common.AssertViewResult(result, expectedViewName);
+            Common.AssertRedirectToUmbracoPageResult(result, ExpectedContentId);
             _authService.ReceivedWithAnyArgs(0).ConfirmEmail(token);
         }
 
         [Test]
         public void AuthSurfaceController_ConfirmEmail_ConfirmationFailure_Success()
         {
-            // Arrange
-            string expectedViewName = "/Views/ConfirmEmailFailure.cshtml";
+            // Arrange           
             _authService.ConfirmEmail(ValidToken).Returns(new Result(ErrorCodeType.ConfirmationTokenIsExpired));
+            ArrangeAirFlowHelper_GetContentId(AirFlowConstants.EmailConfirmationFailureContent, ExpectedContentId);
 
             // Act
-            var result = _authController.ConfirmEmail(ValidToken) as ViewResult;
+            var result = _authController.ConfirmEmail(ValidToken) as RedirectToUmbracoPageResult;
 
             // Assert
-            Common.AssertViewResult(result, expectedViewName);
+            Common.AssertRedirectToUmbracoPageResult(result, ExpectedContentId);
         }
 
         #endregion
@@ -192,17 +206,51 @@ namespace AirFlow.Tests.Controllers
         public void AuthSurfaceController_ConfirmLogin_ValidToken_RedirectToHomePage()
         {
             // Arrange
-            string expectedUrl = "/";
+            ArrangeAirFlowHelper_GetContentId(AirFlowConstants.HomeContent, ExpectedContentId);
             _authService.ConfirmLogin(LoginToken).Returns(new LoginResult(Username, LoginType.TwoFactorEmail));
 
             // Act
-            var result = _authController.ConfirmLogin(LoginToken) as RedirectResult;
+            var result = _authController.ConfirmLogin(LoginToken) as RedirectToUmbracoPageResult;
 
             // Assert
             _formsAuthentication.Received(1).SetAuthCookie(Username, createPersistentCookie: false);
-            Common.AssertRedirectResult(result, expectedUrl);
+            Common.AssertRedirectToUmbracoPageResult(result, ExpectedContentId);
+        }
+
+        [TestCase("")]
+        [TestCase(null)]
+        public void AuthSurfaceController_ConfirmLogin_TokenIsMissingOrEmpty_RedirectToErrorPage(string token)
+        {
+            // Arrange
+            ArrangeAirFlowHelper_GetContentId(AirFlowConstants.LoginConfirmationFailureContent, ExpectedContentId);
+
+            // Act
+            var result = _authController.ConfirmLogin(token) as RedirectToUmbracoPageResult;
+
+            // Assert
+            Common.AssertRedirectToUmbracoPageResult(result, ExpectedContentId);
+            _authService.ReceivedWithAnyArgs(0).ConfirmEmail(token);
+        }
+
+        [Test]
+        public void AuthSurfaceController_ConfirmLogin_ConfirmationFailure_Success()
+        {
+            // Arrange           
+            _authService.ConfirmLogin(LoginToken).Returns(new LoginResult(ErrorCodeType.ConfirmationTokenIsExpired));
+            ArrangeAirFlowHelper_GetContentId(AirFlowConstants.LoginConfirmationFailureContent, ExpectedContentId);
+
+            // Act
+            var result = _authController.ConfirmLogin(LoginToken) as RedirectToUmbracoPageResult;
+
+            // Assert
+            Common.AssertRedirectToUmbracoPageResult(result, ExpectedContentId);
         }
 
         #endregion
+
+        private void ArrangeAirFlowHelper_GetContentId(string contentName, int expectedContentPageId)
+        {
+            _airFlowHelper.GetContentId(contentName).Returns(expectedContentPageId);
+        }
     }
 }

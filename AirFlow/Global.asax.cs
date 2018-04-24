@@ -1,5 +1,4 @@
-﻿using AirFlow.App_Start;
-using AirFlow.Data.Migrations;
+﻿using AirFlow.Data.Migrations;
 using System;
 using System.Web.Optimization;
 using System.Web.Routing;

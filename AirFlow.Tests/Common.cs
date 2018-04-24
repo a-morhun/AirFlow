@@ -10,6 +10,7 @@ using Umbraco.Core.Configuration.UmbracoSettings;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Profiling;
 using Umbraco.Web;
+using Umbraco.Web.Mvc;
 using Umbraco.Web.Routing;
 using Umbraco.Web.Security;
 
@@ -27,7 +28,7 @@ namespace AirFlow.Tests
         public static string ShowResponseTypeMismatchMessage(Type type) => string.Format(ResponseTypeMismatchFormat, type.Name);
         public static string ShowNotSatisfiedExpectationMessage<T>(T expected, object target) => string.Format(NotSatisfiedExpectation, expected, target);
 
-        public static void SetUpUmbracoContext()
+        public static void SetUpUmbracoContext(IUrlProvider provider = null)
         {
             var applicationContext = new ApplicationContext(
                 CacheHelper.CreateDisabledCacheHelper(),
@@ -38,7 +39,7 @@ namespace AirFlow.Tests
                 applicationContext,
                 new WebSecurity(Substitute.For<HttpContextBase>(), applicationContext),
                 Substitute.For<IUmbracoSettingsSection>(),
-                Enumerable.Empty<IUrlProvider>(),
+                provider == null ? Enumerable.Empty<IUrlProvider>() : new [] { provider },
                 true);
         }
 
@@ -51,6 +52,12 @@ namespace AirFlow.Tests
         {
             Assert.IsNotNull(result, ShowResponseTypeMismatchMessage(typeof(ViewResult)));
             Assert.AreEqual(expectedViewName, result.ViewName);
+        }
+
+        public static void AssertRedirectToUmbracoPageResult(RedirectToUmbracoPageResult result, int expectedPageId)
+        {
+            Assert.IsNotNull(result, ShowResponseTypeMismatchMessage(typeof(RedirectToUmbracoPageResult)));
+            Assert.AreEqual(expectedPageId, result.PageId);
         }
 
         public static T AssertPartialViewResult<T>(PartialViewResult result) where T : class

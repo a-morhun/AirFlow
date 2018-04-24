@@ -52,3 +52,7 @@ header > div {
     margin-top: 15px;
     text-align: center;
 }
+
+.email-confirmation {
+    text-align: center;
+}

@@ -1,7 +1,4 @@
-﻿using Umbraco.Core.Models;
-using Umbraco.Web.Models;
-
-namespace AirFlow.Models.Common
+﻿namespace AirFlow.Models.Common
 {
     public class ResultViewModel
     {

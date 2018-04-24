@@ -2,6 +2,7 @@
 using AirFlow.Models.Common;
 using AirFlow.Services.Auth;
 using System.Web.Mvc;
+using Umbraco.Web;
 using Umbraco.Web.Mvc;
 
 namespace AirFlow.Controllers
@@ -65,14 +66,15 @@ namespace AirFlow.Controllers
         {
             if (string.IsNullOrEmpty(token))
             {
-                return View(ViewEmailConfirmationFailure);
+                CurrentPage.Site().Descendant("emailConfirmation");
+                return RedirectToUmbracoPage(Umbraco.ContentAtXPath("//EmailConfirmationFailure"));
             }
 
             Result confirmationResult = _authService.ConfirmEmail(token);
 
             if (confirmationResult.IsFailure)
             {
-                return View(ViewEmailConfirmationFailure);
+                return RedirectToUmbracoPage(Umbraco.TypedContentSingleAtXPath("//EmailConfirmationFailure"));
             }
 
             return View(ViewEmailConfirmationSuccess);

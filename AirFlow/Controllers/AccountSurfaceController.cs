@@ -1,5 +1,4 @@
 ﻿using AirFlow.Models.Account;
-using AirFlow.Models.Auth;
 using AirFlow.Models.Common;
 using AirFlow.Services.Account;
 using System.Web.Mvc;

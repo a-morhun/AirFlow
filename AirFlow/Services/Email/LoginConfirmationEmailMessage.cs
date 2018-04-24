@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Net.Mail;
 using System.Text;
+using AirFlow.Models.Common;
 
 namespace AirFlow.Services.Email
 {
     public class LoginConfirmationEmailMessage : MailMessage
     {
-        private const string UrlBase = "http://localhost:51356";
-
         private readonly string _bodyTemplate =
             "<p>Please, confirm you login using following link:</p>" +
             "<p style=\"text-align: center;\"><a href=\"{0}/umbraco/Surface/AuthSurface/ConfirmLogin?token={1}\">{2}</a></p>" +
@@ -20,7 +19,7 @@ namespace AirFlow.Services.Email
             Subject = "AirFlow login confirmation";
             IsBodyHtml = true;
             BodyEncoding = Encoding.UTF8;
-            Body = string.Format(_bodyTemplate, UrlBase, token, "Confirmation", expirationDateTime.ToLocalTime());
+            Body = string.Format(_bodyTemplate, AirFlowConfiguration.AirFlowUrl, token, "Confirmation", expirationDateTime.ToLocalTime());
         }
     }
 }

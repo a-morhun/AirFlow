@@ -10,6 +10,7 @@ using Umbraco.Core.Configuration.UmbracoSettings;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Profiling;
 using Umbraco.Web;
+using Umbraco.Web.Mvc;
 using Umbraco.Web.Routing;
 using Umbraco.Web.Security;
 
@@ -51,6 +52,12 @@ namespace AirFlow.Tests
         {
             Assert.IsNotNull(result, ShowResponseTypeMismatchMessage(typeof(ViewResult)));
             Assert.AreEqual(expectedViewName, result.ViewName);
+        }
+
+        public static void AssertRedirectToUmbracoPageResult(RedirectToUmbracoPageResult result, int expectedPageId)
+        {
+            Assert.IsNotNull(result, ShowResponseTypeMismatchMessage(typeof(RedirectToUmbracoPageResult)));
+            Assert.AreEqual(expectedPageId, result.PageId);
         }
 
         public static T AssertPartialViewResult<T>(PartialViewResult result) where T : class

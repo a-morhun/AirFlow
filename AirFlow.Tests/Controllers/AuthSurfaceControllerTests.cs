@@ -7,6 +7,11 @@ using NSubstitute;
 using System;
 using System.Linq.Expressions;
 using System.Web.Mvc;
+using AirFlow.ServiceContainers;
+using AirFlow.Services.Helpers;
+using Autofac;
+using Umbraco.Core.Services;
+using Umbraco.Web.Mvc;
 
 namespace AirFlow.Tests.Controllers
 {
@@ -17,17 +22,23 @@ namespace AirFlow.Tests.Controllers
 
         private IAuthService _authService;
         private IFormsAuthentication _formsAuthentication;
+        private IAirFlowHelper _airFlowHelper;
         private AuthSurfaceController _authController;
 
         [SetUp]
-        public void SetUpOnce()
+        public void SetUp()
         {
             Common.SetUpUmbracoContext();
 
             _authService = Substitute.For<IAuthService>();
             _formsAuthentication = Substitute.For<IFormsAuthentication>();
+            _airFlowHelper = Substitute.For<IAirFlowHelper>();
 
             _authController = new AuthSurfaceController(_authService, _formsAuthentication);
+
+            var builder = new ContainerBuilder();
+            builder.RegisterInstance(_airFlowHelper).As<IAirFlowHelper>();
+            AirFlowServiceContainer.SetContainer(builder.Build());
         }
 
         [TearDown]
@@ -111,7 +122,7 @@ namespace AirFlow.Tests.Controllers
 
         private void MockFailureServiceRegisterMethod(UserLoginViewModel loginRequest, ErrorCodeType errorCode) =>
             _authService.Login(Arg.Is(ServiceLoginPredicate(loginRequest))).Returns(new LoginResult(errorCode));
-        
+
         private static Expression<Predicate<UserToLogin>> ServiceLoginPredicate(UserLoginViewModel loginRequest) =>
             r => r.Email == loginRequest.Email && r.Password == loginRequest.Password;
 
@@ -143,14 +154,16 @@ namespace AirFlow.Tests.Controllers
         public void AuthSurfaceController_ConfirmEmail_ValidToken_Success()
         {
             // Arrange
-            string expectedViewName = "/Views/ConfirmEmailSuccess.cshtml";
+            string expectedContentName = "EmailConfirmationSuccess";
+            const int expectedContentPageId = 2;
             _authService.ConfirmEmail(ValidToken).Returns(Result.Success);
+            _airFlowHelper.GetContentId(expectedContentName).Returns(expectedContentPageId);
 
             // Act
-            var result = _authController.ConfirmEmail(ValidToken) as ViewResult;
+            var result = _authController.ConfirmEmail(ValidToken) as RedirectToUmbracoPageResult;
 
             // Assert
-            Common.AssertViewResult(result, expectedViewName);
+            Common.AssertRedirectToUmbracoPageResult(result, expectedContentPageId);
         }
 
         [TestCase("")]
@@ -158,13 +171,15 @@ namespace AirFlow.Tests.Controllers
         public void AuthSurfaceController_ConfirmEmail_TokenIsMissingOrEmpty_Success(string token)
         {
             // Arrange
-            string expectedViewName = "/Views/ConfirmEmailFailure.cshtml";
+            string expectedContentName = "EmailConfirmationFailure";
+            const int expectedContentPageId = 1;
+            _airFlowHelper.GetContentId(expectedContentName).Returns(expectedContentPageId);
 
             // Act
-            var result = _authController.ConfirmEmail(token) as ViewResult;
+            var result = _authController.ConfirmEmail(token) as RedirectToUmbracoPageResult;
 
             // Assert
-            Common.AssertViewResult(result, expectedViewName);
+            Common.AssertRedirectToUmbracoPageResult(result, expectedContentPageId);
             _authService.ReceivedWithAnyArgs(0).ConfirmEmail(token);
         }
 
@@ -172,14 +187,16 @@ namespace AirFlow.Tests.Controllers
         public void AuthSurfaceController_ConfirmEmail_ConfirmationFailure_Success()
         {
             // Arrange
-            string expectedViewName = "/Views/ConfirmEmailFailure.cshtml";
+            string expectedContentName = "EmailConfirmationFailure";
+            const int expectedContentPageId = 1;
             _authService.ConfirmEmail(ValidToken).Returns(new Result(ErrorCodeType.ConfirmationTokenIsExpired));
+            _airFlowHelper.GetContentId(expectedContentName).Returns(expectedContentPageId);
 
             // Act
-            var result = _authController.ConfirmEmail(ValidToken) as ViewResult;
+            var result = _authController.ConfirmEmail(ValidToken) as RedirectToUmbracoPageResult;
 
             // Assert
-            Common.AssertViewResult(result, expectedViewName);
+            Common.AssertRedirectToUmbracoPageResult(result, expectedContentPageId);
         }
 
         #endregion

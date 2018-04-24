@@ -1,6 +1,6 @@
 ﻿using System.Web.Optimization;
 
-namespace AirFlow.App_Start
+namespace AirFlow
 {
     public class BundleConfig
     {
@@ -27,8 +27,6 @@ namespace AirFlow.App_Start
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
-
-            BundleTable.EnableOptimizations = false;
         }
     }
 }

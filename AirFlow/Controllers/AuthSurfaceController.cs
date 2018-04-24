@@ -2,7 +2,8 @@
 using AirFlow.Models.Common;
 using AirFlow.Services.Auth;
 using System.Web.Mvc;
-using Umbraco.Web;
+using AirFlow.ServiceContainers;
+using AirFlow.Services.Helpers;
 using Umbraco.Web.Mvc;
 
 namespace AirFlow.Controllers
@@ -10,13 +11,15 @@ namespace AirFlow.Controllers
     public class AuthSurfaceController : SurfaceController
     {
         private const string PartialViewLoginMessage = "/Views/Partials/Auth/_LoginMessage.cshtml";
-        private const string ViewEmailConfirmationSuccess = "/Views/ConfirmEmailSuccess.cshtml";
-        private const string ViewEmailConfirmationFailure = "/Views/ConfirmEmailFailure.cshtml";
+        private const string ConfirmationSuccessContentName = "EmailConfirmationSuccess";
+        private const string ConfirmationFailureContentName = "EmailConfirmationFailure";
         private const string ViewLoginConfirmationFailure = "/Views/ConfirmLoginFailure.cshtml";
         private const string HomePath = "/";
 
         private readonly IAuthService _authService;
         private readonly IFormsAuthentication _formsAuthentication;
+
+        private IAirFlowHelper _airFlowHelper => AirFlowServiceContainer.GetInstance<IAirFlowHelper>();
 
         public AuthSurfaceController(
             IAuthService authService,
@@ -66,18 +69,17 @@ namespace AirFlow.Controllers
         {
             if (string.IsNullOrEmpty(token))
             {
-                CurrentPage.Site().Descendant("emailConfirmation");
-                return RedirectToUmbracoPage(Umbraco.ContentAtXPath("//EmailConfirmationFailure"));
+                return RedirectToUmbracoPage(_airFlowHelper.GetContentId(ConfirmationFailureContentName));
             }
 
             Result confirmationResult = _authService.ConfirmEmail(token);
 
             if (confirmationResult.IsFailure)
             {
-                return RedirectToUmbracoPage(Umbraco.TypedContentSingleAtXPath("//EmailConfirmationFailure"));
+                return RedirectToUmbracoPage(_airFlowHelper.GetContentId(ConfirmationFailureContentName));
             }
 
-            return View(ViewEmailConfirmationSuccess);
+            return RedirectToUmbracoPage(_airFlowHelper.GetContentId(ConfirmationSuccessContentName));
         }
 
         [HttpGet]

@@ -649,12 +649,12 @@
     <Compile Include="Models\Account\UserRoleType.cs" />
     <Compile Include="Models\Auth\LoginType.cs" />
     <Compile Include="Models\Common\AirFlowConfiguration.cs" />
+    <Compile Include="Models\Common\AirFlowConstants.cs" />
     <Compile Include="Models\Common\ResultViewModel.cs" />
     <Compile Include="Models\Auth\LoginResult.cs" />
     <Compile Include="Models\Auth\UserToLogin.cs" />
     <Compile Include="App_Start\AutofacConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="Controllers\AccountSurfaceController.cs" />
     <Compile Include="Controllers\AuthSurfaceController.cs" />
     <Compile Include="Services\Account\IUserRegistration.cs" />
@@ -689,7 +689,8 @@
     <Compile Include="Services\Auth\MembershipWrapper.cs" />
     <Compile Include="Services\Auth\TokenGenerator.cs" />
     <Compile Include="Services\Email\RegistrationEmailMessage.cs" />
-    <Compile Include="Services\Helpers\Helper.cs" />
+    <Compile Include="Services\Helpers\AirFlowHelper.cs" />
+    <Compile Include="Services\Helpers\IAirFlowHelper.cs" />
     <Compile Include="Services\ServiceContainers\AirFlowServiceContainer.cs" />
   </ItemGroup>
   <ItemGroup>

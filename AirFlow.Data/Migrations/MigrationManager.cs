@@ -37,6 +37,7 @@ namespace AirFlow.Data.Migrations
                 .Where(t => t.IsSubclassOf(typeof(Migration)))
                 .Select(t => (Migration)Activator.CreateInstance(t))
                 .Where(m => m.Version > currentVersion)
+                .OrderBy(m => m.Version)
                 .ToArray();
         }
 

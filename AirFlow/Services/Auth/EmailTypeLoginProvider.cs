@@ -1,10 +1,10 @@
-﻿using AirFlow.Data;
+﻿using AirFlow.Data.Security.Auth;
 using AirFlow.Services.Email;
 using System.Net.Mail;
 
 namespace AirFlow.Services.Auth
 {
-    public class EmailTypeLoginProvider : TwoFactorLoginProvider
+    internal class EmailTypeLoginProvider : TwoFactorLoginProvider
     {
         private readonly ITokenGenerator _tokenGenerator;
         private readonly IEmailSender _emailSender;

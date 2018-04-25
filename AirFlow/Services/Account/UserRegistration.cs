@@ -1,24 +1,23 @@
-﻿using System;
-using System.Net.Mail;
-using AirFlow.Data;
-using AirFlow.Data.Models;
+﻿using AirFlow.Data.Security.Account;
 using AirFlow.Models.Account;
 using AirFlow.Models.Auth;
 using AirFlow.Services.Auth;
 using AirFlow.Services.Email;
+using System;
+using System.Net.Mail;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
 
 namespace AirFlow.Services.Account
 {
-    public class UserRegistration : IUserRegistration
+    internal class UserRegistration : IUserRegistration
     {
         private const string DefaultMemberType = "Member";
         private const string RegularMemberGroup = "Regular";
 
         private readonly IMemberService _memberService;
         private readonly IMemberTypeService _memberTypeService;
-        private readonly IUserSecurityRepository _repository;
+        private readonly IAccountRepository _accountRepository;
         private readonly ITokenGenerator _tokenGenerator;
         private readonly IEmailSender _emailSender;
 
@@ -27,13 +26,13 @@ namespace AirFlow.Services.Account
         public UserRegistration(
             IMemberService memberService,
             IMemberTypeService memberTypeService,
-            IUserSecurityRepository securityRepository,
+            IAccountRepository accountRepository,
             ITokenGenerator tokenGenerator,
             IEmailSender emailSender)
         {
             _memberService = memberService;
             _memberTypeService = memberTypeService;
-            _repository = securityRepository;
+            _accountRepository = accountRepository;
             _tokenGenerator = tokenGenerator;
             _emailSender = emailSender;
         }
@@ -65,7 +64,7 @@ namespace AirFlow.Services.Account
         {
             token = _tokenGenerator.Generate();
 
-            var registration = new UserRegistrationDto
+            var registration = new UserAccountDto
             {
                 ConfirmationToken = token,
                 ConfirmationExpirationDate = _expirationTokenDateTime,
@@ -73,7 +72,7 @@ namespace AirFlow.Services.Account
                 LoginType = (byte)type
             };
 
-            _repository.Save(registration);
+            _accountRepository.Save(registration);
         }
 
         private void SendConfirmationEmail(string token, string userEmail)

@@ -3,7 +3,7 @@ using System.Web.Routing;
 
 namespace AirFlow
 {
-    public class RouteConfig
+    internal class RouteConfig
     {
         public static void RegisterRoutes(RouteCollection routes)
         {

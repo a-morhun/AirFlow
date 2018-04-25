@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AirFlow.Data.Models
+namespace AirFlow.Data.Security
 {
     public class Token
     {

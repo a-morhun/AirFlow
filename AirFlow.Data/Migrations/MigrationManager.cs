@@ -53,7 +53,7 @@ namespace AirFlow.Data.Migrations
                 conn.Open();
                 using (var tran = conn.BeginTransaction())
                 {
-                    string[] queries = migration.GetSqlQueries();
+                    string[] queries = migration.GetSqlQueriesForSqlCe();
                     foreach (var query in queries)
                     {
                         var command = conn.CreateCommand();

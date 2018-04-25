@@ -1,10 +1,8 @@
-﻿using AirFlow.Data.Models;
-
-namespace AirFlow.Data
+﻿namespace AirFlow.Data.Security.Account
 {
-    public interface IUserSecurityRepository
+    public interface IAccountRepository
     {
-        void Save(UserRegistrationDto dto);
+        void Save(UserAccountDto user);
 
         ConfirmationToken GetConfirmationTokenDetails(string confirmationToken);
 

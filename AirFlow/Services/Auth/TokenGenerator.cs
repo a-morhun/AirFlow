@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 
 namespace AirFlow.Services.Auth
 {
-    public class TokenGenerator : ITokenGenerator
+    internal class TokenGenerator : ITokenGenerator
     {
         private const int NumberOfBytes = 32;
 

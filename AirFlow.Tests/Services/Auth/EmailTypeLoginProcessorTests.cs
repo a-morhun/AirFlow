@@ -1,5 +1,4 @@
-﻿using AirFlow.Data;
-using AirFlow.Data.Models;
+﻿using AirFlow.Data.Security.Auth;
 using AirFlow.Services.Auth;
 using AirFlow.Services.Email;
 using NSubstitute;

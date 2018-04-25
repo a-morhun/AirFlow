@@ -5,7 +5,7 @@ using Umbraco.Core.Services;
 
 namespace AirFlow.Services.Account
 {
-    public class AccountService : IAccountService
+    internal class AccountService : IAccountService
     {
         private readonly IMemberService _memberService;
         private readonly IUserRegistration _userRegistration;

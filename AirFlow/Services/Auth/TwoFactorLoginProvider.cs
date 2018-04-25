@@ -1,10 +1,9 @@
-﻿using System;
-using AirFlow.Data;
-using AirFlow.Data.Models;
+﻿using AirFlow.Data.Security.Auth;
+using System;
 
 namespace AirFlow.Services.Auth
 {
-    public abstract class TwoFactorLoginProvider : ITwoFactorLoginProvider
+    internal abstract class TwoFactorLoginProvider : ITwoFactorLoginProvider
     {
         private readonly ILoginRepository _loginRepository;
 

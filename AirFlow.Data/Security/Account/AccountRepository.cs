@@ -1,17 +1,16 @@
-﻿using AirFlow.Data.Models;
-using PetaPoco;
+﻿using PetaPoco;
 using System;
 using System.Linq;
 
-namespace AirFlow.Data
+namespace AirFlow.Data.Security.Account
 {
-    public class UserSecurityRepository : IUserSecurityRepository
+    public class AccountRepository : IAccountRepository
     {
-        public void Save(UserRegistrationDto dto)
+        public void Save(UserAccountDto user)
         {
             using (var db = new Database(Config.ConnectionStringName))
             {
-                db.Insert(dto);
+                db.Insert(user);
             }
         }
 

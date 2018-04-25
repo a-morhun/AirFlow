@@ -9,7 +9,7 @@ using Umbraco.Web;
 
 namespace AirFlow
 {
-    public class SecurityConfig
+    internal class SecurityConfig
     {
         public static void Initialize()
         {

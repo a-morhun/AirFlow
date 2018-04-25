@@ -1,4 +1,4 @@
-﻿namespace AirFlow.Data.Models
+﻿namespace AirFlow.Data.Security.Account
 {
     public class ConfirmationToken : Token
     {

@@ -2,7 +2,7 @@
 
 namespace AirFlow
 {
-    public class BundleConfig
+    internal class BundleConfig
     {
         public static void RegisterBundles(BundleCollection bundles)
         {

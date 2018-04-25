@@ -2,7 +2,7 @@
 
 namespace AirFlow.Services.Auth
 {
-    public class MembershipWrapper : IMembership
+    internal class MembershipWrapper : IMembership
     {
         public string GetUserNameByEmail(string email)
         {

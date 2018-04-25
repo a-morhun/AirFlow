@@ -1,10 +1,10 @@
 ﻿using System;
 using PetaPoco;
 
-namespace AirFlow.Data.Models
+namespace AirFlow.Data.Security.Account
 {
     [TableName("airFlowMemberRegistration")]
-    public class UserRegistrationDto
+    public class UserAccountDto
     {
         [Column(name: "nodeId")]
         public int UserId { get; set; }

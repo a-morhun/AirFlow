@@ -1,7 +1,7 @@
 ﻿using System;
 using PetaPoco;
 
-namespace AirFlow.Data.Models
+namespace AirFlow.Data.Security.Auth
 {
     [TableName("airFlowTwoFactorLogin")]
     public class TwoFactorLoginDto

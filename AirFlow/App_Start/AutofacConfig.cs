@@ -1,22 +1,24 @@
-﻿using AirFlow.Data;
+﻿using AirFlow.Data.Security;
+using AirFlow.Data.Security.Account;
+using AirFlow.Data.Security.Auth;
 using AirFlow.Services.Account;
 using AirFlow.Services.Auth;
+using AirFlow.Services.Containers;
 using AirFlow.Services.Email;
+using AirFlow.Services.Helpers;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using Autofac;
-using System.Web.Http;
-using System.Web.Mvc;
-using AirFlow.Services.Containers;
-using AirFlow.Services.Helpers;
 using Umbraco.Core;
 using Umbraco.Core.Services;
 using Umbraco.Web;
+using System.Web.Http;
+using System.Web.Mvc;
 using IEmailSender = AirFlow.Services.Email.IEmailSender;
 
 namespace AirFlow
 {
-    public class AutofacConfig
+    internal class AutofacConfig
     {
         public static void Configure()
         {
@@ -53,11 +55,10 @@ namespace AirFlow
             builder.RegisterType<TokenGenerator>().As<ITokenGenerator>();
             builder.RegisterType<SmtpEmailSender>().As<IEmailSender>();
 
-            builder.RegisterType<UserSecurityRepository>().As<IUserSecurityRepository>();
+            builder.RegisterType<AccountRepository>().As<IAccountRepository>();
             builder.RegisterType<UserRegistration>().As<IUserRegistration>();
-            builder.RegisterType<UserRepository>().As<IUserRepository>();
             builder.RegisterType<LoginRepository>().As<ILoginRepository>();
-            builder.RegisterType<AuthRepository>().As<IAuthRepository>();
+            builder.RegisterType<SecurityRepository>().As<ISecurityRepository>();
 
             builder.RegisterInstance(AirFlowHelper.Instance).As<IAirFlowHelper>();
             builder.RegisterInstance(AirFlowServiceContainer.Instance).As<IServiceContainer>();

@@ -1,7 +1,5 @@
-﻿using AirFlow.Data;
-using AirFlow.Data.Models;
+﻿using AirFlow.Data.Security.Account;
 using AirFlow.Models.Account;
-using AirFlow.Models.Auth;
 using AirFlow.Services.Account;
 using AirFlow.Services.Auth;
 using AirFlow.Services.Email;
@@ -18,7 +16,7 @@ namespace AirFlow.Tests.Services.Account
     {
         private IMemberService _memberService;
         private IMemberTypeService _memberTypeService;
-        private IUserSecurityRepository _repository;
+        private IAccountRepository _accountRepository;
         private ITokenGenerator _tokenGenerator;
         private IEmailSender _emailSender;
         private IUserRegistration _userRegistration;
@@ -28,14 +26,14 @@ namespace AirFlow.Tests.Services.Account
         {
             _memberService = Substitute.For<IMemberService>();
             _memberTypeService = Substitute.For<IMemberTypeService>();
-            _repository = Substitute.For<IUserSecurityRepository>();
+            _accountRepository = Substitute.For<IAccountRepository>();
             _tokenGenerator = Substitute.For<ITokenGenerator>();
             _emailSender = Substitute.For<IEmailSender>();
 
             _userRegistration = new UserRegistration(
                 _memberService,
                 _memberTypeService,
-                _repository,
+                _accountRepository,
                 _tokenGenerator,
                 _emailSender);
         }
@@ -107,7 +105,7 @@ namespace AirFlow.Tests.Services.Account
 
         private void AsserrIfConfirmationDataWasSaved()
         {
-            _repository.Received(1).Save(Arg.Is<UserRegistrationDto>(a =>
+            _accountRepository.Received(1).Save(Arg.Is<UserAccountDto>(a =>
                 a.UserId == RegisteredMemberId &&
                 a.ConfirmationToken == GeneratedToken &&
                 a.ConfirmationExpirationDate > DateTime.UtcNow));

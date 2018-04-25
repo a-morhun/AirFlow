@@ -1,5 +1,6 @@
-﻿using AirFlow.Data;
-using AirFlow.Data.Models;
+﻿using AirFlow.Data.Security;
+using AirFlow.Data.Security.Account;
+using AirFlow.Data.Security.Auth;
 using AirFlow.Models.Auth;
 using AirFlow.Models.Common;
 using AirFlow.Services.Auth;
@@ -14,20 +15,18 @@ namespace AirFlow.Tests.Services.Auth
     public class AuthServiceTests
     {
         private IMembership _membership;
-        private IAuthRepository _authRepository;
+        private ISecurityRepository _securityRepository;
         private IAuthService _authService;
-        private IUserRepository _userRepository;
         private IServiceContainer _serviceContainer;
 
         [SetUp]
         public void SetUp()
         {
             _membership = Substitute.For<IMembership>();
-            _authRepository = Substitute.For<IAuthRepository>();
-            _userRepository = Substitute.For<IUserRepository>();
+            _securityRepository = Substitute.For<ISecurityRepository>();
             _serviceContainer = Substitute.For<IServiceContainer>();
 
-            _authService = new AuthService(_membership, _authRepository, _userRepository, _serviceContainer);
+            _authService = new AuthService(_membership, _securityRepository, _serviceContainer);
         }
 
         #region Login
@@ -132,7 +131,7 @@ namespace AirFlow.Tests.Services.Auth
         });
 
         private void ReturnExistingAdditionalInfo(string email, LoginType type = LoginType.Regular) =>
-            _userRepository.GetAdditionalLoginInfo(email).Returns(new AdditionalLoginInfo
+            _securityRepository.GetAdditionalLoginInfo(email).Returns(new AdditionalLoginInfo
             {
                 UserId = UserId,
                 LoginType = (byte)type,
@@ -146,10 +145,10 @@ namespace AirFlow.Tests.Services.Auth
             _membership.ValidateUser(username, password).Returns(false);
 
         private void ReturnConfirmedEmailValue(string email) =>
-            _authRepository.IsEmailConfirmed(email).Returns(true);
+            _securityRepository.IsEmailConfirmed(email).Returns(true);
 
         private void ReturnNotConfirmedEmailValue(string email) =>
-            _authRepository.IsEmailConfirmed(email).Returns(false);
+            _securityRepository.IsEmailConfirmed(email).Returns(false);
 
         #endregion
 
@@ -171,7 +170,7 @@ namespace AirFlow.Tests.Services.Auth
             // Assert
             Assert.IsNotNull(confirmationResult, Common.ShowResponseTypeMismatchMessage(typeof(Result)));
             Assert.IsTrue(confirmationResult.IsSuccess, Common.ShowNotSatisfiedExpectationMessage(true, "confirmationResult.IsSuccess"));
-            _authRepository.Received(1).ConfirmEmail(UserId);
+            _securityRepository.Received(1).ConfirmEmail(UserId);
         }
 
         [Test]
@@ -242,7 +241,7 @@ namespace AirFlow.Tests.Services.Auth
             ForUserId = userId
         };
 
-        private void EmailConfirmationFailed(int userId) => _authRepository
+        private void EmailConfirmationFailed(int userId) => _securityRepository
             .When(x => x.ConfirmEmail(userId))
             .Do(x => throw new Exception());
 
@@ -251,11 +250,11 @@ namespace AirFlow.Tests.Services.Auth
             Assert.IsNotNull(confirmationResult, Common.ShowResponseTypeMismatchMessage(typeof(Result)));
             Assert.IsTrue(confirmationResult.IsFailure, Common.ShowNotSatisfiedExpectationMessage(true, "confirmationResult.IsFailure"));
             Assert.AreEqual(expectedErrorCode, confirmationResult.ErrorCode, Common.ShowNotSatisfiedExpectationMessage(expectedErrorCode, confirmationResult.ErrorCode));
-            _authRepository.ReceivedWithAnyArgs(numberOfCalls).ConfirmEmail(UserId);
+            _securityRepository.ReceivedWithAnyArgs(numberOfCalls).ConfirmEmail(UserId);
         }
 
         private void ReturnConfirmationToken(ConfirmationToken token) =>
-            _authRepository.GetConfirmationTokenDetails(Token).Returns(token);
+            _securityRepository.GetConfirmationTokenDetails(Token).Returns(token);
 
         #endregion
 
@@ -275,7 +274,7 @@ namespace AirFlow.Tests.Services.Auth
             // Assert
             Assert.IsNotNull(confirmationResult, Common.ShowResponseTypeMismatchMessage(typeof(LoginResult)));
             Assert.IsTrue(confirmationResult.IsSuccess, Common.ShowNotSatisfiedExpectationMessage(true, "confirmationResult.IsSuccess"));
-            _authRepository.Received(1).ConfirmLogin(UserId);
+            _securityRepository.Received(1).ConfirmLogin(UserId);
             Assert.AreEqual(Username, confirmationResult.Username);
         }
 
@@ -331,9 +330,9 @@ namespace AirFlow.Tests.Services.Auth
             ForUserId = userId
         };
 
-        private void LoginConfirmed(int userId) => _authRepository.ConfirmLogin(userId).Returns(Username);
+        private void LoginConfirmed(int userId) => _securityRepository.ConfirmLogin(userId).Returns(Username);
 
-        private void LoginConfirmationFailed(int userId) => _authRepository
+        private void LoginConfirmationFailed(int userId) => _securityRepository
             .When(x => x.ConfirmLogin(userId))
             .Do(x => throw new Exception());
 
@@ -342,11 +341,11 @@ namespace AirFlow.Tests.Services.Auth
             Assert.IsNotNull(confirmationResult, Common.ShowResponseTypeMismatchMessage(typeof(LoginResult)));
             Assert.IsTrue(confirmationResult.IsFailure, Common.ShowNotSatisfiedExpectationMessage(true, "confirmationResult.IsFailure"));
             Assert.AreEqual(expectedErrorCode, confirmationResult.ErrorCode, Common.ShowNotSatisfiedExpectationMessage(expectedErrorCode, confirmationResult.ErrorCode));
-            _authRepository.ReceivedWithAnyArgs(numberOfCalls).ConfirmLogin(UserId);
+            _securityRepository.ReceivedWithAnyArgs(numberOfCalls).ConfirmLogin(UserId);
         }
 
         private void ReturnConfirmationLoginToken(Token token) =>
-            _authRepository.GetLoginTokenDetails(Token).Returns(token);
+            _securityRepository.GetLoginTokenDetails(Token).Returns(token);
 
         #endregion
     }

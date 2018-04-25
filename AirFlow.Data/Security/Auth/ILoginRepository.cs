@@ -1,6 +1,4 @@
-﻿using AirFlow.Data.Models;
-
-namespace AirFlow.Data
+﻿namespace AirFlow.Data.Security.Auth
 {
     public interface ILoginRepository
     {
@@ -9,5 +7,7 @@ namespace AirFlow.Data
         Token GetLoginTokenDetails(string token);
 
         string ConfirmLogin(int userId);
+
+        AdditionalLoginInfo GetAdditionalLoginInfo(string email);
     }
 }

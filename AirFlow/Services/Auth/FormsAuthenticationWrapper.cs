@@ -2,7 +2,7 @@
 
 namespace AirFlow.Services.Auth
 {
-    public class FormsAuthenticationWrapper : IFormsAuthentication
+    internal class FormsAuthenticationWrapper : IFormsAuthentication
     {
         public void SetAuthCookie(string username, bool createPersistentCookie)
         {

@@ -16,31 +16,31 @@ namespace AirFlow.Data.Migrations.MirationUnit
             Version = version;
         }
 
-        public virtual string[] GetSqlQueries()
+        public virtual string[] GetSqlQueriesForSqlCe()
         {
-            return GetSqlQueries(this).ToArray();
+            return GetSqlQueriesForSqlCe(this).ToArray();
         }
 
-        private IEnumerable<string> GetSqlQueries(Migration migration)
+        private IEnumerable<string> GetSqlQueriesForSqlCe(Migration migration)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            string sqlScriptResource = $"{assembly.GetName().Name}.Migrations.Scripts.{migration.GetType().Name}.sql";
+            var sqlScriptResource = $"{assembly.GetName().Name}.Migrations.Scripts.{migration.GetType().Name}.sql";
             var sqlScript = new StringBuilder();
 
-            using (Stream stream = assembly.GetManifestResourceStream(sqlScriptResource))
+            using (var stream = assembly.GetManifestResourceStream(sqlScriptResource))
             {
                 if (stream == null)
                 {
                     throw new InvalidOperationException($"resource not found {sqlScriptResource}");
                 }
 
-                using (StreamReader reader = new StreamReader(stream))
+                using (var reader = new StreamReader(stream))
                 {
                     while (reader.Peek() >= 0)
                     {
-                        string line = reader.ReadLine().Replace("\t", String.Empty).Trim();
+                        string line = reader.ReadLine().Replace("\t", string.Empty).Trim();
 
-                        if (line == string.Empty)
+                        if (string.IsNullOrEmpty(line) || line.StartsWith("--"))
                         {
                             continue;
                         }

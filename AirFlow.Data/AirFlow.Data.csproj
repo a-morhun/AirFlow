@@ -48,27 +48,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AuthRepository.cs" />
+    <Compile Include="AirConditionUnits\AirConditionUnitRequestDto.cs" />
+    <Compile Include="AirConditionUnits\AirConditionUnitRequestRepository.cs" />
+    <Compile Include="AirConditionUnits\IAirConditionUnitRequestRepository.cs" />
+    <Compile Include="Security\SecurityRepository.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="IAuthRepository.cs" />
-    <Compile Include="ILoginRepository.cs" />
-    <Compile Include="IUserRepository.cs" />
-    <Compile Include="IUserSecurityRepository.cs" />
-    <Compile Include="LoginRepository.cs" />
+    <Compile Include="Security\ISecurityRepository.cs" />
+    <Compile Include="Security\Auth\ILoginRepository.cs" />
+    <Compile Include="Security\Account\IAccountRepository.cs" />
+    <Compile Include="Security\Auth\LoginRepository.cs" />
     <Compile Include="Migrations\MigrationManager.cs" />
+    <Compile Include="Migrations\MirationUnit\AirConditionUnitRelatedMigration.cs" />
     <Compile Include="Migrations\MirationUnit\InitialMigration.cs" />
     <Compile Include="Migrations\MirationUnit\Migration.cs" />
     <Compile Include="Migrations\MirationUnit\SecondMigration.cs" />
-    <Compile Include="Models\AdditionalLoginInfo.cs" />
-    <Compile Include="Models\ConfirmationToken.cs" />
-    <Compile Include="Models\DTO\TwoFactorLoginDto.cs" />
+    <Compile Include="Security\Auth\AdditionalLoginInfo.cs" />
+    <Compile Include="Security\Account\ConfirmationToken.cs" />
+    <Compile Include="Security\Auth\TwoFactorLoginDto.cs" />
     <Compile Include="Models\UmbracoMember.cs" />
-    <Compile Include="Models\Token.cs" />
+    <Compile Include="Security\Token.cs" />
     <Compile Include="Models\SqlBatch.cs" />
-    <Compile Include="PetaPocoUnitOfWork.cs" />
-    <Compile Include="UserRepository.cs" />
-    <Compile Include="UserSecurityRepository.cs" />
-    <Compile Include="Models\DTO\UserRegistrationDto.cs" />
+    <Compile Include="Security\Account\AccountRepository.cs" />
+    <Compile Include="Security\Account\UserAccountDto.cs" />
     <Compile Include="Models\Generated\Database.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -85,6 +86,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\Scripts\InitialMigration.sql" />
     <EmbeddedResource Include="Migrations\Scripts\SecondMigration.sql" />
+    <EmbeddedResource Include="Migrations\Scripts\AirConditionUnitRelatedMigration.sql" />
     <Content Include="Models\Generated\Database.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Database.cs</LastGenOutput>

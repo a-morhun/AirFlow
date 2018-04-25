@@ -20,5 +20,13 @@ namespace AirFlow.Data.AirConditionUnits
                 return db.Fetch<AirConditionUnitRequestDto>(sql).ToArray();
             }
         }
+
+        public void Save(AirConditionUnitRequestDto request)
+        {
+            using (var db = new Database(Config.ConnectionStringName))
+            {
+                db.Insert(request);
+            }
+        }
     }
 }

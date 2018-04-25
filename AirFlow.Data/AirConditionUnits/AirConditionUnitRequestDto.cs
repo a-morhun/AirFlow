@@ -4,6 +4,7 @@ using System;
 namespace AirFlow.Data.AirConditionUnits
 {
     [TableName("airFlowACURequests")]
+    [PrimaryKey("id")]
     public class AirConditionUnitRequestDto
     {
         [Column("id")]

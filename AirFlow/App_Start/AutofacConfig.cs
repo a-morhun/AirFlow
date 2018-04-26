@@ -1,4 +1,6 @@
-﻿using AirFlow.Data.Security;
+﻿using AirFlow.AirConditionUnits;
+using AirFlow.Data.AirConditionUnits;
+using AirFlow.Data.Security;
 using AirFlow.Data.Security.Account;
 using AirFlow.Data.Security.Auth;
 using AirFlow.Services.Account;
@@ -59,6 +61,9 @@ namespace AirFlow
             builder.RegisterType<UserRegistration>().As<IUserRegistration>();
             builder.RegisterType<LoginRepository>().As<ILoginRepository>();
             builder.RegisterType<SecurityRepository>().As<ISecurityRepository>();
+
+            builder.RegisterType<AirConditionUnitRequestRepository>().As<IAirConditionUnitRequestRepository>();
+            builder.RegisterType<AirConditionUnitService>().As<IAirConditionUnitService>();
 
             builder.RegisterInstance(AirFlowHelper.Instance).As<IAirFlowHelper>();
             builder.RegisterInstance(AirFlowServiceContainer.Instance).As<IServiceContainer>();

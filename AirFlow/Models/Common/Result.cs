@@ -22,4 +22,20 @@
             ErrorMessage = errorMessage;
         }
     }
+
+    public class Result<TReturn> : Result
+    {
+        public TReturn ReturnObject { get; }
+
+        public Result(TReturn returnObject)
+        {
+            ReturnObject = returnObject;
+        }
+
+        public Result(ErrorCodeType errorCode, string errorMessage = "")
+            : base(errorCode, errorMessage)
+        {
+        }
+    }
+
 }

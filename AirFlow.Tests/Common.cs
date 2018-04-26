@@ -21,6 +21,7 @@ namespace AirFlow.Tests
         public const string ValtechUkDomain = "valtech.co.uk";
         public const string DefaultMemberType = "Member";
         public const string RegularMemberGroup = "Regular";
+        public const string TimeZone = "GMT Standard Time";
 
         private const string ResponseTypeMismatchFormat = "Response is not type of {0} or missing at all";
         private const string NotSatisfiedExpectation = "Expected {0} for {1}";
@@ -39,7 +40,7 @@ namespace AirFlow.Tests
                 applicationContext,
                 new WebSecurity(Substitute.For<HttpContextBase>(), applicationContext),
                 Substitute.For<IUmbracoSettingsSection>(),
-                provider == null ? Enumerable.Empty<IUrlProvider>() : new [] { provider },
+                provider == null ? Enumerable.Empty<IUrlProvider>() : new[] { provider },
                 true);
         }
 
@@ -74,6 +75,19 @@ namespace AirFlow.Tests
             Assert.IsNotNull(result, ShowResponseTypeMismatchMessage(typeof(RedirectResult)));
             string url = result.Url;
             Assert.IsNotNull(url, ShowNotSatisfiedExpectationMessage(expectedUrl, url));
+        }
+
+        public static void AssertResult(Result result, bool isSuccess)
+        {
+            Assert.IsNotNull(result, Common.ShowResponseTypeMismatchMessage(typeof(Result)));
+
+            if (isSuccess)
+            {
+                Assert.IsTrue(result.IsSuccess, Common.ShowNotSatisfiedExpectationMessage(true, "result.IsSuccess"));
+                return;
+            }
+
+            Assert.IsTrue(result.IsFailure, Common.ShowNotSatisfiedExpectationMessage(true, "result.IsFailure"));
         }
     }
 }

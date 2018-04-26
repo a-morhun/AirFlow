@@ -3,6 +3,7 @@
     public enum EmailMessageType
     {
         EmailConfirmation,
-        LoginConfirmation
+        LoginConfirmation,
+        TemperatureChangeRequest
     }
 }

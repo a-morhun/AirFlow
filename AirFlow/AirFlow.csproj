@@ -447,7 +447,12 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SecurityConfig.cs" />
+    <Compile Include="Controllers\AirConditionUnitsController.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Models\Account\UserRoleType.cs" />
+    <Compile Include="Models\AirConditionUnits\TemperatureRequestHistoryResponse.cs" />
+    <Compile Include="Models\AirConditionUnits\TemperatureRequest.cs" />
+    <Compile Include="Models\AirConditionUnits\TemperatureRequestHistory.cs" />
     <Compile Include="Models\Auth\LoginType.cs" />
     <Compile Include="Models\Common\AirFlowConfiguration.cs" />
     <Compile Include="Models\Common\AirFlowConstants.cs" />
@@ -472,6 +477,8 @@
     <Compile Include="Models\Common\Result.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Account\IAccountService.cs" />
+    <Compile Include="Services\AirConditionUnits\AirConditionUnitService.cs" />
+    <Compile Include="Services\AirConditionUnits\IAirConditionUnitService.cs" />
     <Compile Include="Services\Auth\AuthService.cs" />
     <Compile Include="Services\Auth\EmailTypeLoginProvider.cs" />
     <Compile Include="Services\Auth\IAuthService.cs" />
@@ -480,7 +487,9 @@
     <Compile Include="Services\Auth\ITokenGenerator.cs" />
     <Compile Include="Services\Auth\ITwoFactorLoginProvider.cs" />
     <Compile Include="Services\Auth\TwoFactorLoginProvider.cs" />
-    <Compile Include="Services\Email\ConfirmationEmailMessageFactory.cs" />
+    <Compile Include="Services\Email\EmailMessageFactory.cs" />
+    <Compile Include="Services\Email\ConfirmationEmailMessageOptions.cs" />
+    <Compile Include="Services\Email\EmailMessageOptions.cs" />
     <Compile Include="Services\Email\EmailMessageType.cs" />
     <Compile Include="Services\Email\LoginConfirmationEmailMessage.cs" />
     <Compile Include="Services\Email\SmtpEmailSender.cs" />
@@ -490,6 +499,8 @@
     <Compile Include="Services\Auth\MembershipWrapper.cs" />
     <Compile Include="Services\Auth\TokenGenerator.cs" />
     <Compile Include="Services\Email\RegistrationEmailMessage.cs" />
+    <Compile Include="Services\Email\TemperatureRequestEmailMessage.cs" />
+    <Compile Include="Services\Email\TemperatureRequestEmailMessageOptions.cs" />
     <Compile Include="Services\Helpers\AirFlowHelper.cs" />
     <Compile Include="Services\Helpers\IAirFlowHelper.cs" />
     <Compile Include="Services\Containers\AirFlowServiceContainer.cs" />
@@ -501,7 +512,6 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Extensions\" />
     <Folder Include="obj\" />
   </ItemGroup>
   <ItemGroup>

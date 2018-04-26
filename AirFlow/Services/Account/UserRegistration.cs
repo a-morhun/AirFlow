@@ -77,10 +77,7 @@ namespace AirFlow.Services.Account
 
         private void SendConfirmationEmail(string token, string userEmail)
         {
-            MailMessage message = ConfirmationEmailMessageFactory.ConstructConfirmationMessage(
-                EmailMessageType.EmailConfirmation, userEmail, token, _expirationTokenDateTime);
-
-            _emailSender.Send(message);
+            _emailSender.Send(EmailMessageType.EmailConfirmation, new ConfirmationEmailMessageOptions(userEmail, token, _expirationTokenDateTime));
         }
     }
 }

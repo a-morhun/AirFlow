@@ -30,10 +30,7 @@ namespace AirFlow.Services.Auth
 
         protected override void SendConfirmation(string token)
         {
-            MailMessage message = ConfirmationEmailMessageFactory.ConstructConfirmationMessage(
-                EmailMessageType.LoginConfirmation, _userEmail, token, ExpirationDateTime);
-
-            _emailSender.Send(message);
+            _emailSender.Send(EmailMessageType.LoginConfirmation, new ConfirmationEmailMessageOptions(_userEmail, token, ExpirationDateTime));
         }
     }
 }

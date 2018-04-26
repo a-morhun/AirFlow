@@ -19,8 +19,8 @@ using Umbraco.ModelsBuilder;
 using Umbraco.ModelsBuilder.Umbraco;
 
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "e7dc7d6c46d80fd6")]
-[assembly:System.Reflection.AssemblyVersion("0.0.0.1")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "d15254fb33761ae6")]
+[assembly:System.Reflection.AssemblyVersion("0.0.0.2")]
 
 namespace Umbraco.Web.PublishedContentModels
 {
@@ -205,6 +205,15 @@ namespace Umbraco.Web.PublishedContentModels
 		{
 			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
 		}
+
+		///<summary>
+		/// ConfirmationEmailTemplate: Enter email template which will be sent to a user in order to confirm login (if 2FA was selected)
+		///</summary>
+		[ImplementPropertyType("confirmationEmailTemplate")]
+		public IHtmlString ConfirmationEmailTemplate
+		{
+			get { return this.GetPropertyValue<IHtmlString>("confirmationEmailTemplate"); }
+		}
 	}
 
 	/// <summary>Register</summary>
@@ -230,6 +239,15 @@ namespace Umbraco.Web.PublishedContentModels
 		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<Register, TValue>> selector)
 		{
 			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
+		}
+
+		///<summary>
+		/// ConfirmationEmailTemplate: Enter email template which will be sent to newly registered user in order to confirm his email
+		///</summary>
+		[ImplementPropertyType("confirmationEmailTemplate")]
+		public IHtmlString ConfirmationEmailTemplate
+		{
+			get { return this.GetPropertyValue<IHtmlString>("confirmationEmailTemplate"); }
 		}
 	}
 

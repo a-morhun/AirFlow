@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Net.Mail;
+using System.Web;
+using AirFlow.Models.Common;
+using AirFlow.Services.Helpers;
 
 namespace AirFlow.Services.Email
 {
@@ -7,13 +10,16 @@ namespace AirFlow.Services.Email
     {
         public static MailMessage Construct(EmailMessageType type, EmailMessageOptions options)
         {
+            var emailTemplate = string.Empty;
             switch (type)
             {
                 case EmailMessageType.EmailConfirmation:
-                    return new RegistrationEmailMessage(options as ConfirmationEmailMessageOptions);
+                    emailTemplate = GetEmailTemplate("Register", "confirmationEmailTemplate");
+                    return new RegistrationEmailMessage(emailTemplate, options as ConfirmationEmailMessageOptions);
 
                 case EmailMessageType.LoginConfirmation:
-                    return new LoginConfirmationEmailMessage(options as ConfirmationEmailMessageOptions);
+                    emailTemplate = GetEmailTemplate("Login", "confirmationEmailTemplate");
+                    return new LoginConfirmationEmailMessage(emailTemplate, options as ConfirmationEmailMessageOptions);
 
                 case EmailMessageType.TemperatureChangeRequest:
                     return new TemperatureRequestEmailMessage(options as TemperatureRequestEmailMessageOptions);
@@ -21,6 +27,12 @@ namespace AirFlow.Services.Email
                 default:
                     throw new InvalidOperationException($"No email message defined for type {type}");
             }
+        }
+
+        private static string GetEmailTemplate(string contentName, string emailTemplatePropertyAlias)
+        {
+            string template = AirFlowHelper.Instance.GetSingleContentPropertyValue<string>(contentName, emailTemplatePropertyAlias, AirFlowConstants.RootContentLevel);
+            return HttpUtility.HtmlDecode(template);
         }
     }
 }

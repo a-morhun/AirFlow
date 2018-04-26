@@ -12,13 +12,16 @@ namespace AirFlow.Services.Email
             "<p><strong>Attention! The link will have been expired by {3}</strong></p>" +
             "<p>Do not respond to this email - it was auto-generated. If you have received it mistakely just ignore it. </p>";
 
-        public LoginConfirmationEmailMessage(ConfirmationEmailMessageOptions options)
+        public LoginConfirmationEmailMessage(string emailTemplate, ConfirmationEmailMessageOptions options)
         {
             To.Add(options.SendTo);
             Subject = "AirFlow login confirmation";
             IsBodyHtml = true;
             BodyEncoding = Encoding.UTF8;
-            Body = string.Format(BodyTemplate, AirFlowConfiguration.AirFlowUrl, options.Token, "Confirmation", options.ExpirationDateTime.ToLocalTime());
+
+            string href = string.Format("{0}/umbraco/Surface/AuthSurface/ConfirmLogin?token={1}", AirFlowConfiguration.AirFlowUrl, options.Token);
+            const string confirmationLinkName = "Confirmation";
+            Body = string.Format(emailTemplate, href, confirmationLinkName, options.ExpirationDateTime.ToUniversalTime());
         }
     }
 }

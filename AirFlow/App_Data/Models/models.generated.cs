@@ -19,7 +19,7 @@ using Umbraco.ModelsBuilder;
 using Umbraco.ModelsBuilder.Umbraco;
 
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "d15254fb33761ae6")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "d1145592274844fb")]
 [assembly:System.Reflection.AssemblyVersion("0.0.0.2")]
 
 namespace Umbraco.Web.PublishedContentModels
@@ -178,6 +178,15 @@ namespace Umbraco.Web.PublishedContentModels
 		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<Home, TValue>> selector)
 		{
 			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
+		}
+
+		///<summary>
+		/// TemperatureRequestEmailMessage: Enter template for an email message body which will be sent to a responsible person in order to change temperature of air-condition unit
+		///</summary>
+		[ImplementPropertyType("temperatureRequestEmailMessage")]
+		public IHtmlString TemperatureRequestEmailMessage
+		{
+			get { return this.GetPropertyValue<IHtmlString>("temperatureRequestEmailMessage"); }
 		}
 	}
 

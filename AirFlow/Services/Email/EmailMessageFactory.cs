@@ -23,7 +23,8 @@ namespace AirFlow.Services.Email
                     return new LoginConfirmationEmailMessage(emailTemplate, options as ConfirmationEmailMessageOptions);
 
                 case EmailMessageType.TemperatureChangeRequest:
-                    return new TemperatureRequestEmailMessage(options as TemperatureRequestEmailMessageOptions);
+                    emailTemplate = GetEmailTemplate("Home", "temperatureRequestEmailMessage");
+                    return new TemperatureRequestEmailMessage(emailTemplate, options as TemperatureRequestEmailMessageOptions);
 
                 default:
                     throw new InvalidOperationException($"No email message defined for type {type}");

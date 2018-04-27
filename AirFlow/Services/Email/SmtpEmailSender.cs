@@ -25,8 +25,9 @@ namespace AirFlow.Services.Email
             }
         }
 
-        public void Send(MailMessage message)
+        public void Send(EmailMessageType type, EmailMessageOptions options)
         {
+            MailMessage message = EmailMessageFactory.Construct(type, options);
             _client.Send(message);
         }
     }

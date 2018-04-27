@@ -13,7 +13,7 @@ namespace AirFlow.Tests.Services.Auth
         private const string UserEmail = "user@com";
         private const string Token = "token";
         private const int UserId = 1;
-        
+
         private ITokenGenerator _tokenGenerator;
         private IEmailSender _emailSender;
         private ILoginRepository _loginRepository;
@@ -51,19 +51,19 @@ namespace AirFlow.Tests.Services.Auth
 
         private void AssertIfLoginTokenSaved()
         {
-            _loginRepository.Received(1).SaveLoginToken(Arg.Is< TwoFactorLoginDto>(t => 
-                t.Token == Token && 
-                t.UserId == UserId && 
-                t.ExpirationDate > DateTime.UtcNow));
+            _loginRepository.Received(1).SaveLoginToken(Arg.Is<TwoFactorLoginDto>(t =>
+               t.Token == Token &&
+               t.UserId == UserId &&
+               t.ExpirationDate > DateTime.UtcNow));
         }
 
         private void AssertIfConfirmationEmailWasSent()
         {
-            _emailSender.Received(1).Send(Arg.Is<LoginConfirmationEmailMessage>(r =>
-                r != null &&
-                r.IsBodyHtml &&
-                !string.IsNullOrEmpty(r.Subject) &&
-                !string.IsNullOrEmpty(r.Body)));
+            _emailSender.Received(1).Send(EmailMessageType.LoginConfirmation,
+                Arg.Is<ConfirmationEmailMessageOptions>(o =>
+                    o != null &&
+                    o.Token == Token &&
+                    o.SendTo == UserEmail));
         }
     }
 }

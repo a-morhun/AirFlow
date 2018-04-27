@@ -9,11 +9,11 @@ namespace AirFlow.Data.AirConditionUnits
             using (var db = new Database(Config.ConnectionStringName))
             {
                 var sql = Sql.Builder
-                    .Select("id AS Id," +
-                            "acu_id AS AirConditionUnitId," +
-                            "requester_email AS RequesterEmail," +
-                            "temperature AS Temperature," +
-                            "update_datetime AS UpdateDateTime")
+                    .Select("id," +
+                            "acu_id," +
+                            "requester_email," +
+                            "temperature," +
+                            "update_datetime")
                     .From("airFlowACURequests")
                     .Where("acu_id = @0", airConditionUnitId);
 

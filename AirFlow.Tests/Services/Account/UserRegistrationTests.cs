@@ -76,7 +76,7 @@ namespace AirFlow.Tests.Services.Account
             // Assert
             AssertIfMemberWasCreated(user, registeredUser, shouldBeApproved: user.Type == UserType.ValtechUk);
             AsserrIfConfirmationDataWasSaved();
-            AssertIfConfirmationEmailWasSent();
+            AssertIfConfirmationEmailWasSent(user.Email);
         }
 
         private IMember GetRegisteredMember(UserToRegister user)
@@ -111,13 +111,13 @@ namespace AirFlow.Tests.Services.Account
                 a.ConfirmationExpirationDate > DateTime.UtcNow));
         }
 
-        private void AssertIfConfirmationEmailWasSent()
+        private void AssertIfConfirmationEmailWasSent(string userEmail)
         {
-            _emailSender.Received(1).Send(Arg.Is<RegistrationEmailMessage>(r =>
-                r != null &&
-                r.IsBodyHtml &&
-                !string.IsNullOrEmpty(r.Subject) &&
-                !string.IsNullOrEmpty(r.Body)));
+            _emailSender.Received(1).Send(EmailMessageType.EmailConfirmation,
+                Arg.Is<ConfirmationEmailMessageOptions>(o => 
+                    o != null &&
+                    o.Token == GeneratedToken &&
+                    o.SendTo == userEmail));
         }
 
         private UserToRegister GetUserToRegister(bool isValtechUkEmail) => new UserToRegister(new UserRegistrationViewModel

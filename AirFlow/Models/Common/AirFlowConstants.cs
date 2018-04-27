@@ -7,5 +7,6 @@
         public const string EmailConfirmationSuccessContent = "Confirmation_Email_Success";
         public const string EmailConfirmationFailureContent = "Confirmation_Email_Failure";
         public const string LoginConfirmationFailureContent = "Confirmation_Login_Failure";
+        public const string UkTimeZone = "GMT Standard Time";
     }
 }

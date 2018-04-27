@@ -1,6 +1,5 @@
 ﻿using AirFlow.Data.Security.Auth;
 using AirFlow.Services.Email;
-using System.Net.Mail;
 
 namespace AirFlow.Services.Auth
 {

@@ -1,8 +1,8 @@
-﻿using System;
+﻿using AirFlow.Models.Common;
+using AirFlow.Services.Helpers;
+using System;
 using System.Net.Mail;
 using System.Web;
-using AirFlow.Models.Common;
-using AirFlow.Services.Helpers;
 
 namespace AirFlow.Services.Email
 {
@@ -10,12 +10,13 @@ namespace AirFlow.Services.Email
     {
         public static MailMessage Construct(EmailMessageType type, EmailMessageOptions options)
         {
-            var emailTemplate = string.Empty;
+            string emailTemplate;
+
             switch (type)
             {
                 case EmailMessageType.EmailConfirmation:
                     emailTemplate = GetEmailTemplate("Register", "confirmationEmailTemplate");
-                    return new RegistrationEmailMessage(emailTemplate, options as ConfirmationEmailMessageOptions);
+                    return new EmailConfirmationEmailMessage(emailTemplate, options as ConfirmationEmailMessageOptions);
 
                 case EmailMessageType.LoginConfirmation:
                     emailTemplate = GetEmailTemplate("Login", "confirmationEmailTemplate");

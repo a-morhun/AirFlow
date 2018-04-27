@@ -7,6 +7,7 @@ namespace AirFlow.Services.Email
 {
     internal class TemperatureRequestEmailMessage : MailMessage
     {
+        // TODO: Design and move template into Umbraco
         private const string BodyTemplate =
             "<p>Temperature change request</p>" +
             "<p>Air-condition unit: {0}</p>" +

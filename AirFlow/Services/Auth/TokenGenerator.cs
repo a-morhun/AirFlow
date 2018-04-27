@@ -9,17 +9,17 @@ namespace AirFlow.Services.Auth
 
         public string Generate()
         {
-            byte[] randomBytes = GenerateRandomBytes();
-            string base64 = Convert.ToBase64String(randomBytes);
+            var randomBytes = GenerateRandomBytes();
+            var base64 = Convert.ToBase64String(randomBytes);
             return ReplaceToUrlSafe(base64);
         }
 
-        private string ReplaceToUrlSafe(string base64)
+        private static string ReplaceToUrlSafe(string base64)
         {
-            return base64.TrimEnd(new[] { '=' }).Replace('+', '-').Replace('/', '_');
+            return base64.TrimEnd('=').Replace('+', '-').Replace('/', '_');
         }
 
-        private byte[] GenerateRandomBytes()
+        private static byte[] GenerateRandomBytes()
         {
             var buffer = new byte[NumberOfBytes];
 

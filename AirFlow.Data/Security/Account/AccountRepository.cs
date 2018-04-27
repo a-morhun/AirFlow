@@ -30,12 +30,12 @@ namespace AirFlow.Data.Security.Account
 
         public void ConfirmEmail(int userId)
         {
-            var dto = (UserId: userId, EmailConfirmed: true, ConfirmationDate: DateTime.UtcNow);
+            var (emailConfirmed, confirmationDate) = (true, DateTime.UtcNow);
             const string query = "UPDATE airFlowMemberRegistration SET email_confirmed = @0, confirmation_date = @1 WHERE nodeId = @2;";
 
             using (var db = new Database(Config.ConnectionStringName))
             {
-                db.Execute(query, dto.EmailConfirmed, dto.ConfirmationDate, dto.UserId);
+                db.Execute(query, emailConfirmed, confirmationDate, userId);
             }
         }
 

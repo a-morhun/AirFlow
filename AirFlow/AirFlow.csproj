@@ -487,6 +487,7 @@
     <Compile Include="Services\Auth\ITokenGenerator.cs" />
     <Compile Include="Services\Auth\ITwoFactorLoginProvider.cs" />
     <Compile Include="Services\Auth\TwoFactorLoginProvider.cs" />
+    <Compile Include="Services\Email\ConfirmationEmailMessage.cs" />
     <Compile Include="Services\Email\EmailMessageFactory.cs" />
     <Compile Include="Services\Email\ConfirmationEmailMessageOptions.cs" />
     <Compile Include="Services\Email\EmailMessageOptions.cs" />
@@ -498,7 +499,7 @@
     <Compile Include="Services\Auth\FormsAuthenticationWrapper.cs" />
     <Compile Include="Services\Auth\MembershipWrapper.cs" />
     <Compile Include="Services\Auth\TokenGenerator.cs" />
-    <Compile Include="Services\Email\RegistrationEmailMessage.cs" />
+    <Compile Include="Services\Email\EmailConfirmationEmailMessage.cs" />
     <Compile Include="Services\Email\TemperatureRequestEmailMessage.cs" />
     <Compile Include="Services\Email\TemperatureRequestEmailMessageOptions.cs" />
     <Compile Include="Services\Helpers\AirFlowHelper.cs" />

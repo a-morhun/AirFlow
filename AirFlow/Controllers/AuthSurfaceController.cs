@@ -1,9 +1,8 @@
 ﻿using AirFlow.Models.Auth;
 using AirFlow.Models.Common;
 using AirFlow.Services.Auth;
-using System.Web.Mvc;
-using AirFlow.Services.Containers;
 using AirFlow.Services.Helpers;
+using System.Web.Mvc;
 using Umbraco.Web.Mvc;
 
 namespace AirFlow.Controllers

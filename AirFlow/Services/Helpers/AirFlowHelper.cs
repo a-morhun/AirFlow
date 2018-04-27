@@ -10,11 +10,11 @@ namespace AirFlow.Services.Helpers
     public class AirFlowHelper : IAirFlowHelper
     {
         private IContentService ContentService => AirFlowServiceContainer.Instance.GetInstance<IContentService>();
-        private static Lazy<AirFlowHelper> _lazy = new Lazy<AirFlowHelper>(() => new AirFlowHelper());
+        private static readonly Lazy<AirFlowHelper> Lazy = new Lazy<AirFlowHelper>(() => new AirFlowHelper());
 
-        public static AirFlowHelper Instance => _lazy.Value;
+        public static AirFlowHelper Instance => Lazy.Value;
 
-        AirFlowHelper()
+        private AirFlowHelper()
         {
         }
 

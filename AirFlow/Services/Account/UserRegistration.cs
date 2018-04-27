@@ -4,7 +4,6 @@ using AirFlow.Models.Auth;
 using AirFlow.Services.Auth;
 using AirFlow.Services.Email;
 using System;
-using System.Net.Mail;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
 

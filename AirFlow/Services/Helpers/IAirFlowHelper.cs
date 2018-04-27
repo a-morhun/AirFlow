@@ -11,5 +11,7 @@ namespace AirFlow.Services.Helpers
         int GetContentId(string contentName, int level = AirFlowConstants.RootContentLevel);
 
         string GetContentUrl(UmbracoContext context, string contentName, int level = AirFlowConstants.RootContentLevel);
+
+        T GetSingleContentPropertyValue<T>(string contentName, string propertyAlias, int level = AirFlowConstants.RootContentLevel);
     }
 }

@@ -5,20 +5,28 @@ using System.Configuration;
 using System.Data.SqlServerCe;
 using System.Linq;
 using System.Reflection;
+using AirFlow.Utilities;
 
 namespace AirFlow.Data.Migrations
 {
     public static class MigrationManager
     {
+        private static readonly IAirFlowLogger Logger = new AirFlowLogger(typeof(MigrationManager));
+
         public static void Process()
         {
+            Logger.Debug("Start migrations");
             int currentVersion = GetCurrentVersion();
+            Logger.Debug($"Current DB version is '{currentVersion}'");
             Migration[] migrations = GetPendingMigrations(currentVersion);
+            Logger.Debug($"Current Pending migration count is '{migrations.Length}'");
 
             foreach (var migration in migrations)
             {
                 Execute(migration);
             }
+
+            Logger.Debug("End migrations");
         }
 
         private static int GetCurrentVersion()
@@ -47,6 +55,20 @@ namespace AirFlow.Data.Migrations
         }
 
         private static void Execute(Migration migration)
+        {
+            Logger.Debug($"Execute migration '{migration.GetType().Name}'");
+            try
+            {
+                ExecuteInternal(migration);
+            }
+            catch (Exception ex)
+            {
+                Logger.Fatal($"Failed to execute migration '{migration.GetType().Name}'", ex);
+                throw;
+            }
+        }
+
+        private static void ExecuteInternal(Migration migration)
         {
             string connectionString = ConfigurationManager.ConnectionStrings[Config.ConnectionStringName].ConnectionString;
             using (var conn = new SqlCeConnection(connectionString))

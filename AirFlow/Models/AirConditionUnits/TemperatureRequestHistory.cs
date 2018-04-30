@@ -18,5 +18,10 @@ namespace AirFlow.AirConditionUnits
             Temperature = dto.Temperature;
             RequestDateTime = dto.UpdateDateTime.ApplyTimeZone(timeZoneId);
         }
+
+        public override string ToString()
+        {
+            return $"Requester: {RequesterEmail}, Temperature: {Temperature}, Date: {RequestDateTime}";
+        }
     }
 }

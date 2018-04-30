@@ -15,8 +15,13 @@ namespace AirFlow.AirConditionUnits
         public bool IsInvalid()
         {
             return AirConditionUnitId <= 0 ||
-                   string.IsNullOrEmpty(AirConditionUnitName) || 
+                   string.IsNullOrEmpty(AirConditionUnitName) ||
                    Temperature < 0;
+        }
+
+        public override string ToString()
+        {
+            return $"Id: {AirConditionUnitId}, Name: {AirConditionUnitName}, Temperature: {Temperature}";
         }
     }
 }

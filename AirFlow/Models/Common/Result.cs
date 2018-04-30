@@ -21,6 +21,11 @@
             ErrorCode = errorCode;
             ErrorMessage = errorMessage;
         }
+
+        public override string ToString()
+        {
+            return $"IsSuccess: {IsSuccess}, ErrorCode: {ErrorCode}";
+        }
     }
 
     public class Result<TReturn> : Result

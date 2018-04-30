@@ -3,6 +3,7 @@ using AirFlow.Models.Account;
 using AirFlow.Models.Auth;
 using AirFlow.Services.Auth;
 using AirFlow.Services.Email;
+using AirFlow.Utilities;
 using System;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
@@ -19,6 +20,7 @@ namespace AirFlow.Services.Account
         private readonly IAccountRepository _accountRepository;
         private readonly ITokenGenerator _tokenGenerator;
         private readonly IEmailSender _emailSender;
+        private readonly IAirFlowLogger _logger = new AirFlowLogger(typeof(UserRegistration));
 
         private readonly DateTime _expirationTokenDateTime = DateTime.UtcNow.AddDays(1);
 
@@ -45,18 +47,35 @@ namespace AirFlow.Services.Account
 
         private IMember CreateMember(UserToRegister user)
         {
-            IMember registeredUser = _memberService.CreateMemberWithIdentity(user.Username, user.Email, user.Name, DetermineMemberTypeAlias());
+            IMember registeredUser;
+
+            try
+            {
+                registeredUser = _memberService.CreateMemberWithIdentity(user.Username, user.Email, user.Name, DetermineMemberTypeAlias());
+            }
+            catch (Exception e)
+            {
+                throw new MemberServiceException("Failed to create member with identity", e);
+            }
+
             registeredUser.IsApproved = user.Type == UserType.ValtechUk;
             _memberService.SavePassword(registeredUser, user.Password);
             _memberService.Save(registeredUser);
-            _memberService.AssignRole(registeredUser.Id, RegularMemberGroup);
+            string userRole = DetermineUserRole();
+            _memberService.AssignRole(registeredUser.Id, userRole);
 
+            _logger.Debug($"RegisteredUser: email: '{registeredUser.Email}', isApproved : {registeredUser.IsApproved}, role: {userRole}");
             return registeredUser;
         }
 
         private string DetermineMemberTypeAlias()
         {
             return _memberTypeService.Get(DefaultMemberType).Alias;
+        }
+
+        private string DetermineUserRole()
+        {
+            return RegularMemberGroup;
         }
 
         private void SaveRegistrationConfirmation(int userId, LoginType type, out string token)
@@ -71,12 +90,14 @@ namespace AirFlow.Services.Account
                 LoginType = (byte)type
             };
 
+            _logger.Debug($"registration data: {registration}");
             _accountRepository.Save(registration);
         }
 
         private void SendConfirmationEmail(string token, string userEmail)
         {
             _emailSender.Send(EmailMessageType.EmailConfirmation, new ConfirmationEmailMessageOptions(userEmail, token, _expirationTokenDateTime));
+            _logger.Debug($"Sent confirmation email for {userEmail}");
         }
     }
 }

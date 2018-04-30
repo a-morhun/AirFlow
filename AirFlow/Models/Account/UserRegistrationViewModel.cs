@@ -26,5 +26,10 @@ namespace AirFlow.Models.Account
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        public override string ToString()
+        {
+            return $"Email: {Email}, Username: {Username}, Name:{Name}, LoginType: {LoginType}";
+        }
     }
 }

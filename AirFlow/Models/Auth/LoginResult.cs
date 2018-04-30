@@ -21,5 +21,10 @@ namespace AirFlow.Models.Auth
         public LoginResult(ErrorCodeType errorCode, string errorMessage = "") : base(errorCode, errorMessage)
         {
         }
+
+        public override string ToString()
+        {
+            return $"{base.ToString()}, Username: {Username}";
+        }
     }
 }

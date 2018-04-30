@@ -21,5 +21,14 @@ namespace AirFlow.Data.AirConditionUnits
 
         [Column("update_datetime")]
         public DateTime UpdateDateTime { get; set; }
+
+        public override string ToString()
+        {
+            return $"Id: {Id}, " +
+                   $"UnitId: {AirConditionUnitId}, " +
+                   $"Requester: {RequesterEmail}, " +
+                   $"Temperature: {Temperature}, " +
+                   $"Date: {UpdateDateTime}";
+        }
     }
 }

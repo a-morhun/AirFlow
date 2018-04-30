@@ -48,9 +48,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AirConditionUnits\AirConditionUnitRepositoryException.cs" />
     <Compile Include="AirConditionUnits\AirConditionUnitRequestDto.cs" />
     <Compile Include="AirConditionUnits\AirConditionUnitRequestRepository.cs" />
     <Compile Include="AirConditionUnits\IAirConditionUnitRequestRepository.cs" />
+    <Compile Include="Models\Generated\Database.cs" />
+    <Compile Include="Models\Generated\Database1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Database.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Security\Account\AccountRepositoryException.cs" />
+    <Compile Include="Security\Auth\LoginRepositoryException.cs" />
     <Compile Include="Security\SecurityRepository.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Security\ISecurityRepository.cs" />
@@ -70,11 +79,6 @@
     <Compile Include="Models\SqlBatch.cs" />
     <Compile Include="Security\Account\AccountRepository.cs" />
     <Compile Include="Security\Account\UserAccountDto.cs" />
-    <Compile Include="Models\Generated\Database.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Database.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\PetaPoco.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -87,14 +91,21 @@
     <EmbeddedResource Include="Migrations\Scripts\InitialMigration.sql" />
     <EmbeddedResource Include="Migrations\Scripts\SecondMigration.sql" />
     <EmbeddedResource Include="Migrations\Scripts\AirConditionUnitRelatedMigration.sql" />
-    <Content Include="Models\Generated\Database.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Database.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\AirFlow.Utilities\AirFlow.Utilities.csproj">
+      <Project>{84963E88-0875-431C-B1A3-CC155F328A01}</Project>
+      <Name>AirFlow.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Models\Generated\Database.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Database1.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

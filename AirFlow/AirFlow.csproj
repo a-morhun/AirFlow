@@ -449,6 +449,7 @@
     <Compile Include="App_Start\SecurityConfig.cs" />
     <Compile Include="Controllers\AirConditionUnitsController.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Models\Account\MemberServiceException.cs" />
     <Compile Include="Models\Account\UserRoleType.cs" />
     <Compile Include="Models\AirConditionUnits\TemperatureRequestHistoryResponse.cs" />
     <Compile Include="Models\AirConditionUnits\TemperatureRequest.cs" />
@@ -492,6 +493,7 @@
     <Compile Include="Services\Email\ConfirmationEmailMessageOptions.cs" />
     <Compile Include="Services\Email\EmailMessageOptions.cs" />
     <Compile Include="Services\Email\EmailMessageType.cs" />
+    <Compile Include="Services\Email\EmailSenderException.cs" />
     <Compile Include="Services\Email\LoginConfirmationEmailMessage.cs" />
     <Compile Include="Services\Email\SmtpEmailSender.cs" />
     <Compile Include="Services\Email\IEmailSender.cs" />
@@ -519,13 +521,17 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Scripts\index.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\AirFlow.Data\AirFlow.Data.csproj">
       <Project>{83990f61-bef1-4b4a-b593-5bfdeda25604}</Project>
       <Name>AirFlow.Data</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <TypeScriptCompile Include="Scripts\index.d.ts" />
+    <ProjectReference Include="..\AirFlow.Utilities\AirFlow.Utilities.csproj">
+      <Project>{84963e88-0875-431c-b1a3-cc155f328a01}</Project>
+      <Name>AirFlow.Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

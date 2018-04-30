@@ -95,6 +95,11 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\AirFlow.Utilities\AirFlow.Utilities.csproj">
+      <Project>{84963E88-0875-431C-B1A3-CC155F328A01}</Project>
+      <Name>AirFlow.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

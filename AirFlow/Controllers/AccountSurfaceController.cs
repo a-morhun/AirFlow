@@ -2,6 +2,7 @@
 using AirFlow.Models.Common;
 using AirFlow.Services.Account;
 using System.Web.Mvc;
+using AirFlow.Utilities;
 using Umbraco.Web.Mvc;
 
 namespace AirFlow.Controllers
@@ -11,6 +12,7 @@ namespace AirFlow.Controllers
         private const string PartialMessageViewPath = "/Views/Partials/Account/_RegistrationResult.cshtml";
 
         private readonly IAccountService _accountService;
+        private static readonly IAirFlowLogger Logger = new AirFlowLogger(typeof(AccountSurfaceController));
 
         public AccountSurfaceController(IAccountService accountService)
         {

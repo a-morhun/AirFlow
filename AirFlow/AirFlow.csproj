@@ -519,13 +519,17 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Scripts\index.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\AirFlow.Data\AirFlow.Data.csproj">
       <Project>{83990f61-bef1-4b4a-b593-5bfdeda25604}</Project>
       <Name>AirFlow.Data</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <TypeScriptCompile Include="Scripts\index.d.ts" />
+    <ProjectReference Include="..\AirFlow.Utilities\AirFlow.Utilities.csproj">
+      <Project>{84963e88-0875-431c-b1a3-cc155f328a01}</Project>
+      <Name>AirFlow.Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

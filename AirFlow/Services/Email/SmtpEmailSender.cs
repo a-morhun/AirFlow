@@ -1,5 +1,7 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Net.Configuration;
 using System.Net.Mail;
 
@@ -28,7 +30,15 @@ namespace AirFlow.Services.Email
         public void Send(EmailMessageType type, EmailMessageOptions options)
         {
             MailMessage message = EmailMessageFactory.Construct(type, options);
-            _client.Send(message);
+
+            try
+            {
+                _client.Send(message);
+            }
+            catch (Exception e)
+            {
+                throw new EmailSenderException($"Failed to send email from {message.From} to {message.To.FirstOrDefault()} with options {options}", e);
+            }
         }
     }
 }

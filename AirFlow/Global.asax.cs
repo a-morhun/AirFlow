@@ -14,7 +14,7 @@ namespace AirFlow
 
         protected override void OnApplicationStarted(object sender, EventArgs e)
         {
-            _logger.Debug("Application configuration START");
+            _logger.Debug("===Application configuration START===");
             base.OnApplicationStarted(sender, e);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

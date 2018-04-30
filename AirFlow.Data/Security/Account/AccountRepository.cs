@@ -10,7 +10,14 @@ namespace AirFlow.Data.Security.Account
         {
             using (var db = new Database(Config.ConnectionStringName))
             {
-                db.Insert(user);
+                try
+                {
+                    db.Insert(user);
+                }
+                catch (Exception e)
+                {
+                    throw new AccountRepositoryException($"Failed to save info for userId '{user.UserId}'", e);
+                }
             }
         }
 
@@ -24,7 +31,15 @@ namespace AirFlow.Data.Security.Account
                             "email_confirmed AS AlreadyConfirmed")
                     .From("airFlowMemberRegistration")
                     .Where("confirmation_token = @0", confirmationToken);
-                return db.Fetch<ConfirmationToken>(sql).FirstOrDefault();
+
+                try
+                {
+                    return db.Fetch<ConfirmationToken>(sql).FirstOrDefault();
+                }
+                catch (Exception e)
+                {
+                    throw new AccountRepositoryException("Failed to retreive token details", e);
+                }
             }
         }
 
@@ -35,7 +50,14 @@ namespace AirFlow.Data.Security.Account
 
             using (var db = new Database(Config.ConnectionStringName))
             {
-                db.Execute(query, emailConfirmed, confirmationDate, userId);
+                try
+                {
+                    db.Execute(query, emailConfirmed, confirmationDate, userId);
+                }
+                catch (Exception e)
+                {
+                    throw new AccountRepositoryException("Failed to confirm email", e);
+                }
             }
         }
 
@@ -49,7 +71,14 @@ namespace AirFlow.Data.Security.Account
                     .InnerJoin("cmsMember AS M").On("M.nodeId = A.nodeId")
                     .Where("M.email = @0", email);
 
-                return db.Fetch<bool>(sql).FirstOrDefault();
+                try
+                {
+                    return db.Fetch<bool>(sql).FirstOrDefault();
+                }
+                catch (Exception e)
+                {
+                    throw new AccountRepositoryException("Failed to retreive confirmation info", e);
+                }
             }
         }
     }

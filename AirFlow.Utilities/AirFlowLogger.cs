@@ -1,53 +1,61 @@
-﻿using System;
-using log4net;
+﻿using log4net;
+using System;
+using System.Runtime.CompilerServices;
 
 namespace AirFlow.Utilities
 {
     public class AirFlowLogger : IAirFlowLogger
     {
         private readonly ILog _logger;
+        private readonly Type _targetType;
 
         public AirFlowLogger(Type type)
         {
-            _logger = LogManager.GetLogger(type.Namespace);
+            _targetType = type;
+            _logger = LogManager.GetLogger(_targetType.Namespace);
         }
 
-        public void Debug(string message)
+        public void Debug(string message, [CallerMemberName] string caller = "")
         {
-            _logger.Debug(message);
+            _logger.Debug(FormatMessage(message, caller));
         }
 
-        public void Info(string message)
+        public void Info(string message, [CallerMemberName] string caller = "")
         {
-            _logger.Info(message);
+            _logger.Info(FormatMessage(message, caller));
         }
 
-        public void Warn(string message)
+        public void Warn(string message, [CallerMemberName] string caller = "")
         {
-            _logger.Warn(message);
+            _logger.Warn(FormatMessage(message, caller));
         }
 
-        public void Error(string message, Exception ex = null)
-        {
-            if (ex == null)
-            {
-                _logger.Error(message);
-                return;
-            }
-
-            _logger.Error(message, ex);
-        }
-
-
-        public void Fatal(string message, Exception ex = null)
+        public void Error(string message, Exception ex = null, [CallerMemberName] string caller = "")
         {
             if (ex == null)
             {
-                _logger.Fatal(message);
+                _logger.Error(FormatMessage(message, caller));
                 return;
             }
 
-            _logger.Fatal(message, ex);
+            _logger.Error(FormatMessage(message, caller), ex);
+        }
+
+
+        public void Fatal(string message, Exception ex = null, [CallerMemberName] string caller = "")
+        {
+            if (ex == null)
+            {
+                _logger.Fatal(FormatMessage(message, caller));
+                return;
+            }
+
+            _logger.Fatal(FormatMessage(message, caller), ex);
+        }
+
+        private string FormatMessage(string message, string caller)
+        {
+            return $"[{_targetType.Name} {caller}] {message}";
         }
     }
 }

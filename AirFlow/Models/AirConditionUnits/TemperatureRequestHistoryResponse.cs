@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Linq;
+using Newtonsoft.Json;
 
 namespace AirFlow.AirConditionUnits
 {
@@ -10,6 +11,11 @@ namespace AirFlow.AirConditionUnits
         public TemperatureRequestHistoryResponse(TemperatureRequestHistory[] history)
         {
             History = history;
+        }
+
+        public override string ToString()
+        {
+            return $"History: {string.Join(";", History.Select(h => h.ToString()))}";
         }
     }
 }

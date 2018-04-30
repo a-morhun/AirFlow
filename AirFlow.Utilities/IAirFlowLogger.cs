@@ -1,17 +1,18 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 
 namespace AirFlow.Utilities
 {
     public interface IAirFlowLogger
     {
-        void Debug(string message);
+        void Debug(string message, [CallerMemberName] string caller = "");
 
-        void Info(string message);
+        void Info(string message, [CallerMemberName] string caller = "");
 
-        void Warn(string message);
+        void Warn(string message, [CallerMemberName] string caller = "");
 
-        void Error(string message, Exception ex = null);
+        void Error(string message, Exception ex = null, [CallerMemberName] string caller = "");
 
-        void Fatal(string message, Exception ex = null);
+        void Fatal(string message, Exception ex = null, [CallerMemberName] string caller = "");
     }
 }

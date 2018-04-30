@@ -23,5 +23,13 @@ namespace AirFlow.Data.Security.Account
 
         [Column(name: "login_type")]
         public byte LoginType { get; set; }
+
+        public override string ToString()
+        {
+            return $"UserId: {UserId}, " +
+                   $"ConfirmationToken: {ConfirmationToken}, " +
+                   $"ExpirationDate (UTC): {ConfirmationExpirationDate}," +
+                   $"LoginType: {LoginType}";
+        }
     }
 }

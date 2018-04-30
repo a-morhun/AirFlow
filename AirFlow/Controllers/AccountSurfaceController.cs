@@ -1,8 +1,8 @@
 ﻿using AirFlow.Models.Account;
 using AirFlow.Models.Common;
 using AirFlow.Services.Account;
-using System.Web.Mvc;
 using AirFlow.Utilities;
+using System.Web.Mvc;
 using Umbraco.Web.Mvc;
 
 namespace AirFlow.Controllers
@@ -12,7 +12,7 @@ namespace AirFlow.Controllers
         private const string PartialMessageViewPath = "/Views/Partials/Account/_RegistrationResult.cshtml";
 
         private readonly IAccountService _accountService;
-        private static readonly IAirFlowLogger Logger = new AirFlowLogger(typeof(AccountSurfaceController));
+        private readonly IAirFlowLogger _logger = new AirFlowLogger(typeof(AccountSurfaceController));
 
         public AccountSurfaceController(IAccountService accountService)
         {
@@ -24,12 +24,14 @@ namespace AirFlow.Controllers
         [AllowAnonymous]
         public ActionResult Register(UserRegistrationViewModel registrationRequest)
         {
+            _logger.Debug($"registrationRequest: {registrationRequest}");
             if (!ModelState.IsValid)
             {
                 return PartialView(PartialMessageViewPath, new ResultViewModel("Please, verify input data", isSuccess: false));
             }
 
             Result result = _accountService.Register(new UserToRegister(registrationRequest));
+            _logger.Debug(result.ToString());
 
             if (result.IsFailure)
             {

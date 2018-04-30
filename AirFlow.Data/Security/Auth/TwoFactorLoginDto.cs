@@ -14,5 +14,10 @@ namespace AirFlow.Data.Security.Auth
 
         [Column(name: "token_expiration")]
         public DateTime ExpirationDate { get; set; }
+
+        public override string ToString()
+        {
+            return $"UserId: {UserId}, Token: {Token}, ExpirationDate: {ExpirationDate}";
+        }
     }
 }

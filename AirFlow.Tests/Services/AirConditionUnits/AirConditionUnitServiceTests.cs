@@ -2,6 +2,7 @@
 using AirFlow.Data.AirConditionUnits;
 using AirFlow.Models.Common;
 using AirFlow.Services.Email;
+using AirFlow.Services.Helpers;
 using NSubstitute;
 using NUnit.Framework;
 using System;
@@ -14,13 +15,16 @@ namespace AirFlow.Tests.Services.AirConditionUnits
         private IAirConditionUnitRequestRepository _repository;
         private IEmailSender _emailSender;
         private IAirConditionUnitService _airConditionUnitService;
+        private IAirFlowHelper _airFlowHelper;
 
         [SetUp]
         public void SetUp()
         {
             _repository = Substitute.For<IAirConditionUnitRequestRepository>();
             _emailSender = Substitute.For<IEmailSender>();
-            _airConditionUnitService = new AirConditionUnitService(_repository, _emailSender);
+            _airFlowHelper = Substitute.For<IAirFlowHelper>();
+
+            _airConditionUnitService = new AirConditionUnitService(_repository, _emailSender, _airFlowHelper);
         }
 
         #region Create request

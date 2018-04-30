@@ -1,5 +1,6 @@
 ﻿namespace AirFlow.Data.Security.Auth
 {
+    /// <exception cref="LoginRepositoryException">Thrown when account repository failed to insert new data</exception>
     public interface ILoginRepository
     {
         void SaveLoginToken(TwoFactorLoginDto dto);

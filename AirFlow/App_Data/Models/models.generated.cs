@@ -19,8 +19,8 @@ using Umbraco.ModelsBuilder;
 using Umbraco.ModelsBuilder.Umbraco;
 
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "9a913359937901a6")]
-[assembly:System.Reflection.AssemblyVersion("0.0.0.2")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "7036f4f6a75c0b00")]
+[assembly:System.Reflection.AssemblyVersion("0.0.0.3")]
 
 namespace Umbraco.Web.PublishedContentModels
 {
@@ -208,7 +208,7 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 
 		///<summary>
-		/// TemperatureRequestEmailMessage: Enter template for an email message body which will be sent to a responsible person in order to change temperature of air-condition unit
+		/// Temperature Request Email Message
 		///</summary>
 		[ImplementPropertyType("temperatureRequestEmailMessage")]
 		public IHtmlString TemperatureRequestEmailMessage

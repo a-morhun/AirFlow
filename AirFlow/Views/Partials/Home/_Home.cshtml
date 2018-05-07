@@ -1,0 +1,55 @@
+﻿@model HomeModel
+@using AirFlow.Models.Home
+
+<img class="mx-auto d-block home-map" src="@Model.MapUrl" />
+
+<div class="ac"></div>
+
+@foreach (var ac in Model.AirConditioners)
+{
+    string sizeParameter = "";
+    {
+        if (ac.IsVertical)
+        {
+            sizeParameter = "height:" + ac.Height + "%;";
+        }
+        else
+        {
+            sizeParameter = "width:" + ac.Width + "%;";
+        }
+    }
+    string buttonStyle = "left:" + @ac.PositionX + "%;top:" + @ac.PositionY + "%;" + sizeParameter;
+
+    string imageStyle = ac.IsVertical ? "height:100%" : "width:100%";
+    <div class="ac" style=@buttonStyle data-toggle="modal" data-target="#acModal" data-title="@ac.Name">
+        <img src="@ac.ImageUrl" style=@imageStyle>
+    </div>
+}
+
+<!-- Modal -->
+<div class="modal fade" id="acModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">AC Name</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="currentTemperature">Current temperature</label>
+                    <input disabled type="text" class="form-control" id="currentTemperature">
+                </div>
+                <div class="form-group">
+                    <label for="desiredTemperature">Desired temperature</label>
+                    <input type="number" class="form-control" id="desiredTemperature">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Send request</button>
+            </div>
+        </div>
+    </div>
+</div>

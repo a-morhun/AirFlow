@@ -357,7 +357,7 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\Site.css" />
+    <Content Include="Content\site.css" />
     <Content Include="default.aspx" />
     <Content Include="config\trees.config" />
     <Content Include="config\Dashboard.config" />
@@ -466,6 +466,7 @@
     <Content Include="Views\Confirmation.cshtml" />
     <Content Include="Views\Error.cshtml" />
     <Content Include="Views\Home.cshtml" />
+    <Content Include="Views\Partials\Home\_Home.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -484,6 +485,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SecurityConfig.cs" />
     <Compile Include="Controllers\AirConditionUnitsController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Models\Account\UserRoleType.cs" />
     <Compile Include="Models\AirConditionUnits\TemperatureRequestHistoryResponse.cs" />
@@ -499,6 +501,8 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Controllers\AccountSurfaceController.cs" />
     <Compile Include="Controllers\AuthSurfaceController.cs" />
+    <Compile Include="Models\Home\AirConditioner.cs" />
+    <Compile Include="Models\Home\HomeModel.cs" />
     <Compile Include="Services\Account\IUserRegistration.cs" />
     <Compile Include="Services\Account\UserRegistration.cs" />
     <Compile Include="Global.asax.cs">
@@ -549,6 +553,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="obj\" />
+    <Folder Include="Views\Home\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

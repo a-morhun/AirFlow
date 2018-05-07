@@ -1,12 +1,26 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
 @{
-	Layout = null;
+    Layout = null;
 }
 
 @* the fun starts here *@
+@Styles.Render("~/Content/css")
 
-<h1>Welcome to AirFlow, @User.Identity.Name !</h1>
+<div class="row no-gutters">
+    <div class="col">
+        <div class="align-middle m-1 d-flex float-right">
+            <span class="m-1 lead">Welcome to AirFlow, @User.Identity.Name !</span>
+            <div class="m-1">@{ Html.RenderPartial("~/Views/Partials/Auth/_Logout.cshtml"); }</div>
+        </div>
+    </div>
+</div>
+<div class="row no-gutters">
+    <div class="col no-gutters">
+        @RenderBody()
+    </div>
+</div>
 
-@{ Html.RenderPartial("~/Views/Partials/Auth/_Logout.cshtml"); }
-
-@RenderBody()
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@Scripts.Render("~/bundles/jqueryval")
+@RenderSection("scripts", required: false)

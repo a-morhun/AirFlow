@@ -8,6 +8,7 @@ using Umbraco.Web;
 using Umbraco.Core.Models;
 using Archetype.Models;
 using AirFlow.Models.Home;
+using System.Web.Http;
 
 namespace AirFlow.Controllers
 {
@@ -58,6 +59,12 @@ namespace AirFlow.Controllers
         public string GetPartialView(string partialViewName)
         {
             return $"~/Views/Partials/Home/{partialViewName}.cshtml";
+        }
+
+        [System.Web.Http.HttpPost]
+        public JsonResult Test ([FromBody]object o)
+        {
+            return Json(o);
         }
     }
 }

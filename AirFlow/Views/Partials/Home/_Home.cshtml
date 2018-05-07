@@ -21,7 +21,7 @@
     string buttonStyle = "left:" + @ac.PositionX + "%;top:" + @ac.PositionY + "%;" + sizeParameter;
 
     string imageStyle = ac.IsVertical ? "height:100%" : "width:100%";
-    <div class="ac" style=@buttonStyle data-toggle="modal" data-target="#acModal" data-title="@ac.Name">
+    <div class="ac" style=@buttonStyle data-toggle="modal" data-target="#acModal" data-title="@ac.Name" data-id="@ac.Id">
         <img src="@ac.ImageUrl" style=@imageStyle>
     </div>
 }
@@ -48,7 +48,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Send request</button>
+                <button type="button" class="btn btn-primary" onclick="sendEmailRequest()">Send request</button>
             </div>
         </div>
     </div>

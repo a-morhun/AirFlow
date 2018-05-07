@@ -11,7 +11,7 @@ namespace AirFlow.Data.AirConditionUnits
         public int Id { get; set; }
 
         [Column("acu_id")]
-        public int AirConditionUnitId { get; set; }
+        public Guid AirConditionUnitId { get; set; }
 
         [Column("requester_email")]
         public string RequesterEmail { get; set; }

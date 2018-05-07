@@ -17,13 +17,13 @@ $('#acModal').on('show.bs.modal', function (event) {
 
 function sendEmailRequest() {
     var acId = $("#acModal").find('.modal-title').data('id');
-    var desiredT = $("#desiredTemperature").val();
+    var desiredTemperature = $("#desiredTemperature").val();
     $.ajax({
-        url: '/api/Home/Test',
+        url: '/Umbraco/api/AirConditionUnits/Request',
         dataType: "json",
         type: "POST",
         contentType: 'application/json; charset=utf-8',
-        data: JSON.stringify({ id: acId, desiredTemperature: desiredT }),
+        data: JSON.stringify({ airConditionUnitId: acId, temperature: desiredTemperature }),
         async: true,
         processData: false,
         cache: false,

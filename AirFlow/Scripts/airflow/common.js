@@ -23,7 +23,7 @@ function sendEmailRequest() {
         dataType: "json",
         type: "POST",
         contentType: 'application/json; charset=utf-8',
-        data: JSON.stringify({ airConditionUnitId: acId, temperature: desiredTemperature }),
+        data: JSON.stringify({ airConditionUnitId: acId, airConditionUnitName: "aaa", temperature: desiredTemperature }),
         async: true,
         processData: false,
         cache: false,

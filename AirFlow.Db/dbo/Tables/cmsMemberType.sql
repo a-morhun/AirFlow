@@ -1,12 +1,12 @@
-﻿CREATE TABLE [dbo].[cmsMemberType] (
-    [pk]             INT IDENTITY (1, 1) NOT NULL,
-    [NodeId]         INT NOT NULL,
-    [propertytypeId] INT NOT NULL,
-    [memberCanEdit]  BIT CONSTRAINT [DF_cmsMemberType_memberCanEdit] DEFAULT ('0') NOT NULL,
-    [viewOnProfile]  BIT CONSTRAINT [DF_cmsMemberType_viewOnProfile] DEFAULT ('0') NOT NULL,
-    [isSensitive]    BIT CONSTRAINT [DF_cmsMemberType_isSensitive] DEFAULT ('0') NOT NULL,
-    CONSTRAINT [PK_cmsMemberType] PRIMARY KEY CLUSTERED ([pk] ASC),
-    CONSTRAINT [FK_cmsMemberType_cmsContentType_nodeId] FOREIGN KEY ([NodeId]) REFERENCES [dbo].[cmsContentType] ([nodeId]),
-    CONSTRAINT [FK_cmsMemberType_umbracoNode_id] FOREIGN KEY ([NodeId]) REFERENCES [dbo].[umbracoNode] ([id])
+﻿CREATE TABLE [cmsMemberType] (
+  [pk] int IDENTITY (1,1)  NOT NULL
+, [NodeId] int  NOT NULL
+, [propertytypeId] int  NOT NULL
+, [memberCanEdit] bit DEFAULT ('0') NOT NULL
+, [viewOnProfile] bit DEFAULT ('0') NOT NULL
+, [isSensitive] bit DEFAULT ('0') NOT NULL
 );
-
+GO
+ALTER TABLE [cmsMemberType] ADD CONSTRAINT [FK_cmsMemberType_umbracoNode_id] FOREIGN KEY ([NodeId]) REFERENCES [umbracoNode]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+ALTER TABLE [cmsMemberType] ADD CONSTRAINT [PK_cmsMemberType] PRIMARY KEY ([pk]);

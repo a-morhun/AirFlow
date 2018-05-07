@@ -1,25 +1,21 @@
-﻿CREATE TABLE [dbo].[umbracoUserGroup] (
-    [id]                          INT            IDENTITY (1, 1) NOT NULL,
-    [userGroupAlias]              NVARCHAR (200) NOT NULL,
-    [userGroupName]               NVARCHAR (200) NOT NULL,
-    [userGroupDefaultPermissions] NVARCHAR (50)  NULL,
-    [createDate]                  DATETIME       CONSTRAINT [DF_umbracoUserGroup_createDate] DEFAULT (getdate()) NOT NULL,
-    [updateDate]                  DATETIME       CONSTRAINT [DF_umbracoUserGroup_updateDate] DEFAULT (getdate()) NOT NULL,
-    [icon]                        NVARCHAR (255) NULL,
-    [startContentId]              INT            NULL,
-    [startMediaId]                INT            NULL,
-    CONSTRAINT [PK_umbracoUserGroup] PRIMARY KEY CLUSTERED ([id] ASC),
-    CONSTRAINT [FK_startContentId_umbracoNode_id] FOREIGN KEY ([startContentId]) REFERENCES [dbo].[umbracoNode] ([id]),
-    CONSTRAINT [FK_startMediaId_umbracoNode_id] FOREIGN KEY ([startMediaId]) REFERENCES [dbo].[umbracoNode] ([id])
+﻿CREATE TABLE [umbracoUserGroup] (
+  [id] int IDENTITY (6,1)  NOT NULL
+, [userGroupAlias] nvarchar(200)  NOT NULL
+, [userGroupName] nvarchar(200)  NOT NULL
+, [userGroupDefaultPermissions] nvarchar(50)  NULL
+, [createDate] datetime DEFAULT (GETDATE()) NOT NULL
+, [updateDate] datetime DEFAULT (GETDATE()) NOT NULL
+, [icon] nvarchar(255)  NULL
+, [startContentId] int  NULL
+, [startMediaId] int  NULL
 );
-
-
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_umbracoUserGroup_userGroupAlias]
-    ON [dbo].[umbracoUserGroup]([userGroupAlias] ASC);
-
-
+ALTER TABLE [umbracoUserGroup] ADD CONSTRAINT [FK_startContentId_umbracoNode_id] FOREIGN KEY ([startContentId]) REFERENCES [umbracoNode]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_umbracoUserGroup_userGroupName]
-    ON [dbo].[umbracoUserGroup]([userGroupName] ASC);
-
+ALTER TABLE [umbracoUserGroup] ADD CONSTRAINT [FK_startMediaId_umbracoNode_id] FOREIGN KEY ([startMediaId]) REFERENCES [umbracoNode]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+ALTER TABLE [umbracoUserGroup] ADD CONSTRAINT [PK_umbracoUserGroup] PRIMARY KEY ([id]);
+GO
+ALTER TABLE [umbracoUserGroup] ADD CONSTRAINT [IX_umbracoUserGroup_userGroupAlias] UNIQUE ([userGroupAlias]);
+GO
+ALTER TABLE [umbracoUserGroup] ADD CONSTRAINT [IX_umbracoUserGroup_userGroupName] UNIQUE ([userGroupName]);

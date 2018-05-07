@@ -1,9 +1,9 @@
-﻿CREATE TABLE [dbo].[umbracoExternalLogin] (
-    [id]            INT             IDENTITY (1, 1) NOT NULL,
-    [userId]        INT             NOT NULL,
-    [loginProvider] NVARCHAR (4000) NOT NULL,
-    [providerKey]   NVARCHAR (4000) NOT NULL,
-    [createDate]    DATETIME        CONSTRAINT [DF_umbracoExternalLogin_createDate] DEFAULT (getdate()) NOT NULL,
-    CONSTRAINT [PK_umbracoExternalLogin] PRIMARY KEY CLUSTERED ([id] ASC)
+﻿CREATE TABLE [umbracoExternalLogin] (
+  [id] int IDENTITY (1,1)  NOT NULL
+, [userId] int  NOT NULL
+, [loginProvider] nvarchar(4000)  NOT NULL
+, [providerKey] nvarchar(4000)  NOT NULL
+, [createDate] datetime DEFAULT (GETDATE()) NOT NULL
 );
-
+GO
+ALTER TABLE [umbracoExternalLogin] ADD CONSTRAINT [PK_umbracoExternalLogin] PRIMARY KEY ([id]);

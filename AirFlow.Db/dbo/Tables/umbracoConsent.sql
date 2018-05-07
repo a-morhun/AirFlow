@@ -1,12 +1,12 @@
-﻿CREATE TABLE [dbo].[umbracoConsent] (
-    [id]         INT            IDENTITY (1, 1) NOT NULL,
-    [current]    BIT            NOT NULL,
-    [source]     NVARCHAR (512) NOT NULL,
-    [context]    NVARCHAR (128) NOT NULL,
-    [action]     NVARCHAR (512) NOT NULL,
-    [createDate] DATETIME       CONSTRAINT [DF_umbracoConsent_createDate] DEFAULT (getdate()) NOT NULL,
-    [state]      INT            NOT NULL,
-    [comment]    NVARCHAR (255) NOT NULL,
-    CONSTRAINT [PK_umbracoConsent] PRIMARY KEY CLUSTERED ([id] ASC)
+﻿CREATE TABLE [umbracoConsent] (
+  [id] int IDENTITY (1,1)  NOT NULL
+, [current] bit NOT NULL
+, [source] nvarchar(512)  NOT NULL
+, [context] nvarchar(128)  NOT NULL
+, [action] nvarchar(512)  NOT NULL
+, [createDate] datetime DEFAULT (GETDATE()) NOT NULL
+, [state] int  NOT NULL
+, [comment] nvarchar(255)  NOT NULL
 );
-
+GO
+ALTER TABLE [umbracoConsent] ADD CONSTRAINT [PK_umbracoConsent] PRIMARY KEY ([id]);

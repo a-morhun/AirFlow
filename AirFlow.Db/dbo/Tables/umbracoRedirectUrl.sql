@@ -1,15 +1,11 @@
-﻿CREATE TABLE [dbo].[umbracoRedirectUrl] (
-    [id]            UNIQUEIDENTIFIER NOT NULL,
-    [contentKey]    UNIQUEIDENTIFIER NOT NULL,
-    [createDateUtc] DATETIME         NOT NULL,
-    [url]           NVARCHAR (255)   NOT NULL,
-    [urlHash]       NVARCHAR (40)    NOT NULL,
-    CONSTRAINT [PK_umbracoRedirectUrl] PRIMARY KEY CLUSTERED ([id] ASC),
-    CONSTRAINT [FK_umbracoRedirectUrl_umbracoNode_uniqueID] FOREIGN KEY ([contentKey]) REFERENCES [dbo].[umbracoNode] ([uniqueID])
+﻿CREATE TABLE [umbracoRedirectUrl] (
+  [id] uniqueidentifier NOT NULL
+, [contentKey] uniqueidentifier NOT NULL
+, [createDateUtc] datetime NOT NULL
+, [url] nvarchar(255)  NOT NULL
+, [urlHash] nvarchar(40)  NOT NULL
 );
-
-
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_umbracoRedirectUrl]
-    ON [dbo].[umbracoRedirectUrl]([urlHash] ASC, [contentKey] ASC, [createDateUtc] ASC);
-
+ALTER TABLE [umbracoRedirectUrl] ADD CONSTRAINT [PK_umbracoRedirectUrl] PRIMARY KEY ([id]);
+GO
+ALTER TABLE [umbracoRedirectUrl] ADD CONSTRAINT [IX_umbracoRedirectUrl] UNIQUE ([urlHash],[contentKey],[createDateUtc]);

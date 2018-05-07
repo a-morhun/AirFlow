@@ -1,21 +1,15 @@
-﻿CREATE TABLE [dbo].[umbracoServer] (
-    [id]               INT            IDENTITY (1, 1) NOT NULL,
-    [address]          NVARCHAR (500) NOT NULL,
-    [computerName]     NVARCHAR (255) NOT NULL,
-    [registeredDate]   DATETIME       CONSTRAINT [DF_umbracoServer_registeredDate] DEFAULT (getdate()) NOT NULL,
-    [lastNotifiedDate] DATETIME       NOT NULL,
-    [isActive]         BIT            NOT NULL,
-    [isMaster]         BIT            NOT NULL,
-    CONSTRAINT [PK_umbracoServer] PRIMARY KEY CLUSTERED ([id] ASC)
+﻿CREATE TABLE [umbracoServer] (
+  [id] int IDENTITY (2,1)  NOT NULL
+, [address] nvarchar(500)  NOT NULL
+, [computerName] nvarchar(255)  NOT NULL
+, [registeredDate] datetime DEFAULT (GETDATE()) NOT NULL
+, [lastNotifiedDate] datetime NOT NULL
+, [isActive] bit NOT NULL
+, [isMaster] bit NOT NULL
 );
-
-
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_computerName]
-    ON [dbo].[umbracoServer]([computerName] ASC);
-
-
+ALTER TABLE [umbracoServer] ADD CONSTRAINT [PK_umbracoServer] PRIMARY KEY ([id]);
 GO
-CREATE NONCLUSTERED INDEX [IX_umbracoServer_isActive]
-    ON [dbo].[umbracoServer]([isActive] ASC);
-
+ALTER TABLE [umbracoServer] ADD CONSTRAINT [IX_computerName] UNIQUE ([computerName]);
+GO
+CREATE INDEX [IX_umbracoServer_isActive] ON [umbracoServer] ([isActive] ASC);

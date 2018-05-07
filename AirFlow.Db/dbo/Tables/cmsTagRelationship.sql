@@ -1,10 +1,11 @@
-﻿CREATE TABLE [dbo].[cmsTagRelationship] (
-    [nodeId]         INT NOT NULL,
-    [tagId]          INT NOT NULL,
-    [propertyTypeId] INT NOT NULL,
-    CONSTRAINT [PK_cmsTagRelationship] PRIMARY KEY CLUSTERED ([nodeId] ASC, [propertyTypeId] ASC, [tagId] ASC),
-    CONSTRAINT [FK_cmsTagRelationship_cmsContent] FOREIGN KEY ([nodeId]) REFERENCES [dbo].[cmsContent] ([nodeId]),
-    CONSTRAINT [FK_cmsTagRelationship_cmsPropertyType] FOREIGN KEY ([propertyTypeId]) REFERENCES [dbo].[cmsPropertyType] ([id]),
-    CONSTRAINT [FK_cmsTagRelationship_cmsTags_id] FOREIGN KEY ([tagId]) REFERENCES [dbo].[cmsTags] ([id])
+﻿CREATE TABLE [cmsTagRelationship] (
+  [nodeId] int  NOT NULL
+, [tagId] int  NOT NULL
+, [propertyTypeId] int  NOT NULL
 );
-
+GO
+ALTER TABLE [cmsTagRelationship] ADD CONSTRAINT [FK_cmsTagRelationship_cmsPropertyType] FOREIGN KEY ([propertyTypeId]) REFERENCES [cmsPropertyType]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+ALTER TABLE [cmsTagRelationship] ADD CONSTRAINT [FK_cmsTagRelationship_cmsTags_id] FOREIGN KEY ([tagId]) REFERENCES [cmsTags]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+ALTER TABLE [cmsTagRelationship] ADD CONSTRAINT [PK_cmsTagRelationship] PRIMARY KEY ([nodeId],[propertyTypeId],[tagId]);

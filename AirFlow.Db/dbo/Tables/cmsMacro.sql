@@ -1,27 +1,21 @@
-﻿CREATE TABLE [dbo].[cmsMacro] (
-    [id]                     INT              IDENTITY (1, 1) NOT NULL,
-    [uniqueId]               UNIQUEIDENTIFIER NOT NULL,
-    [macroUseInEditor]       BIT              CONSTRAINT [DF_cmsMacro_macroUseInEditor] DEFAULT ('0') NOT NULL,
-    [macroRefreshRate]       INT              CONSTRAINT [DF_cmsMacro_macroRefreshRate] DEFAULT ('0') NOT NULL,
-    [macroAlias]             NVARCHAR (255)   NOT NULL,
-    [macroName]              NVARCHAR (255)   NULL,
-    [macroScriptType]        NVARCHAR (255)   NULL,
-    [macroScriptAssembly]    NVARCHAR (255)   NULL,
-    [macroXSLT]              NVARCHAR (255)   NULL,
-    [macroCacheByPage]       BIT              CONSTRAINT [DF_cmsMacro_macroCacheByPage] DEFAULT ('1') NOT NULL,
-    [macroCachePersonalized] BIT              CONSTRAINT [DF_cmsMacro_macroCachePersonalized] DEFAULT ('0') NOT NULL,
-    [macroDontRender]        BIT              CONSTRAINT [DF_cmsMacro_macroDontRender] DEFAULT ('0') NOT NULL,
-    [macroPython]            NVARCHAR (255)   NULL,
-    CONSTRAINT [PK_cmsMacro] PRIMARY KEY CLUSTERED ([id] ASC)
+﻿CREATE TABLE [cmsMacro] (
+  [id] int IDENTITY (2,1)  NOT NULL
+, [uniqueId] uniqueidentifier NOT NULL
+, [macroUseInEditor] bit DEFAULT ('0') NOT NULL
+, [macroRefreshRate] int DEFAULT ('0')  NOT NULL
+, [macroAlias] nvarchar(255)  NOT NULL
+, [macroName] nvarchar(255)  NULL
+, [macroScriptType] nvarchar(255)  NULL
+, [macroScriptAssembly] nvarchar(255)  NULL
+, [macroXSLT] nvarchar(255)  NULL
+, [macroCacheByPage] bit DEFAULT ('1') NOT NULL
+, [macroCachePersonalized] bit DEFAULT ('0') NOT NULL
+, [macroDontRender] bit DEFAULT ('0') NOT NULL
+, [macroPython] nvarchar(255)  NULL
 );
-
-
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_cmsMacro_UniqueId]
-    ON [dbo].[cmsMacro]([uniqueId] ASC);
-
-
+ALTER TABLE [cmsMacro] ADD CONSTRAINT [PK_cmsMacro] PRIMARY KEY ([id]);
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_cmsMacroPropertyAlias]
-    ON [dbo].[cmsMacro]([macroAlias] ASC);
-
+ALTER TABLE [cmsMacro] ADD CONSTRAINT [IX_cmsMacro_UniqueId] UNIQUE ([uniqueId]);
+GO
+ALTER TABLE [cmsMacro] ADD CONSTRAINT [IX_cmsMacroPropertyAlias] UNIQUE ([macroAlias]);

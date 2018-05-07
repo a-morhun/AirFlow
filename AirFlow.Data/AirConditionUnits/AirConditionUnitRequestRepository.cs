@@ -5,7 +5,7 @@ namespace AirFlow.Data.AirConditionUnits
 {
     internal class AirConditionUnitRequestRepository : IAirConditionUnitRequestRepository
     {
-        public AirConditionUnitRequestDto[] Get(int airConditionUnitId)
+        public AirConditionUnitRequestDto[] Get(string airConditionUnitId)
         {
             using (var db = new Database(Config.ConnectionStringName))
             {

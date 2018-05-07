@@ -3,7 +3,7 @@
 CREATE TABLE airFlowACURequests
 (
 	id INT IDENTITY(1,1),
-	acu_id INT NOT NULL,
+	acu_id NVARCHAR(128) NOT NULL,
 	requester_email NVARCHAR(1000),
 	temperature DECIMAL(5,2) NOT NULL,
 	update_datetime DATETIME NOT NULL

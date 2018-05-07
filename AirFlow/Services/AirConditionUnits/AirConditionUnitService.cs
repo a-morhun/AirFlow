@@ -68,7 +68,7 @@ namespace AirFlow.AirConditionUnits
             _emailSender.Send(EmailMessageType.TemperatureChangeRequest, options);
         }
 
-        public Result<TemperatureRequestHistory[]> GetRequestHistory(int airConditionUnitId)
+        public Result<TemperatureRequestHistory[]> GetRequestHistory(string airConditionUnitId)
         {
             AirConditionUnitRequestDto[] historyDto;
 

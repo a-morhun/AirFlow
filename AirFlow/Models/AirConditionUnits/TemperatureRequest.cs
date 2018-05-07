@@ -4,7 +4,7 @@ namespace AirFlow.AirConditionUnits
 {
     public class TemperatureRequest
     {
-        public Guid AirConditionUnitId { get; set; }
+        public string AirConditionUnitId { get; set; }
 
         public string AirConditionUnitName { get; set; }
 
@@ -14,7 +14,8 @@ namespace AirFlow.AirConditionUnits
 
         public bool IsInvalid()
         {
-            return AirConditionUnitId == Guid.Empty ||
+            return string.IsNullOrEmpty(AirConditionUnitId) ||
+                   string.IsNullOrEmpty(AirConditionUnitName) ||
                    Temperature < 0;
         }
 

@@ -10,7 +10,7 @@ namespace AirFlow.Services.Email
         public TemperatureRequestEmailMessage(string bodyTemplate, TemperatureRequestEmailMessageOptions options)
         {
             To.Add(options.SendTo);
-            Subject = "AirFlow login confirmation";
+            Subject = "AirFlow temperature request";
             IsBodyHtml = true;
             BodyEncoding = Encoding.UTF8;
 

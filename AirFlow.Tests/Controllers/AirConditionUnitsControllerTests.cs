@@ -46,12 +46,12 @@ namespace AirFlow.Tests.Controllers
         }
 
         [Test]
-        [TestCase(0, "Name", 14)]
-        [TestCase(1, "", 14)]
-        [TestCase(1, null, 14)]
-        [TestCase(1, "Name", -1)]
+        [TestCase(null, "Name", 14)]
+        [TestCase("abc", "", 14)]
+        [TestCase("abc", null, 14)]
+        [TestCase("abc", "Name", -1)]
         public void AirConditionUnitsController_CreateTemperatureRequest_InValidRequest_BadRequest(
-            int airConditionUnitId,
+            string airConditionUnitId,
             string airConditionUnitName,
             decimal temperature)
         {
@@ -87,7 +87,7 @@ namespace AirFlow.Tests.Controllers
 
         private TemperatureRequest GetValidTemperatureRequest() => new TemperatureRequest
         {
-            AirConditionUnitId = 1,
+            AirConditionUnitId = "abc",
             AirConditionUnitName = "Name",
             Temperature = 14
         };
@@ -100,7 +100,7 @@ namespace AirFlow.Tests.Controllers
         public void GetTemperatureRequestHistory_Success()
         {
             // Arrange
-            const int airConditionUnitId = 1;
+            const string airConditionUnitId = "abc";
             var history = new[]
             {
                 new TemperatureRequestHistory(new AirConditionUnitRequestDto
@@ -128,7 +128,7 @@ namespace AirFlow.Tests.Controllers
         public void GetTemperatureRequestHistory_ServiceFailure_InternalError()
         {
             // Arrange
-            const int airConditionUnitId = 1;
+            const string airConditionUnitId = "abc";
             _airConditionUnitService.GetRequestHistory(airConditionUnitId)
                 .Returns(new Result<TemperatureRequestHistory[]>(ErrorCodeType.UnknownError));
 

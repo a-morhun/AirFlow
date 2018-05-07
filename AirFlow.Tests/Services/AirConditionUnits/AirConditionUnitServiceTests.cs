@@ -84,7 +84,7 @@ namespace AirFlow.Tests.Services.AirConditionUnits
 
         private TemperatureRequest GetValidTemperatureRequest() => new TemperatureRequest
         {
-            AirConditionUnitId = 1,
+            AirConditionUnitId = "abc",
             AirConditionUnitName = "Name",
             Temperature = 14,
             RequestDateTime = DateTime.UtcNow
@@ -112,7 +112,7 @@ namespace AirFlow.Tests.Services.AirConditionUnits
 
         #region Get request history
 
-        private const int AirConditionUnitId = 1;
+        private const string AirConditionUnitId = "abc";
 
         [Test]
         public void GetRequestHistory_Retrieved_Success()

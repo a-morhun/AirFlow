@@ -48,7 +48,7 @@ namespace AirFlow.Controllers
 
         [HttpGet]
         [ActionName("History")]
-        public IHttpActionResult GetTemperatureRequestHistory(int id)
+        public IHttpActionResult GetTemperatureRequestHistory(string id)
         {
             _logger.Debug($"temperature history request for unit {id} from '{User.Identity?.Name}'");
             Result<TemperatureRequestHistory[]> history = _airConditionUnitService.GetRequestHistory(id);

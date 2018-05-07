@@ -6,6 +6,6 @@ namespace AirFlow.AirConditionUnits
     {
         Result CreateRequest(string requesterEmail, TemperatureRequest request);
 
-        Result<TemperatureRequestHistory[]> GetRequestHistory(int airConditionUnitId);
+        Result<TemperatureRequestHistory[]> GetRequestHistory(string airConditionUnitId);
     }
 }

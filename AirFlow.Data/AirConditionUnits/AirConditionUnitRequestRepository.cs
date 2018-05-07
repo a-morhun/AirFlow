@@ -1,4 +1,5 @@
-﻿using PetaPoco;
+﻿using System;
+using PetaPoco;
 
 namespace AirFlow.Data.AirConditionUnits
 {
@@ -17,7 +18,15 @@ namespace AirFlow.Data.AirConditionUnits
                     .From("airFlowACURequests")
                     .Where("acu_id = @0", airConditionUnitId);
 
-                return db.Fetch<AirConditionUnitRequestDto>(sql).ToArray();
+                try
+                {
+                    return db.Fetch<AirConditionUnitRequestDto>(sql).ToArray();
+                }
+                catch (Exception e)
+                {
+                    throw new AirConditionUnitRepositoryException($"Failed to retreive history for unit {airConditionUnitId}", e);
+                }
+
             }
         }
 
@@ -25,7 +34,14 @@ namespace AirFlow.Data.AirConditionUnits
         {
             using (var db = new Database(Config.ConnectionStringName))
             {
-                db.Insert(request);
+                try
+                {
+                    db.Insert(request);
+                }
+                catch (Exception e)
+                {
+                    throw new AirConditionUnitRepositoryException("Failed to save temperature request", e);
+                }
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using AirFlow.Data.Security.Auth;
+using AirFlow.Utilities;
 using System;
 
 namespace AirFlow.Services.Auth
@@ -6,6 +7,7 @@ namespace AirFlow.Services.Auth
     internal abstract class TwoFactorLoginProvider : ITwoFactorLoginProvider
     {
         private readonly ILoginRepository _loginRepository;
+        private readonly IAirFlowLogger _logger = new AirFlowLogger(typeof(TwoFactorLoginProvider));
 
         protected DateTime ExpirationDateTime = DateTime.UtcNow.AddMinutes(5);
 
@@ -33,6 +35,7 @@ namespace AirFlow.Services.Auth
                 UserId = userId,
             };
 
+            _logger.Debug($"SaveLoginTokenInfo: {twoFactorLoginDto}");
             _loginRepository.SaveLoginToken(twoFactorLoginDto);
         }
     }

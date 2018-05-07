@@ -206,6 +206,15 @@ namespace Umbraco.Web.PublishedContentModels
 		{
 			get { return this.GetPropertyValue<string>("supportEmailAddress"); }
 		}
+
+		///<summary>
+		/// TemperatureRequestEmailMessage: Enter template for an email message body which will be sent to a responsible person in order to change temperature of air-condition unit
+		///</summary>
+		[ImplementPropertyType("temperatureRequestEmailMessage")]
+		public IHtmlString TemperatureRequestEmailMessage
+		{
+			get { return this.GetPropertyValue<IHtmlString>("temperatureRequestEmailMessage"); }
+		}
 	}
 
 	/// <summary>Login</summary>
@@ -232,6 +241,15 @@ namespace Umbraco.Web.PublishedContentModels
 		{
 			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
 		}
+
+		///<summary>
+		/// ConfirmationEmailTemplate: Enter email template which will be sent to a user in order to confirm login (if 2FA was selected)
+		///</summary>
+		[ImplementPropertyType("confirmationEmailTemplate")]
+		public IHtmlString ConfirmationEmailTemplate
+		{
+			get { return this.GetPropertyValue<IHtmlString>("confirmationEmailTemplate"); }
+		}
 	}
 
 	/// <summary>Register</summary>
@@ -257,6 +275,15 @@ namespace Umbraco.Web.PublishedContentModels
 		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<Register, TValue>> selector)
 		{
 			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
+		}
+
+		///<summary>
+		/// ConfirmationEmailTemplate: Enter email template which will be sent to newly registered user in order to confirm his email
+		///</summary>
+		[ImplementPropertyType("confirmationEmailTemplate")]
+		public IHtmlString ConfirmationEmailTemplate
+		{
+			get { return this.GetPropertyValue<IHtmlString>("confirmationEmailTemplate"); }
 		}
 	}
 

@@ -9,5 +9,10 @@ namespace AirFlow.Data.Security
         public DateTime ExpirationDate { get; set; }
 
         public bool IsExpired => DateTime.UtcNow >= ExpirationDate;
+
+        public override string ToString()
+        {
+            return $"UserId: {ForUserId}, ExpirationDate: {ExpirationDate}, IsExpired: {IsExpired}";
+        }
     }
 }

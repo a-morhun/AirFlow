@@ -1,5 +1,8 @@
-﻿using System;
+﻿using AirFlow.Models.Common;
+using AirFlow.Services.Helpers;
+using System;
 using System.Net.Mail;
+using System.Web;
 
 namespace AirFlow.Services.Email
 {
@@ -7,20 +10,31 @@ namespace AirFlow.Services.Email
     {
         public static MailMessage Construct(EmailMessageType type, EmailMessageOptions options)
         {
+            string emailTemplate;
+
             switch (type)
             {
                 case EmailMessageType.EmailConfirmation:
-                    return new RegistrationEmailMessage(options as ConfirmationEmailMessageOptions);
+                    emailTemplate = GetEmailTemplate("Register", "confirmationEmailTemplate");
+                    return new EmailConfirmationEmailMessage(emailTemplate, options as ConfirmationEmailMessageOptions);
 
                 case EmailMessageType.LoginConfirmation:
-                    return new LoginConfirmationEmailMessage(options as ConfirmationEmailMessageOptions);
+                    emailTemplate = GetEmailTemplate("Login", "confirmationEmailTemplate");
+                    return new LoginConfirmationEmailMessage(emailTemplate, options as ConfirmationEmailMessageOptions);
 
                 case EmailMessageType.TemperatureChangeRequest:
-                    return new TemperatureRequestEmailMessage(options as TemperatureRequestEmailMessageOptions);
+                    emailTemplate = GetEmailTemplate("Home", "temperatureRequestEmailMessage");
+                    return new TemperatureRequestEmailMessage(emailTemplate, options as TemperatureRequestEmailMessageOptions);
 
                 default:
                     throw new InvalidOperationException($"No email message defined for type {type}");
             }
+        }
+
+        private static string GetEmailTemplate(string contentName, string emailTemplatePropertyAlias)
+        {
+            string template = AirFlowHelper.Instance.GetSingleContentPropertyValue<string>(contentName, emailTemplatePropertyAlias, AirFlowConstants.RootContentLevel);
+            return HttpUtility.HtmlDecode(template);
         }
     }
 }

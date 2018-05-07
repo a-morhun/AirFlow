@@ -1,6 +1,9 @@
 ﻿using AirFlow.Data.AirConditionUnits;
 using AirFlow.Models.Common;
 using AirFlow.Services.Email;
+using AirFlow.Services.Helpers;
+using AirFlow.Utilities;
+using System;
 using System.Linq;
 
 namespace AirFlow.AirConditionUnits
@@ -9,11 +12,18 @@ namespace AirFlow.AirConditionUnits
     {
         private readonly IAirConditionUnitRequestRepository _repository;
         private readonly IEmailSender _emailSender;
+        private readonly IAirFlowHelper _airFlowHelper;
 
-        public AirConditionUnitService(IAirConditionUnitRequestRepository repository, IEmailSender emailSender)
+        private readonly IAirFlowLogger _logger = new AirFlowLogger(typeof(AirConditionUnitService));
+
+        public AirConditionUnitService(
+            IAirConditionUnitRequestRepository repository, 
+            IEmailSender emailSender,
+            IAirFlowHelper airFlowHelper)
         {
             _repository = repository;
             _emailSender = emailSender;
+            _airFlowHelper = airFlowHelper;
         }
 
         public Result CreateRequest(string requesterEmail, TemperatureRequest request)
@@ -21,18 +31,22 @@ namespace AirFlow.AirConditionUnits
             try
             {
                 SendRequestEmail(requesterEmail, request);
-                _repository.Save(new AirConditionUnitRequestDto
+                var requestDto = new AirConditionUnitRequestDto
                 {
                     AirConditionUnitId = request.AirConditionUnitId,
                     RequesterEmail = requesterEmail,
                     Temperature = request.Temperature,
                     UpdateDateTime = request.RequestDateTime.Value
-                });
+                };
+
+                _logger.Debug(requestDto.ToString());
+                _repository.Save(requestDto);
 
                 return Result.Success;
             }
-            catch
+            catch (Exception e)
             {
+                _logger.Error("Failed to create request", e);
                 return new Result(ErrorCodeType.UnknownError);
             }
 
@@ -40,7 +54,10 @@ namespace AirFlow.AirConditionUnits
 
         private void SendRequestEmail(string requesterEmail, TemperatureRequest request)
         {
+            // TODO: Uncomment when homepage will be integrated into Umbraco
+            //string sendTo = _airFlowHelper.GetSingleContentPropertyValue<string>("Home", "SendRequestTo");
             string sendTo = "a@a.com";
+            _logger.Debug($"SendRequestTo: {sendTo}");
             var options = new TemperatureRequestEmailMessageOptions(
                 sendTo,
                 request.AirConditionUnitName,
@@ -59,8 +76,9 @@ namespace AirFlow.AirConditionUnits
             {
                 historyDto = _repository.Get(airConditionUnitId);
             }
-            catch
+            catch (Exception e)
             {
+                _logger.Error("Failed to retreive history", e);
                 return new Result<TemperatureRequestHistory[]>(ErrorCodeType.UnknownError);
             }
 

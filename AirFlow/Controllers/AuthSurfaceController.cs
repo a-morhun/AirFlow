@@ -1,9 +1,9 @@
 ﻿using AirFlow.Models.Auth;
 using AirFlow.Models.Common;
 using AirFlow.Services.Auth;
-using System.Web.Mvc;
-using AirFlow.Services.Containers;
 using AirFlow.Services.Helpers;
+using AirFlow.Utilities;
+using System.Web.Mvc;
 using Umbraco.Web.Mvc;
 
 namespace AirFlow.Controllers
@@ -15,6 +15,7 @@ namespace AirFlow.Controllers
         private readonly IAuthService _authService;
         private readonly IFormsAuthentication _formsAuthentication;
         private readonly IAirFlowHelper _airFlowHelper;
+        private readonly IAirFlowLogger _logger = new AirFlowLogger(typeof(AuthSurfaceController));
 
         public AuthSurfaceController(
             IAuthService authService,
@@ -31,12 +32,15 @@ namespace AirFlow.Controllers
         [AllowAnonymous]
         public ActionResult Login(UserLoginViewModel loginRequest)
         {
+            _logger.Debug($"Login request: '{loginRequest}'");
             if (!ModelState.IsValid)
             {
+                _logger.Info("Login request is invalid");
                 return PartialView(PartialViewLoginMessage, new ResultViewModel("Please, verify input data", isSuccess: false));
             }
 
             LoginResult loginResult = _authService.Login(new UserToLogin(loginRequest));
+            _logger.Debug(loginResult.ToString());
 
             if (loginResult.IsFailure)
             {
@@ -48,6 +52,7 @@ namespace AirFlow.Controllers
                 _formsAuthentication.SetAuthCookie(loginResult.Username, createPersistentCookie: false);
                 return JavaScript($"window.location = '{GetContentUrl(AirFlowConstants.HomeContent)}'");
             }
+
             return PartialView(PartialViewLoginMessage, new ResultViewModel("Confirmation message was sent to your email", isSuccess: true));
         }
 
@@ -56,19 +61,26 @@ namespace AirFlow.Controllers
         [MemberAuthorize]
         public ActionResult Logout()
         {
+            string identityUser = User?.Identity?.Name;
             _formsAuthentication.SignOut();
+            _logger.Debug($"Logout processed for {identityUser}'");
+
             return RedirectToUmbracoPage(_airFlowHelper.GetContentId("Login"));
         }
 
         [HttpGet]
         public ActionResult ConfirmEmail(string token)
         {
+            _logger.Debug($"Confirm email request: {token}'");
+
             if (string.IsNullOrEmpty(token))
             {
+                _logger.Info("Token is null or empty");
                 return RedirectToUmbracoPage(GetContentId(AirFlowConstants.EmailConfirmationFailureContent));
             }
 
             Result confirmationResult = _authService.ConfirmEmail(token);
+            _logger.Debug(confirmationResult?.ToString());
 
             if (confirmationResult.IsFailure)
             {
@@ -81,12 +93,16 @@ namespace AirFlow.Controllers
         [HttpGet]
         public ActionResult ConfirmLogin(string token)
         {
+            _logger.Debug($"Confirm login request: {token}'");
+
             if (string.IsNullOrEmpty(token))
             {
+                _logger.Info("Token is null or empty");
                 return RedirectToUmbracoPage(GetContentId(AirFlowConstants.LoginConfirmationFailureContent));
             }
 
             LoginResult confirmationResult = _authService.ConfirmLogin(token);
+            _logger.Debug(confirmationResult.ToString());
 
             if (confirmationResult.IsFailure)
             {

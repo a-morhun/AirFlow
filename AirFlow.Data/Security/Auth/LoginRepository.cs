@@ -1,4 +1,5 @@
-﻿using PetaPoco;
+﻿using System;
+using PetaPoco;
 using System.Linq;
 
 namespace AirFlow.Data.Security.Auth
@@ -9,8 +10,15 @@ namespace AirFlow.Data.Security.Auth
         {
             using (var db = new Database(Config.ConnectionStringName))
             {
-                db.Execute("DELETE FROM airFlowTwoFactorLogin WHERE nodeId = @0", dto.UserId);
-                db.Insert(dto);
+                try
+                {
+                    db.Execute("DELETE FROM airFlowTwoFactorLogin WHERE nodeId = @0", dto.UserId);
+                    db.Insert(dto);
+                }
+                catch (Exception e)
+                {
+                    throw new LoginRepositoryException("Failed to save login token", e);
+                }
             }
         }
 
@@ -23,19 +31,34 @@ namespace AirFlow.Data.Security.Auth
                             "token_expiration AS ExpirationDate")
                     .From("airFlowTwoFactorLogin")
                     .Where("token = @0", token);
-                return db.Fetch<Token>(sql).FirstOrDefault();
+
+                try
+                {
+                    return db.Fetch<Token>(sql).FirstOrDefault();
+                }
+                catch (Exception e)
+                {
+                    throw new LoginRepositoryException("Failed to retreive login details", e);
+                }
             }
         }
 
         public string ConfirmLogin(int userId)
         {
-            const string updateQuery = "UPDATE airFlowTwoFactorLogin SET token = null, token_expiration = null WHERE nodeId = @0";
+            const string updateQuery = "DELETE FROM airFlowTwoFactorLogin WHERE nodeId = @0";
             const string getUsername = "SELECT LoginName FROM cmsMember WHERE nodeId = @0";
 
             using (var db = new Database(Config.ConnectionStringName))
             {
-                db.Execute(updateQuery, userId);
-                return db.Fetch<string>(getUsername, userId).FirstOrDefault();
+                try
+                {
+                    db.Execute(updateQuery, userId);
+                    return db.Fetch<string>(getUsername, userId).FirstOrDefault();
+                }
+                catch (Exception e)
+                {
+                    throw new LoginRepositoryException("Failed to confirm login", e);
+                }
             }
         }
 
@@ -51,7 +74,14 @@ namespace AirFlow.Data.Security.Auth
                     .InnerJoin("airFlowMemberRegistration AS A").On("M.nodeId = A.nodeId")
                     .Where("M.email = @0", email);
 
-                return db.Fetch<AdditionalLoginInfo>(sql).FirstOrDefault();
+                try
+                {
+                    return db.Fetch<AdditionalLoginInfo>(sql).FirstOrDefault();
+                }
+                catch (Exception e)
+                {
+                    throw new LoginRepositoryException("Failed to retreive additional login info", e);
+                }
             }
         }
     }

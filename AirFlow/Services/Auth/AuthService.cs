@@ -4,6 +4,7 @@ using AirFlow.Data.Security.Auth;
 using AirFlow.Models.Auth;
 using AirFlow.Models.Common;
 using AirFlow.Services.Containers;
+using AirFlow.Utilities;
 using System;
 
 namespace AirFlow.Services.Auth
@@ -13,6 +14,7 @@ namespace AirFlow.Services.Auth
         private readonly IMembership _membership;
         private readonly ISecurityRepository _securityRepository;
         private readonly IServiceContainer _serviceContainer;
+        private readonly IAirFlowLogger _logger = new AirFlowLogger(typeof(AuthService));
 
         public AuthService(
             IMembership membership,
@@ -26,20 +28,24 @@ namespace AirFlow.Services.Auth
 
         public LoginResult Login(UserToLogin user)
         {
+            _logger.Info($"Attempt to login for '{user.Email}'");
             AdditionalLoginInfo additionalInfo = _securityRepository.GetAdditionalLoginInfo(user.Email);
 
             if (additionalInfo == null)
             {
+                _logger.Info($"User was not found: '{user.Email}'");
                 return new LoginResult(ErrorCodeType.MemberNotFound);
             }
 
             if (!_membership.ValidateUser(additionalInfo.Username, user.Password))
             {
+                _logger.Info($"User was not approved or password is not correct: '{user.Email}'");
                 return new LoginResult(ErrorCodeType.MemberIsNotApprovedOrInvalidCredentials);
             }
 
             if (!_securityRepository.IsEmailConfirmed(user.Email))
             {
+                _logger.Info($"User has not confirmed an email: '{user.Email}'");
                 return new LoginResult(ErrorCodeType.MemberHasNotConfirmedEmail);
             }
 
@@ -60,26 +66,31 @@ namespace AirFlow.Services.Auth
 
             if (tokedDetails == null)
             {
+                _logger.Info($"Token not found '{token}'");
                 return new Result(ErrorCodeType.ConfirmationTokenInfoNotFound);
             }
 
             if (tokedDetails.AlreadyConfirmed)
             {
+                _logger.Info($"Email was already confirmed '{tokedDetails}'");
                 return new Result(ErrorCodeType.MemberHasAlreadyConfirmedEmail);
             }
 
             if (tokedDetails.IsExpired)
             {
+                _logger.Info($"Token is expired '{tokedDetails}'");
                 return new Result(ErrorCodeType.ConfirmationTokenIsExpired);
             }
 
             try
             {
                 _securityRepository.ConfirmEmail(tokedDetails.ForUserId);
+                _logger.Debug($"Email confirmed for userId: '{tokedDetails.ForUserId}'");
             }
             catch (Exception e)
             {
-                return new Result(ErrorCodeType.UnknownError, e.Message);
+                _logger.Error($"Failed to confirm email '{token}'", e);
+                return new Result(ErrorCodeType.UnknownError);
             }
 
             return Result.Success;
@@ -91,11 +102,13 @@ namespace AirFlow.Services.Auth
 
             if (tokenDetails == null)
             {
+                _logger.Info($"Token not found '{token}'");
                 return new LoginResult(ErrorCodeType.LoginTokenInfoNotFound);
             }
 
             if (tokenDetails.IsExpired)
             {
+                _logger.Info($"Token is expired '{tokenDetails}'");
                 return new LoginResult(ErrorCodeType.LoginTokenIsExpired);
             }
 
@@ -103,9 +116,11 @@ namespace AirFlow.Services.Auth
             try
             {
                 username = _securityRepository.ConfirmLogin(tokenDetails.ForUserId);
+                _logger.Debug($"Login confirmed for user: '{username}'");
             }
             catch (Exception e)
             {
+                _logger.Error($"Failed to confirm login '{tokenDetails}'", e);
                 return new LoginResult(ErrorCodeType.UnknownError, e.Message);
             }
 

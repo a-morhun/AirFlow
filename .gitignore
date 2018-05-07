@@ -346,3 +346,4 @@ ASALocalRun/
 
 # Ignore the Models Builder models out of date flag
 **/App_Data/Models/ood.flag
+/AirFlow/App_Data/Models/all.dll.path

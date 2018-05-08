@@ -2,6 +2,7 @@
 using AirFlow.Models.Common;
 using AirFlow.Utilities;
 using System;
+using System.Linq;
 using System.Web.Http;
 using Umbraco.Web.WebApi;
 
@@ -43,7 +44,7 @@ namespace AirFlow.Controllers
                 return InternalServerError();
             }
 
-            return Ok();
+            return GetTemperatureRequestHistory(request.AirConditionUnitId);
         }
 
         [HttpGet]
@@ -59,7 +60,7 @@ namespace AirFlow.Controllers
                 return InternalServerError();
             }
 
-            var response = new TemperatureRequestHistoryResponse(history.ReturnObject);
+            var response = new TemperatureRequestHistoryResponse(history.ReturnObject.OrderByDescending(o => o.RequestDateTime).ToArray());
             _logger.Debug(response.ToString());
 
             return Ok(response);

@@ -58,10 +58,12 @@ namespace AirFlow
             if (dbContext.DatabaseProvider == DatabaseProviders.SqlServerCE)
             {
                 dbContext.ConfigureEmbeddedDatabaseConnection();
+                return;
             }
             else if (dbContext.DatabaseProvider == DatabaseProviders.SqlServer)
             {
                 dbContext.ConfigureDatabaseConnection(dbContext.ConnectionString);
+                return;
             }
 
             throw new Exception($"{dbContext.DatabaseProvider} is not supported");

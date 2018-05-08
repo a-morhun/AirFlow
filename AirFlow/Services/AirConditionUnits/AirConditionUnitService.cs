@@ -53,7 +53,7 @@ namespace AirFlow.AirConditionUnits
 
         private void SendRequestEmail(string requesterEmail, TemperatureRequest request)
         {
-            string sendTo = _airFlowHelper.GetSingleContentPropertyValue<string>("Home", "SendRequestTo");
+            string sendTo = _airFlowHelper.GetSingleContentPropertyValue<string>("Home", "supportEmailAddress");
             _logger.Debug($"SendRequestTo: {sendTo}");
             var options = new TemperatureRequestEmailMessageOptions(
                 sendTo,

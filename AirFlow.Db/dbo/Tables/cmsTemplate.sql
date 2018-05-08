@@ -1,14 +1,12 @@
-﻿CREATE TABLE [dbo].[cmsTemplate] (
-    [pk]     INT            IDENTITY (1, 1) NOT NULL,
-    [nodeId] INT            NOT NULL,
-    [alias]  NVARCHAR (100) NULL,
-    [design] NTEXT          NOT NULL,
-    CONSTRAINT [PK_cmsTemplate] PRIMARY KEY CLUSTERED ([pk] ASC),
-    CONSTRAINT [FK_cmsTemplate_umbracoNode] FOREIGN KEY ([nodeId]) REFERENCES [dbo].[umbracoNode] ([id])
+﻿CREATE TABLE [cmsTemplate] (
+  [pk] int IDENTITY (1,1)  NOT NULL
+, [nodeId] int  NOT NULL
+, [alias] nvarchar(100)  NULL
+, [design] ntext NOT NULL
 );
-
-
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_cmsTemplate_nodeId]
-    ON [dbo].[cmsTemplate]([nodeId] ASC);
-
+ALTER TABLE [cmsTemplate] ADD CONSTRAINT [FK_cmsTemplate_umbracoNode] FOREIGN KEY ([nodeId]) REFERENCES [umbracoNode]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+ALTER TABLE [cmsTemplate] ADD CONSTRAINT [PK_cmsTemplate] PRIMARY KEY ([pk]);
+GO
+ALTER TABLE [cmsTemplate] ADD CONSTRAINT [IX_cmsTemplate_nodeId] UNIQUE ([nodeId]);

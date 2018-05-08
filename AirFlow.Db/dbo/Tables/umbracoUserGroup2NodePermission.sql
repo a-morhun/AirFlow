@@ -1,14 +1,13 @@
-﻿CREATE TABLE [dbo].[umbracoUserGroup2NodePermission] (
-    [userGroupId] INT            NOT NULL,
-    [nodeId]      INT            NOT NULL,
-    [permission]  NVARCHAR (255) NOT NULL,
-    CONSTRAINT [PK_umbracoUserGroup2NodePermission] PRIMARY KEY CLUSTERED ([userGroupId] ASC, [nodeId] ASC, [permission] ASC),
-    CONSTRAINT [FK_umbracoUserGroup2NodePermission_umbracoNode_id] FOREIGN KEY ([nodeId]) REFERENCES [dbo].[umbracoNode] ([id]),
-    CONSTRAINT [FK_umbracoUserGroup2NodePermission_umbracoUserGroup_id] FOREIGN KEY ([userGroupId]) REFERENCES [dbo].[umbracoUserGroup] ([id])
+﻿CREATE TABLE [umbracoUserGroup2NodePermission] (
+  [userGroupId] int  NOT NULL
+, [nodeId] int  NOT NULL
+, [permission] nvarchar(255)  NOT NULL
 );
-
-
 GO
-CREATE NONCLUSTERED INDEX [IX_umbracoUser2NodePermission_nodeId]
-    ON [dbo].[umbracoUserGroup2NodePermission]([nodeId] ASC);
-
+ALTER TABLE [umbracoUserGroup2NodePermission] ADD CONSTRAINT [FK_umbracoUserGroup2NodePermission_umbracoNode_id] FOREIGN KEY ([nodeId]) REFERENCES [umbracoNode]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+ALTER TABLE [umbracoUserGroup2NodePermission] ADD CONSTRAINT [FK_umbracoUserGroup2NodePermission_umbracoUserGroup_id] FOREIGN KEY ([userGroupId]) REFERENCES [umbracoUserGroup]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+ALTER TABLE [umbracoUserGroup2NodePermission] ADD CONSTRAINT [PK_umbracoUserGroup2NodePermission] PRIMARY KEY ([userGroupId],[nodeId],[permission]);
+GO
+CREATE INDEX [IX_umbracoUser2NodePermission_nodeId] ON [umbracoUserGroup2NodePermission] ([nodeId] ASC);

@@ -1,10 +1,10 @@
-﻿CREATE TABLE [dbo].[cmsLanguageText] (
-    [pk]         INT              IDENTITY (1, 1) NOT NULL,
-    [languageId] INT              NOT NULL,
-    [UniqueId]   UNIQUEIDENTIFIER NOT NULL,
-    [value]      NVARCHAR (1000)  NOT NULL,
-    CONSTRAINT [PK_cmsLanguageText] PRIMARY KEY CLUSTERED ([pk] ASC),
-    CONSTRAINT [FK_cmsLanguageText_cmsDictionary_id] FOREIGN KEY ([UniqueId]) REFERENCES [dbo].[cmsDictionary] ([id]),
-    CONSTRAINT [FK_cmsLanguageText_umbracoLanguage_id] FOREIGN KEY ([languageId]) REFERENCES [dbo].[umbracoLanguage] ([id])
+﻿CREATE TABLE [cmsLanguageText] (
+  [pk] int IDENTITY (1,1)  NOT NULL
+, [languageId] int  NOT NULL
+, [UniqueId] uniqueidentifier NOT NULL
+, [value] nvarchar(1000)  NOT NULL
 );
-
+GO
+ALTER TABLE [cmsLanguageText] ADD CONSTRAINT [FK_cmsLanguageText_umbracoLanguage_id] FOREIGN KEY ([languageId]) REFERENCES [umbracoLanguage]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+ALTER TABLE [cmsLanguageText] ADD CONSTRAINT [PK_cmsLanguageText] PRIMARY KEY ([pk]);

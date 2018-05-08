@@ -1,8 +1,10 @@
-﻿CREATE TABLE [dbo].[cmsContentType2ContentType] (
-    [parentContentTypeId] INT NOT NULL,
-    [childContentTypeId]  INT NOT NULL,
-    CONSTRAINT [PK_cmsContentType2ContentType] PRIMARY KEY CLUSTERED ([parentContentTypeId] ASC, [childContentTypeId] ASC),
-    CONSTRAINT [FK_cmsContentType2ContentType_umbracoNode_child] FOREIGN KEY ([childContentTypeId]) REFERENCES [dbo].[umbracoNode] ([id]),
-    CONSTRAINT [FK_cmsContentType2ContentType_umbracoNode_parent] FOREIGN KEY ([parentContentTypeId]) REFERENCES [dbo].[umbracoNode] ([id])
+﻿CREATE TABLE [cmsContentType2ContentType] (
+  [parentContentTypeId] int  NOT NULL
+, [childContentTypeId] int  NOT NULL
 );
-
+GO
+ALTER TABLE [cmsContentType2ContentType] ADD CONSTRAINT [FK_cmsContentType2ContentType_umbracoNode_child] FOREIGN KEY ([childContentTypeId]) REFERENCES [umbracoNode]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+ALTER TABLE [cmsContentType2ContentType] ADD CONSTRAINT [FK_cmsContentType2ContentType_umbracoNode_parent] FOREIGN KEY ([parentContentTypeId]) REFERENCES [umbracoNode]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+ALTER TABLE [cmsContentType2ContentType] ADD CONSTRAINT [PK_cmsContentType2ContentType] PRIMARY KEY ([parentContentTypeId],[childContentTypeId]);

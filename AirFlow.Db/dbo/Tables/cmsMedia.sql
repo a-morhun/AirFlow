@@ -1,14 +1,11 @@
-﻿CREATE TABLE [dbo].[cmsMedia] (
-    [nodeId]    INT              NOT NULL,
-    [versionId] UNIQUEIDENTIFIER NOT NULL,
-    [mediaPath] NVARCHAR (255)   NULL,
-    CONSTRAINT [PK_cmsMedia] PRIMARY KEY CLUSTERED ([versionId] ASC),
-    CONSTRAINT [FK_cmsMedia_cmsContent_nodeId] FOREIGN KEY ([nodeId]) REFERENCES [dbo].[cmsContent] ([nodeId]),
-    CONSTRAINT [FK_cmsMedia_umbracoNode_id] FOREIGN KEY ([nodeId]) REFERENCES [dbo].[umbracoNode] ([id])
+﻿CREATE TABLE [cmsMedia] (
+  [nodeId] int  NOT NULL
+, [versionId] uniqueidentifier NOT NULL
+, [mediaPath] nvarchar(255)  NULL
 );
-
-
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_cmsMedia]
-    ON [dbo].[cmsMedia]([nodeId] ASC, [versionId] ASC, [mediaPath] ASC);
-
+ALTER TABLE [cmsMedia] ADD CONSTRAINT [FK_cmsMedia_umbracoNode_id] FOREIGN KEY ([nodeId]) REFERENCES [umbracoNode]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+ALTER TABLE [cmsMedia] ADD CONSTRAINT [PK_cmsMedia] PRIMARY KEY ([versionId]);
+GO
+ALTER TABLE [cmsMedia] ADD CONSTRAINT [IX_cmsMedia] UNIQUE ([nodeId],[versionId],[mediaPath]);

@@ -1,19 +1,12 @@
-﻿CREATE TABLE [dbo].[cmsDictionary] (
-    [pk]     INT              IDENTITY (1, 1) NOT NULL,
-    [id]     UNIQUEIDENTIFIER NOT NULL,
-    [parent] UNIQUEIDENTIFIER NULL,
-    [key]    NVARCHAR (450)   NOT NULL,
-    CONSTRAINT [PK_cmsDictionary] PRIMARY KEY CLUSTERED ([pk] ASC),
-    CONSTRAINT [FK_cmsDictionary_cmsDictionary_id] FOREIGN KEY ([parent]) REFERENCES [dbo].[cmsDictionary] ([id])
+﻿CREATE TABLE [cmsDictionary] (
+  [pk] int IDENTITY (1,1)  NOT NULL
+, [id] uniqueidentifier NOT NULL
+, [parent] uniqueidentifier NULL
+, [key] nvarchar(450)  NOT NULL
 );
-
-
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_cmsDictionary_id]
-    ON [dbo].[cmsDictionary]([id] ASC);
-
-
+ALTER TABLE [cmsDictionary] ADD CONSTRAINT [PK_cmsDictionary] PRIMARY KEY ([pk]);
 GO
-CREATE NONCLUSTERED INDEX [IX_cmsDictionary_key]
-    ON [dbo].[cmsDictionary]([key] ASC);
-
+ALTER TABLE [cmsDictionary] ADD CONSTRAINT [IX_cmsDictionary_id] UNIQUE ([id]);
+GO
+CREATE INDEX [IX_cmsDictionary_key] ON [cmsDictionary] ([key] ASC);

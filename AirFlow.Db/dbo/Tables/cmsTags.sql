@@ -1,14 +1,12 @@
-﻿CREATE TABLE [dbo].[cmsTags] (
-    [id]       INT            IDENTITY (1, 1) NOT NULL,
-    [tag]      NVARCHAR (200) NULL,
-    [ParentId] INT            NULL,
-    [group]    NVARCHAR (100) NULL,
-    CONSTRAINT [PK_cmsTags] PRIMARY KEY CLUSTERED ([id] ASC),
-    CONSTRAINT [FK_cmsTags_cmsTags] FOREIGN KEY ([ParentId]) REFERENCES [dbo].[cmsTags] ([id])
+﻿CREATE TABLE [cmsTags] (
+  [id] int IDENTITY (1,1)  NOT NULL
+, [tag] nvarchar(200)  NULL
+, [ParentId] int  NULL
+, [group] nvarchar(100)  NULL
 );
-
-
 GO
-CREATE NONCLUSTERED INDEX [IX_cmsTags]
-    ON [dbo].[cmsTags]([tag] ASC, [group] ASC);
-
+ALTER TABLE [cmsTags] ADD CONSTRAINT [FK_cmsTags_cmsTags] FOREIGN KEY ([ParentId]) REFERENCES [cmsTags]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+ALTER TABLE [cmsTags] ADD CONSTRAINT [PK_cmsTags] PRIMARY KEY ([id]);
+GO
+CREATE INDEX [IX_cmsTags] ON [cmsTags] ([tag] ASC,[group] ASC);

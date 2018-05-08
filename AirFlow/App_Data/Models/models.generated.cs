@@ -19,7 +19,7 @@ using Umbraco.ModelsBuilder;
 using Umbraco.ModelsBuilder.Umbraco;
 
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "d1145592274844fb")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "c71dc0336534cb22")]
 [assembly:System.Reflection.AssemblyVersion("0.0.0.1")]
 
 namespace Umbraco.Web.PublishedContentModels
@@ -181,7 +181,34 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 
 		///<summary>
-		/// TemperatureRequestEmailMessage: Enter template for an email message body which will be sent to a responsible person in order to change temperature of air-condition unit
+		/// Air conditioners: Add air conditioners to display
+		///</summary>
+		[ImplementPropertyType("airConditioners")]
+		public Archetype.Models.ArchetypeModel AirConditioners
+		{
+			get { return this.GetPropertyValue<Archetype.Models.ArchetypeModel>("airConditioners"); }
+		}
+
+		///<summary>
+		/// Map: Select a picture of the office map
+		///</summary>
+		[ImplementPropertyType("map")]
+		public IPublishedContent Map
+		{
+			get { return this.GetPropertyValue<IPublishedContent>("map"); }
+		}
+
+		///<summary>
+		/// Support email address: Email address to send requests
+		///</summary>
+		[ImplementPropertyType("supportEmailAddress")]
+		public string SupportEmailAddress
+		{
+			get { return this.GetPropertyValue<string>("supportEmailAddress"); }
+		}
+
+		///<summary>
+		/// Temperature Request Email Message
 		///</summary>
 		[ImplementPropertyType("temperatureRequestEmailMessage")]
 		public IHtmlString TemperatureRequestEmailMessage

@@ -21,9 +21,9 @@
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort>44395</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
-    <IISExpressUseClassicPipelineMode />
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -51,6 +51,9 @@
   <ItemGroup>
     <Reference Include="Antlr3.Runtime, Version=3.4.1.9004, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Archetype, Version=1.18.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Archetype.Binaries.1.18.0\lib\net40\Archetype.dll</HintPath>
     </Reference>
     <Reference Include="Autofac, Version=4.7.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.4.7.0\lib\net45\Autofac.dll</HintPath>
@@ -286,12 +289,45 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Plugins\Archetype\assets\logo_50.png" />
+    <Content Include="App_Plugins\Archetype\assets\optout3.png" />
+    <Content Include="App_Plugins\Archetype\assets\twitter.png" />
+    <Content Include="App_Plugins\Archetype\css\archetype.css" />
+    <Content Include="App_Plugins\Archetype\js\archetype.js" />
+    <Content Include="App_Plugins\Archetype\langs\da-dk.js" />
+    <Content Include="App_Plugins\Archetype\langs\da.js" />
+    <Content Include="App_Plugins\Archetype\langs\de-de.js" />
+    <Content Include="App_Plugins\Archetype\langs\de.js" />
+    <Content Include="App_Plugins\Archetype\langs\en-gb.js" />
+    <Content Include="App_Plugins\Archetype\langs\en-us.js" />
+    <Content Include="App_Plugins\Archetype\langs\en.js" />
+    <Content Include="App_Plugins\Archetype\langs\es-es.js" />
+    <Content Include="App_Plugins\Archetype\langs\es.js" />
+    <Content Include="App_Plugins\Archetype\langs\fr-fr.js" />
+    <Content Include="App_Plugins\Archetype\langs\he-il.js" />
+    <Content Include="App_Plugins\Archetype\langs\it-it.js" />
+    <Content Include="App_Plugins\Archetype\langs\ja-jp.js" />
+    <Content Include="App_Plugins\Archetype\langs\ko-kr.js" />
+    <Content Include="App_Plugins\Archetype\langs\nb-no.js" />
+    <Content Include="App_Plugins\Archetype\langs\nl-nl.js" />
+    <Content Include="App_Plugins\Archetype\langs\pl-pl.js" />
+    <Content Include="App_Plugins\Archetype\langs\pt-br.js" />
+    <Content Include="App_Plugins\Archetype\langs\ru-ru.js" />
+    <Content Include="App_Plugins\Archetype\langs\sv-se.js" />
+    <Content Include="App_Plugins\Archetype\langs\zh-cn.js" />
+    <Content Include="App_Plugins\Archetype\views\archetype.config.developer.dialog.html" />
+    <Content Include="App_Plugins\Archetype\views\archetype.config.fieldset.dialog.html" />
+    <Content Include="App_Plugins\Archetype\views\archetype.config.html" />
+    <Content Include="App_Plugins\Archetype\views\archetype.config.stylescript.dialog.html" />
+    <Content Include="App_Plugins\Archetype\views\archetype.default.html" />
+    <Content Include="App_Plugins\Archetype\views\archetype.html" />
     <Content Include="App_Plugins\uSync.Content\uSyncDashboardContent.html" />
     <Content Include="App_Plugins\uSync.Content\uSyncDashboardContentController.js" />
     <Content Include="App_Plugins\uSync\uSyncDashboard.css" />
     <Content Include="App_Plugins\uSync\uSyncDashboard.html" />
     <Content Include="App_Plugins\uSync\uSyncDashboardController.js" />
     <Content Include="App_Plugins\uSync\uSyncDashboardService.js" />
+    <Content Include="bin\Archetype.dll" />
     <Content Include="config\grid.editors.config.js" />
     <Content Include="config\imageprocessor\security.config" />
     <Content Include="config\imageprocessor\processing.config" />
@@ -321,7 +357,7 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Content\Site.css" />
+    <Content Include="Content\site.css" />
     <Content Include="default.aspx" />
     <Content Include="config\trees.config" />
     <Content Include="config\Dashboard.config" />
@@ -430,6 +466,7 @@
     <Content Include="Views\Confirmation.cshtml" />
     <Content Include="Views\Error.cshtml" />
     <Content Include="Views\Home.cshtml" />
+    <Content Include="Views\Partials\Home\_Home.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -450,6 +487,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SecurityConfig.cs" />
     <Compile Include="Controllers\AirConditionUnitsController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Models\Account\MemberServiceException.cs" />
     <Compile Include="Models\Account\UserRoleType.cs" />
@@ -466,6 +504,8 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Controllers\AccountSurfaceController.cs" />
     <Compile Include="Controllers\AuthSurfaceController.cs" />
+    <Compile Include="Models\Home\AirConditioner.cs" />
+    <Compile Include="Models\Home\HomeModel.cs" />
     <Compile Include="Services\Account\IUserRegistration.cs" />
     <Compile Include="Services\Account\UserRegistration.cs" />
     <Compile Include="Global.asax.cs">
@@ -518,6 +558,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="obj\" />
+    <Folder Include="Views\Home\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

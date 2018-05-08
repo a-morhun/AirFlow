@@ -38,9 +38,9 @@ namespace AirFlow.Data.AirConditionUnits
                 {
                     db.Insert(request);
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    throw new AirConditionUnitRepositoryException("Failed to save temperature request", e);
+                    throw new AirConditionUnitRepositoryException("Failed to save temperature request", ex);
                 }
             }
         }

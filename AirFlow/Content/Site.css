@@ -1,8 +1,4 @@
-﻿body {
-    padding-bottom: 20px;
-}
-
-/* Set padding to keep content from hitting the edges */
+﻿/* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
@@ -55,4 +51,19 @@ header > div {
 
 .email-confirmation {
     text-align: center;
+}
+
+.home-map {
+    max-width: 100vw;
+    width: 100%;
+    max-height: calc(100vh - 70px);
+    height: auto;
+}
+
+.ac {
+    position: absolute;
+}
+
+.ac:hover {
+    transform: scale(1.5);
 }

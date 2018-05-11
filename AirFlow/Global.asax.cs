@@ -33,7 +33,7 @@ namespace AirFlow
             {
                 try
                 {
-                    CreateBrandNewSqlCEDatabase(dbContext);
+                    CreateBrandNewSqlDatabase(dbContext);
                 }
                 catch (Exception exception)
                 {
@@ -47,7 +47,7 @@ namespace AirFlow
             base.OnApplicationStarting(this, e);
         }
 
-        private void CreateBrandNewSqlCEDatabase(DatabaseContext dbContext)
+        private void CreateBrandNewSqlDatabase(DatabaseContext dbContext)
         {
             ConfigureDatabaseConnection(dbContext);
             MigrationManager.CreateVersionTable();
@@ -60,7 +60,8 @@ namespace AirFlow
                 dbContext.ConfigureEmbeddedDatabaseConnection();
                 return;
             }
-            else if (dbContext.DatabaseProvider == DatabaseProviders.SqlServer)
+
+            if (dbContext.DatabaseProvider == DatabaseProviders.SqlServer)
             {
                 dbContext.ConfigureDatabaseConnection(dbContext.ConnectionString);
                 return;

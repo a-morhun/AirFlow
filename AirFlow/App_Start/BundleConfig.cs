@@ -1,16 +1,19 @@
 ﻿using System.Web.Optimization;
 
-namespace AirFlow.App_Start
+namespace AirFlow
 {
-    public class BundleConfig
+    internal class BundleConfig
     {
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+                        "~/Scripts/jquery-{version}.js",
+                        "~/Scripts/jquery.unobtrusive-ajax.js",
+                        "~/Scripts/airflow/common.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                        "~/Scripts/jquery.validate*"));
+                        "~/Scripts/jquery.validate.js",
+                        "~/Scripts/jquery.validate.unobtrusive.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.
@@ -24,8 +27,6 @@ namespace AirFlow.App_Start
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
-
-            BundleTable.EnableOptimizations = false;
         }
     }
 }

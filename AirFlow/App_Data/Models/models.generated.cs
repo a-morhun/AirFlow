@@ -19,21 +19,21 @@ using Umbraco.ModelsBuilder;
 using Umbraco.ModelsBuilder.Umbraco;
 
 [assembly: PureLiveAssembly]
-[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "2a50dd844193fbca")]
-[assembly:System.Reflection.AssemblyVersion("0.0.0.5")]
+[assembly:ModelsBuilderAssembly(PureLive = true, SourceHash = "c71dc0336534cb22")]
+[assembly:System.Reflection.AssemblyVersion("0.0.0.1")]
 
 namespace Umbraco.Web.PublishedContentModels
 {
-	/// <summary>Register</summary>
-	[PublishedContentModel("register")]
-	public partial class Register : PublishedContentModel
+	/// <summary>Confirmation</summary>
+	[PublishedContentModel("confirmation")]
+	public partial class Confirmation : PublishedContentModel
 	{
 #pragma warning disable 0109 // new is redundant
-		public new const string ModelTypeAlias = "register";
+		public new const string ModelTypeAlias = "confirmation";
 		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
 #pragma warning restore 0109
 
-		public Register(IPublishedContent content)
+		public Confirmation(IPublishedContent content)
 			: base(content)
 		{ }
 
@@ -44,22 +44,75 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 #pragma warning restore 0109
 
-		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<Register, TValue>> selector)
+		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<Confirmation, TValue>> selector)
+		{
+			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
+		}
+
+		///<summary>
+		/// header: Enter header for a confirmation message
+		///</summary>
+		[ImplementPropertyType("header")]
+		public string Header
+		{
+			get { return this.GetPropertyValue<string>("header"); }
+		}
+
+		///<summary>
+		/// message: Enter message for a confirmation result
+		///</summary>
+		[ImplementPropertyType("message")]
+		public string Message
+		{
+			get { return this.GetPropertyValue<string>("message"); }
+		}
+
+		///<summary>
+		/// Success: Specify whether an operation was successful
+		///</summary>
+		[ImplementPropertyType("success")]
+		public bool Success
+		{
+			get { return this.GetPropertyValue<bool>("success"); }
+		}
+	}
+
+	/// <summary>Confirmation_Email</summary>
+	[PublishedContentModel("confirmation_email_success")]
+	public partial class Confirmation_email_success : Confirmation
+	{
+#pragma warning disable 0109 // new is redundant
+		public new const string ModelTypeAlias = "confirmation_email_success";
+		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
+#pragma warning restore 0109
+
+		public Confirmation_email_success(IPublishedContent content)
+			: base(content)
+		{ }
+
+#pragma warning disable 0109 // new is redundant
+		public new static PublishedContentType GetModelContentType()
+		{
+			return PublishedContentType.Get(ModelItemType, ModelTypeAlias);
+		}
+#pragma warning restore 0109
+
+		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<Confirmation_email_success, TValue>> selector)
 		{
 			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
 		}
 	}
 
-	/// <summary>Login</summary>
-	[PublishedContentModel("login")]
-	public partial class Login : PublishedContentModel
+	/// <summary>Confirmation_Login</summary>
+	[PublishedContentModel("confirmation_Login")]
+	public partial class Confirmation_Login : Confirmation
 	{
 #pragma warning disable 0109 // new is redundant
-		public new const string ModelTypeAlias = "login";
+		public new const string ModelTypeAlias = "confirmation_Login";
 		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
 #pragma warning restore 0109
 
-		public Login(IPublishedContent content)
+		public Confirmation_Login(IPublishedContent content)
 			: base(content)
 		{ }
 
@@ -70,7 +123,33 @@ namespace Umbraco.Web.PublishedContentModels
 		}
 #pragma warning restore 0109
 
-		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<Login, TValue>> selector)
+		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<Confirmation_Login, TValue>> selector)
+		{
+			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
+		}
+	}
+
+	/// <summary>Error</summary>
+	[PublishedContentModel("error")]
+	public partial class Error : PublishedContentModel
+	{
+#pragma warning disable 0109 // new is redundant
+		public new const string ModelTypeAlias = "error";
+		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
+#pragma warning restore 0109
+
+		public Error(IPublishedContent content)
+			: base(content)
+		{ }
+
+#pragma warning disable 0109 // new is redundant
+		public new static PublishedContentType GetModelContentType()
+		{
+			return PublishedContentType.Get(ModelItemType, ModelTypeAlias);
+		}
+#pragma warning restore 0109
+
+		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<Error, TValue>> selector)
 		{
 			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
 		}
@@ -99,6 +178,112 @@ namespace Umbraco.Web.PublishedContentModels
 		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<Home, TValue>> selector)
 		{
 			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
+		}
+
+		///<summary>
+		/// Air conditioners: Add air conditioners to display
+		///</summary>
+		[ImplementPropertyType("airConditioners")]
+		public Archetype.Models.ArchetypeModel AirConditioners
+		{
+			get { return this.GetPropertyValue<Archetype.Models.ArchetypeModel>("airConditioners"); }
+		}
+
+		///<summary>
+		/// Map: Select a picture of the office map
+		///</summary>
+		[ImplementPropertyType("map")]
+		public IPublishedContent Map
+		{
+			get { return this.GetPropertyValue<IPublishedContent>("map"); }
+		}
+
+		///<summary>
+		/// Support email address: Email address to send requests
+		///</summary>
+		[ImplementPropertyType("supportEmailAddress")]
+		public string SupportEmailAddress
+		{
+			get { return this.GetPropertyValue<string>("supportEmailAddress"); }
+		}
+
+		///<summary>
+		/// Temperature Request Email Message
+		///</summary>
+		[ImplementPropertyType("temperatureRequestEmailMessage")]
+		public IHtmlString TemperatureRequestEmailMessage
+		{
+			get { return this.GetPropertyValue<IHtmlString>("temperatureRequestEmailMessage"); }
+		}
+	}
+
+	/// <summary>Login</summary>
+	[PublishedContentModel("login")]
+	public partial class Login : PublishedContentModel
+	{
+#pragma warning disable 0109 // new is redundant
+		public new const string ModelTypeAlias = "login";
+		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
+#pragma warning restore 0109
+
+		public Login(IPublishedContent content)
+			: base(content)
+		{ }
+
+#pragma warning disable 0109 // new is redundant
+		public new static PublishedContentType GetModelContentType()
+		{
+			return PublishedContentType.Get(ModelItemType, ModelTypeAlias);
+		}
+#pragma warning restore 0109
+
+		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<Login, TValue>> selector)
+		{
+			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
+		}
+
+		///<summary>
+		/// ConfirmationEmailTemplate: Enter email template which will be sent to a user in order to confirm login (if 2FA was selected)
+		///</summary>
+		[ImplementPropertyType("confirmationEmailTemplate")]
+		public IHtmlString ConfirmationEmailTemplate
+		{
+			get { return this.GetPropertyValue<IHtmlString>("confirmationEmailTemplate"); }
+		}
+	}
+
+	/// <summary>Register</summary>
+	[PublishedContentModel("register")]
+	public partial class Register : PublishedContentModel
+	{
+#pragma warning disable 0109 // new is redundant
+		public new const string ModelTypeAlias = "register";
+		public new const PublishedItemType ModelItemType = PublishedItemType.Content;
+#pragma warning restore 0109
+
+		public Register(IPublishedContent content)
+			: base(content)
+		{ }
+
+#pragma warning disable 0109 // new is redundant
+		public new static PublishedContentType GetModelContentType()
+		{
+			return PublishedContentType.Get(ModelItemType, ModelTypeAlias);
+		}
+#pragma warning restore 0109
+
+		public static PublishedPropertyType GetModelPropertyType<TValue>(Expression<Func<Register, TValue>> selector)
+		{
+			return PublishedContentModelUtility.GetModelPropertyType(GetModelContentType(), selector);
+		}
+
+		///<summary>
+		/// ConfirmationEmailTemplate: Enter email template which will be sent to newly registered user in order to confirm his email
+		///</summary>
+		[ImplementPropertyType("confirmationEmailTemplate")]
+		public IHtmlString ConfirmationEmailTemplate
+		{
+			get { return this.GetPropertyValue<IHtmlString>("confirmationEmailTemplate"); }
 		}
 	}
 

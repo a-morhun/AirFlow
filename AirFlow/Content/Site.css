@@ -1,9 +1,4 @@
-﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
-}
-
-/* Set padding to keep content from hitting the edges */
+﻿/* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
@@ -16,3 +11,59 @@ textarea {
     max-width: 280px;
 }
 
+/* nav login/sign up section*/
+
+header {
+    height: 60px;
+    border-bottom: 1px black solid;
+}
+
+header > div {
+    padding-left: 20px;
+    padding-top: 10px;
+    font-size: 20px;
+}
+
+.nav-auth {
+    width: 13%;
+    margin: 0 auto;
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+.login-form {
+    width: 30%;
+    margin: 0 auto;
+}
+
+    .login-form .controls {
+        text-align: center;
+    }
+
+    .content-auth-body {
+        margin-top: 2%;
+    }
+
+#ajax-result {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.email-confirmation {
+    text-align: center;
+}
+
+.home-map {
+    max-width: 100vw;
+    width: 100%;
+    max-height: calc(100vh - 70px);
+    height: auto;
+}
+
+.ac {
+    position: absolute;
+}
+
+.ac:hover {
+    transform: scale(1.5);
+}

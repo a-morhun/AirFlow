@@ -1,12 +1,9 @@
-﻿CREATE TABLE [dbo].[umbracoLanguage] (
-    [id]                  INT            IDENTITY (1, 1) NOT NULL,
-    [languageISOCode]     NVARCHAR (10)  NULL,
-    [languageCultureName] NVARCHAR (100) NULL,
-    CONSTRAINT [PK_umbracoLanguage] PRIMARY KEY CLUSTERED ([id] ASC)
+﻿CREATE TABLE [umbracoLanguage] (
+  [id] int IDENTITY (2,1)  NOT NULL
+, [languageISOCode] nvarchar(10)  NULL
+, [languageCultureName] nvarchar(100)  NULL
 );
-
-
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_umbracoLanguage_languageISOCode]
-    ON [dbo].[umbracoLanguage]([languageISOCode] ASC);
-
+ALTER TABLE [umbracoLanguage] ADD CONSTRAINT [PK_umbracoLanguage] PRIMARY KEY ([id]);
+GO
+ALTER TABLE [umbracoLanguage] ADD CONSTRAINT [IX_umbracoLanguage_languageISOCode] UNIQUE ([languageISOCode]);

@@ -1,9 +1,9 @@
-﻿CREATE TABLE [dbo].[umbracoCacheInstruction] (
-    [id]               INT            IDENTITY (1, 1) NOT NULL,
-    [utcStamp]         DATETIME       NOT NULL,
-    [jsonInstruction]  NTEXT          NOT NULL,
-    [originated]       NVARCHAR (500) NOT NULL,
-    [instructionCount] INT            CONSTRAINT [DF_umbracoCacheInstruction_instructionCount] DEFAULT ('1') NOT NULL,
-    CONSTRAINT [PK_umbracoCacheInstruction] PRIMARY KEY CLUSTERED ([id] ASC)
+﻿CREATE TABLE [umbracoCacheInstruction] (
+  [id] int IDENTITY (1,1)  NOT NULL
+, [utcStamp] datetime NOT NULL
+, [jsonInstruction] ntext NOT NULL
+, [originated] nvarchar(500)  NOT NULL
+, [instructionCount] int DEFAULT ('1')  NOT NULL
 );
-
+GO
+ALTER TABLE [umbracoCacheInstruction] ADD CONSTRAINT [PK_umbracoCacheInstruction] PRIMARY KEY ([id]);

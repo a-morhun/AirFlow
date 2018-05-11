@@ -49,14 +49,11 @@ namespace AirFlow.AirConditionUnits
                 _logger.Error("Failed to create request", e);
                 return new Result(ErrorCodeType.UnknownError);
             }
-
         }
 
         private void SendRequestEmail(string requesterEmail, TemperatureRequest request)
         {
-            // TODO: Uncomment when homepage will be integrated into Umbraco
-            //string sendTo = _airFlowHelper.GetSingleContentPropertyValue<string>("Home", "SendRequestTo");
-            string sendTo = "a@a.com";
+            string sendTo = _airFlowHelper.GetSingleContentPropertyValue<string>("Home", "supportEmailAddress");
             _logger.Debug($"SendRequestTo: {sendTo}");
             var options = new TemperatureRequestEmailMessageOptions(
                 sendTo,

@@ -1,15 +1,14 @@
-﻿CREATE TABLE [dbo].[umbracoUserStartNode] (
-    [id]            INT IDENTITY (1, 1) NOT NULL,
-    [userId]        INT NOT NULL,
-    [startNode]     INT NOT NULL,
-    [startNodeType] INT NOT NULL,
-    CONSTRAINT [PK_userStartNode] PRIMARY KEY CLUSTERED ([id] ASC),
-    CONSTRAINT [FK_umbracoUserStartNode_umbracoNode_id] FOREIGN KEY ([startNode]) REFERENCES [dbo].[umbracoNode] ([id]),
-    CONSTRAINT [FK_umbracoUserStartNode_umbracoUser_id] FOREIGN KEY ([userId]) REFERENCES [dbo].[umbracoUser] ([id])
+﻿CREATE TABLE [umbracoUserStartNode] (
+  [id] int IDENTITY (1,1)  NOT NULL
+, [userId] int  NOT NULL
+, [startNode] int  NOT NULL
+, [startNodeType] int  NOT NULL
 );
-
-
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_umbracoUserStartNode_startNodeType]
-    ON [dbo].[umbracoUserStartNode]([startNodeType] ASC, [startNode] ASC, [userId] ASC);
-
+ALTER TABLE [umbracoUserStartNode] ADD CONSTRAINT [FK_umbracoUserStartNode_umbracoNode_id] FOREIGN KEY ([startNode]) REFERENCES [umbracoNode]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+ALTER TABLE [umbracoUserStartNode] ADD CONSTRAINT [FK_umbracoUserStartNode_umbracoUser_id] FOREIGN KEY ([userId]) REFERENCES [umbracoUser]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+ALTER TABLE [umbracoUserStartNode] ADD CONSTRAINT [PK_userStartNode] PRIMARY KEY ([id]);
+GO
+ALTER TABLE [umbracoUserStartNode] ADD CONSTRAINT [IX_umbracoUserStartNode_startNodeType] UNIQUE ([startNodeType],[startNode],[userId]);

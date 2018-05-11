@@ -1,28 +1,21 @@
-﻿CREATE TABLE [dbo].[cmsPropertyType] (
-    [id]                  INT              IDENTITY (1, 1) NOT NULL,
-    [dataTypeId]          INT              NOT NULL,
-    [contentTypeId]       INT              NOT NULL,
-    [propertyTypeGroupId] INT              NULL,
-    [Alias]               NVARCHAR (255)   NOT NULL,
-    [Name]                NVARCHAR (255)   NULL,
-    [sortOrder]           INT              CONSTRAINT [DF_cmsPropertyType_sortOrder] DEFAULT ('0') NOT NULL,
-    [mandatory]           BIT              CONSTRAINT [DF_cmsPropertyType_mandatory] DEFAULT ('0') NOT NULL,
-    [validationRegExp]    NVARCHAR (255)   NULL,
-    [Description]         NVARCHAR (2000)  NULL,
-    [UniqueID]            UNIQUEIDENTIFIER CONSTRAINT [DF_cmsPropertyType_UniqueID] DEFAULT (newid()) NOT NULL,
-    CONSTRAINT [PK_cmsPropertyType] PRIMARY KEY CLUSTERED ([id] ASC),
-    CONSTRAINT [FK_cmsPropertyType_cmsContentType_nodeId] FOREIGN KEY ([contentTypeId]) REFERENCES [dbo].[cmsContentType] ([nodeId]),
-    CONSTRAINT [FK_cmsPropertyType_cmsDataType_nodeId] FOREIGN KEY ([dataTypeId]) REFERENCES [dbo].[cmsDataType] ([nodeId]),
-    CONSTRAINT [FK_cmsPropertyType_cmsPropertyTypeGroup_id] FOREIGN KEY ([propertyTypeGroupId]) REFERENCES [dbo].[cmsPropertyTypeGroup] ([id])
+﻿CREATE TABLE [cmsPropertyType] (
+  [id] int IDENTITY (50,1)  NOT NULL
+, [dataTypeId] int  NOT NULL
+, [contentTypeId] int  NOT NULL
+, [propertyTypeGroupId] int  NULL
+, [Alias] nvarchar(255)  NOT NULL
+, [Name] nvarchar(255)  NULL
+, [sortOrder] int DEFAULT ('0')  NOT NULL
+, [mandatory] bit DEFAULT ('0') NOT NULL
+, [validationRegExp] nvarchar(255)  NULL
+, [Description] nvarchar(2000)  NULL
+, [UniqueID] uniqueidentifier DEFAULT (NEWID()) NOT NULL
 );
-
-
 GO
-CREATE NONCLUSTERED INDEX [IX_cmsPropertyTypeAlias]
-    ON [dbo].[cmsPropertyType]([Alias] ASC);
-
-
+ALTER TABLE [cmsPropertyType] ADD CONSTRAINT [FK_cmsPropertyType_cmsPropertyTypeGroup_id] FOREIGN KEY ([propertyTypeGroupId]) REFERENCES [cmsPropertyTypeGroup]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_cmsPropertyTypeUniqueID]
-    ON [dbo].[cmsPropertyType]([UniqueID] ASC);
-
+ALTER TABLE [cmsPropertyType] ADD CONSTRAINT [PK_cmsPropertyType] PRIMARY KEY ([id]);
+GO
+ALTER TABLE [cmsPropertyType] ADD CONSTRAINT [IX_cmsPropertyTypeUniqueID] UNIQUE ([UniqueID]);
+GO
+CREATE INDEX [IX_cmsPropertyTypeAlias] ON [cmsPropertyType] ([Alias] ASC);

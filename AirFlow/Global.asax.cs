@@ -4,6 +4,7 @@ using System;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Umbraco.Core;
+using Umbraco.Core.Persistence;
 using Umbraco.Web;
 
 namespace AirFlow
@@ -28,7 +29,6 @@ namespace AirFlow
         {
             var dbContext = ApplicationContext.Current.DatabaseContext;
 
-            // For now only SQL CE db in use. So if CanConnect is false - no .sdf file exists
             if (dbContext.CanConnect == false)
             {
                 try
@@ -37,11 +37,11 @@ namespace AirFlow
                 }
                 catch (Exception exception)
                 {
-                    _logger.Fatal("Failed to create SQL CE database", exception);
+                    _logger.Fatal("Failed to create database", exception);
                     throw;
                 }
-               
-                _logger.Debug("Created new SQL CE database");
+
+                _logger.Debug("Created new database");
             }
 
             base.OnApplicationStarting(this, e);
@@ -49,8 +49,24 @@ namespace AirFlow
 
         private void CreateBrandNewSqlCEDatabase(DatabaseContext dbContext)
         {
-            dbContext.ConfigureEmbeddedDatabaseConnection();
+            ConfigureDatabaseConnection(dbContext);
             MigrationManager.CreateVersionTable();
+        }
+
+        private void ConfigureDatabaseConnection(DatabaseContext dbContext)
+        {
+            if (dbContext.DatabaseProvider == DatabaseProviders.SqlServerCE)
+            {
+                dbContext.ConfigureEmbeddedDatabaseConnection();
+                return;
+            }
+            else if (dbContext.DatabaseProvider == DatabaseProviders.SqlServer)
+            {
+                dbContext.ConfigureDatabaseConnection(dbContext.ConnectionString);
+                return;
+            }
+
+            throw new Exception($"{dbContext.DatabaseProvider} is not supported");
         }
     }
 }

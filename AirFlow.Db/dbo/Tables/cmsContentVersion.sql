@@ -1,19 +1,12 @@
-﻿CREATE TABLE [dbo].[cmsContentVersion] (
-    [id]          INT              IDENTITY (1, 1) NOT NULL,
-    [ContentId]   INT              NOT NULL,
-    [VersionId]   UNIQUEIDENTIFIER NOT NULL,
-    [VersionDate] DATETIME         CONSTRAINT [DF_cmsContentVersion_VersionDate] DEFAULT (getdate()) NOT NULL,
-    CONSTRAINT [PK_cmsContentVersion] PRIMARY KEY CLUSTERED ([id] ASC),
-    CONSTRAINT [FK_cmsContentVersion_cmsContent_nodeId] FOREIGN KEY ([ContentId]) REFERENCES [dbo].[cmsContent] ([nodeId])
+﻿CREATE TABLE [cmsContentVersion] (
+  [id] int IDENTITY (1,1)  NOT NULL
+, [ContentId] int  NOT NULL
+, [VersionId] uniqueidentifier NOT NULL
+, [VersionDate] datetime DEFAULT (GETDATE()) NOT NULL
 );
-
-
 GO
-CREATE NONCLUSTERED INDEX [IX_cmsContentVersion_ContentId]
-    ON [dbo].[cmsContentVersion]([ContentId] ASC);
-
-
+ALTER TABLE [cmsContentVersion] ADD CONSTRAINT [PK_cmsContentVersion] PRIMARY KEY ([id]);
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_cmsContentVersion_VersionId]
-    ON [dbo].[cmsContentVersion]([VersionId] ASC);
-
+ALTER TABLE [cmsContentVersion] ADD CONSTRAINT [IX_cmsContentVersion_VersionId] UNIQUE ([VersionId]);
+GO
+CREATE INDEX [IX_cmsContentVersion_ContentId] ON [cmsContentVersion] ([ContentId] ASC);

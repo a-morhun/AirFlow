@@ -1,11 +1,13 @@
 ﻿using AirFlow.Data.Migrations.MirationUnit;
+using AirFlow.Utilities;
 using PetaPoco;
 using System;
 using System.Configuration;
 using System.Data.SqlServerCe;
 using System.Linq;
 using System.Reflection;
-using AirFlow.Utilities;
+using System.Data.Common;
+using System.Data.SqlClient;
 
 namespace AirFlow.Data.Migrations
 {
@@ -71,7 +73,7 @@ namespace AirFlow.Data.Migrations
         private static void ExecuteInternal(Migration migration)
         {
             string connectionString = ConfigurationManager.ConnectionStrings[Config.ConnectionStringName].ConnectionString;
-            using (var conn = new SqlCeConnection(connectionString))
+            using (DbConnection conn = GetConnection(connectionString))
             {
                 conn.Open();
                 using (var tran = conn.BeginTransaction())
@@ -87,6 +89,21 @@ namespace AirFlow.Data.Migrations
                     tran.Commit();
                 }
             }
+        }
+
+        private static DbConnection GetConnection(string connectionString)
+        {
+            string providerName = ConfigurationManager.ConnectionStrings[Config.ConnectionStringName].ProviderName;
+            if (providerName.Contains("SqlServerCe"))
+            {
+                return new SqlCeConnection(connectionString);
+            }
+            else if (providerName.Contains("SqlClient"))
+            {
+                return new SqlConnection(connectionString);
+            }
+
+            throw new NotSupportedException($"'{providerName}' is not supported for AirFlow");
         }
     }
 }

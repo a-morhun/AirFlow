@@ -38,11 +38,17 @@ namespace AirFlow.Tests.Controllers
                                                     r.Temperature == request.Temperature))
                 .Returns(new Result());
 
+            _airConditionUnitService.GetRequestHistory(Arg.Any<string>())
+                .Returns(new Result<TemperatureRequestHistory[]>(new TemperatureRequestHistory[0]));
+
             // Act
-            var result = _controller.CreateTemperatureRequest(request) as OkResult;
+            // TODO: refactor
+            var result = _controller.CreateTemperatureRequest(request) as OkNegotiatedContentResult<TemperatureRequestHistoryResponse>;
 
             // Assert
-            Assert.IsNotNull(result, Common.ShowResponseTypeMismatchMessage(typeof(OkResult)));
+            //Assert.IsNotNull(result, Common.ShowResponseTypeMismatchMessage(typeof(OkResult)));
+            Assert.IsNotNull(result, Common.ShowResponseTypeMismatchMessage(typeof(OkNegotiatedContentResult<TemperatureRequestHistoryResponse>)));
+            Assert.AreEqual(0, result.Content.History.Length);
         }
 
         [Test]

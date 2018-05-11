@@ -1,32 +1,22 @@
-﻿CREATE TABLE [dbo].[cmsDocument] (
-    [nodeId]       INT              NOT NULL,
-    [published]    BIT              NOT NULL,
-    [documentUser] INT              NOT NULL,
-    [versionId]    UNIQUEIDENTIFIER NOT NULL,
-    [text]         NVARCHAR (255)   NOT NULL,
-    [releaseDate]  DATETIME         NULL,
-    [expireDate]   DATETIME         NULL,
-    [updateDate]   DATETIME         CONSTRAINT [DF_cmsDocument_updateDate] DEFAULT (getdate()) NOT NULL,
-    [templateId]   INT              NULL,
-    [newest]       BIT              CONSTRAINT [DF_cmsDocument_newest] DEFAULT ('0') NOT NULL,
-    CONSTRAINT [PK_cmsDocument] PRIMARY KEY CLUSTERED ([versionId] ASC),
-    CONSTRAINT [FK_cmsDocument_cmsContent_nodeId] FOREIGN KEY ([nodeId]) REFERENCES [dbo].[cmsContent] ([nodeId]),
-    CONSTRAINT [FK_cmsDocument_cmsTemplate_nodeId] FOREIGN KEY ([templateId]) REFERENCES [dbo].[cmsTemplate] ([nodeId]),
-    CONSTRAINT [FK_cmsDocument_umbracoNode_id] FOREIGN KEY ([nodeId]) REFERENCES [dbo].[umbracoNode] ([id])
+﻿CREATE TABLE [cmsDocument] (
+  [nodeId] int  NOT NULL
+, [published] bit NOT NULL
+, [documentUser] int  NOT NULL
+, [versionId] uniqueidentifier NOT NULL
+, [text] nvarchar(255)  NOT NULL
+, [releaseDate] datetime NULL
+, [expireDate] datetime NULL
+, [updateDate] datetime DEFAULT (GETDATE()) NOT NULL
+, [templateId] int  NULL
+, [newest] bit DEFAULT ('0') NOT NULL
 );
-
-
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_cmsDocument]
-    ON [dbo].[cmsDocument]([nodeId] ASC, [versionId] ASC);
-
-
+ALTER TABLE [cmsDocument] ADD CONSTRAINT [FK_cmsDocument_umbracoNode_id] FOREIGN KEY ([nodeId]) REFERENCES [umbracoNode]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 GO
-CREATE NONCLUSTERED INDEX [IX_cmsDocument_published]
-    ON [dbo].[cmsDocument]([published] ASC);
-
-
+ALTER TABLE [cmsDocument] ADD CONSTRAINT [PK_cmsDocument] PRIMARY KEY ([versionId]);
 GO
-CREATE NONCLUSTERED INDEX [IX_cmsDocument_newest]
-    ON [dbo].[cmsDocument]([newest] ASC);
-
+ALTER TABLE [cmsDocument] ADD CONSTRAINT [IX_cmsDocument] UNIQUE ([nodeId],[versionId]);
+GO
+CREATE INDEX [IX_cmsDocument_newest] ON [cmsDocument] ([newest] ASC);
+GO
+CREATE INDEX [IX_cmsDocument_published] ON [cmsDocument] ([published] ASC);

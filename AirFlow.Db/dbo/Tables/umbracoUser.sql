@@ -1,29 +1,26 @@
-﻿CREATE TABLE [dbo].[umbracoUser] (
-    [id]                     INT            IDENTITY (1, 1) NOT NULL,
-    [userDisabled]           BIT            CONSTRAINT [DF_umbracoUser_userDisabled] DEFAULT ('0') NOT NULL,
-    [userNoConsole]          BIT            CONSTRAINT [DF_umbracoUser_userNoConsole] DEFAULT ('0') NOT NULL,
-    [userName]               NVARCHAR (255) NOT NULL,
-    [userLogin]              NVARCHAR (125) NOT NULL,
-    [userPassword]           NVARCHAR (500) NOT NULL,
-    [passwordConfig]         NVARCHAR (500) NULL,
-    [userEmail]              NVARCHAR (255) NOT NULL,
-    [userLanguage]           NVARCHAR (10)  NULL,
-    [securityStampToken]     NVARCHAR (255) NULL,
-    [failedLoginAttempts]    INT            NULL,
-    [lastLockoutDate]        DATETIME       NULL,
-    [lastPasswordChangeDate] DATETIME       NULL,
-    [lastLoginDate]          DATETIME       NULL,
-    [emailConfirmedDate]     DATETIME       NULL,
-    [invitedDate]            DATETIME       NULL,
-    [createDate]             DATETIME       CONSTRAINT [DF_umbracoUser_createDate] DEFAULT (getdate()) NOT NULL,
-    [updateDate]             DATETIME       CONSTRAINT [DF_umbracoUser_updateDate] DEFAULT (getdate()) NOT NULL,
-    [avatar]                 NVARCHAR (500) NULL,
-    [tourData]               NTEXT          NULL,
-    CONSTRAINT [PK_user] PRIMARY KEY CLUSTERED ([id] ASC)
+﻿CREATE TABLE [umbracoUser] (
+  [id] int IDENTITY (1,1)  NOT NULL
+, [userDisabled] bit DEFAULT ('0') NOT NULL
+, [userNoConsole] bit DEFAULT ('0') NOT NULL
+, [userName] nvarchar(255)  NOT NULL
+, [userLogin] nvarchar(125)  NOT NULL
+, [userPassword] nvarchar(500)  NOT NULL
+, [passwordConfig] nvarchar(500)  NULL
+, [userEmail] nvarchar(255)  NOT NULL
+, [userLanguage] nvarchar(10)  NULL
+, [securityStampToken] nvarchar(255)  NULL
+, [failedLoginAttempts] int  NULL
+, [lastLockoutDate] datetime NULL
+, [lastPasswordChangeDate] datetime NULL
+, [lastLoginDate] datetime NULL
+, [emailConfirmedDate] datetime NULL
+, [invitedDate] datetime NULL
+, [createDate] datetime DEFAULT (GETDATE()) NOT NULL
+, [updateDate] datetime DEFAULT (GETDATE()) NOT NULL
+, [avatar] nvarchar(500)  NULL
+, [tourData] ntext NULL
 );
-
-
 GO
-CREATE NONCLUSTERED INDEX [IX_umbracoUser_userLogin]
-    ON [dbo].[umbracoUser]([userLogin] ASC);
-
+ALTER TABLE [umbracoUser] ADD CONSTRAINT [PK_user] PRIMARY KEY ([id]);
+GO
+CREATE INDEX [IX_umbracoUser_userLogin] ON [umbracoUser] ([userLogin] ASC);

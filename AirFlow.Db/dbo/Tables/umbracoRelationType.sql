@@ -1,26 +1,17 @@
-﻿CREATE TABLE [dbo].[umbracoRelationType] (
-    [id]               INT              IDENTITY (1, 1) NOT NULL,
-    [typeUniqueId]     UNIQUEIDENTIFIER NOT NULL,
-    [dual]             BIT              NOT NULL,
-    [parentObjectType] UNIQUEIDENTIFIER NOT NULL,
-    [childObjectType]  UNIQUEIDENTIFIER NOT NULL,
-    [name]             NVARCHAR (255)   NOT NULL,
-    [alias]            NVARCHAR (100)   NULL,
-    CONSTRAINT [PK_umbracoRelationType] PRIMARY KEY CLUSTERED ([id] ASC)
+﻿CREATE TABLE [umbracoRelationType] (
+  [id] int IDENTITY (3,1)  NOT NULL
+, [typeUniqueId] uniqueidentifier NOT NULL
+, [dual] bit NOT NULL
+, [parentObjectType] uniqueidentifier NOT NULL
+, [childObjectType] uniqueidentifier NOT NULL
+, [name] nvarchar(255)  NOT NULL
+, [alias] nvarchar(100)  NULL
 );
-
-
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_umbracoRelationType_UniqueId]
-    ON [dbo].[umbracoRelationType]([typeUniqueId] ASC);
-
-
+ALTER TABLE [umbracoRelationType] ADD CONSTRAINT [PK_umbracoRelationType] PRIMARY KEY ([id]);
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_umbracoRelationType_name]
-    ON [dbo].[umbracoRelationType]([name] ASC);
-
-
+ALTER TABLE [umbracoRelationType] ADD CONSTRAINT [IX_umbracoRelationType_alias] UNIQUE ([alias]);
 GO
-CREATE UNIQUE NONCLUSTERED INDEX [IX_umbracoRelationType_alias]
-    ON [dbo].[umbracoRelationType]([alias] ASC);
-
+ALTER TABLE [umbracoRelationType] ADD CONSTRAINT [IX_umbracoRelationType_name] UNIQUE ([name]);
+GO
+ALTER TABLE [umbracoRelationType] ADD CONSTRAINT [IX_umbracoRelationType_UniqueId] UNIQUE ([typeUniqueId]);

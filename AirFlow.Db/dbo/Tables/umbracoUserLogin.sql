@@ -1,11 +1,12 @@
-﻿CREATE TABLE [dbo].[umbracoUserLogin] (
-    [sessionId]        UNIQUEIDENTIFIER NOT NULL,
-    [userId]           INT              NOT NULL,
-    [loggedInUtc]      DATETIME         NOT NULL,
-    [lastValidatedUtc] DATETIME         NOT NULL,
-    [loggedOutUtc]     DATETIME         NULL,
-    [ipAddress]        NVARCHAR (255)   NULL,
-    CONSTRAINT [PK_umbracoUserLogin] PRIMARY KEY CLUSTERED ([sessionId] ASC),
-    CONSTRAINT [FK_umbracoUserLogin_umbracoUser_id] FOREIGN KEY ([userId]) REFERENCES [dbo].[umbracoUser] ([id])
+﻿CREATE TABLE [umbracoUserLogin] (
+  [sessionId] uniqueidentifier NOT NULL
+, [userId] int  NOT NULL
+, [loggedInUtc] datetime NOT NULL
+, [lastValidatedUtc] datetime NOT NULL
+, [loggedOutUtc] datetime NULL
+, [ipAddress] nvarchar(255)  NULL
 );
-
+GO
+ALTER TABLE [umbracoUserLogin] ADD CONSTRAINT [FK_umbracoUserLogin_umbracoUser_id] FOREIGN KEY ([userId]) REFERENCES [umbracoUser]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+ALTER TABLE [umbracoUserLogin] ADD CONSTRAINT [PK_umbracoUserLogin] PRIMARY KEY ([sessionId]);

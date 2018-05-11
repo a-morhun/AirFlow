@@ -1,15 +1,12 @@
-﻿CREATE TABLE [dbo].[cmsMember] (
-    [nodeId]    INT             NOT NULL,
-    [Email]     NVARCHAR (1000) CONSTRAINT [DF_cmsMember_Email] DEFAULT ('''') NOT NULL,
-    [LoginName] NVARCHAR (1000) CONSTRAINT [DF_cmsMember_LoginName] DEFAULT ('''') NOT NULL,
-    [Password]  NVARCHAR (1000) CONSTRAINT [DF_cmsMember_Password] DEFAULT ('''') NOT NULL,
-    CONSTRAINT [PK_cmsMember] PRIMARY KEY CLUSTERED ([nodeId] ASC),
-    CONSTRAINT [FK_cmsMember_cmsContent_nodeId] FOREIGN KEY ([nodeId]) REFERENCES [dbo].[cmsContent] ([nodeId]),
-    CONSTRAINT [FK_cmsMember_umbracoNode_id] FOREIGN KEY ([nodeId]) REFERENCES [dbo].[umbracoNode] ([id])
+﻿CREATE TABLE [cmsMember] (
+  [nodeId] int  NOT NULL
+, [Email] nvarchar(1000) DEFAULT ('''')  NOT NULL
+, [LoginName] nvarchar(1000) DEFAULT ('''')  NOT NULL
+, [Password] nvarchar(1000) DEFAULT ('''')  NOT NULL
 );
-
-
 GO
-CREATE NONCLUSTERED INDEX [IX_cmsMember_LoginName]
-    ON [dbo].[cmsMember]([LoginName] ASC);
-
+ALTER TABLE [cmsMember] ADD CONSTRAINT [FK_cmsMember_umbracoNode_id] FOREIGN KEY ([nodeId]) REFERENCES [umbracoNode]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+ALTER TABLE [cmsMember] ADD CONSTRAINT [PK_cmsMember] PRIMARY KEY ([nodeId]);
+GO
+CREATE INDEX [IX_cmsMember_LoginName] ON [cmsMember] ([LoginName] ASC);

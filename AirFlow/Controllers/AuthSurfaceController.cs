@@ -58,12 +58,15 @@ namespace AirFlow.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [MemberAuthorize]
         public ActionResult Logout()
         {
             string identityUser = User?.Identity?.Name;
-            _formsAuthentication.SignOut();
-            _logger.Debug($"Logout processed for {identityUser}'");
+
+            if (string.IsNullOrEmpty(identityUser) == false)
+            {
+                _formsAuthentication.SignOut();
+                _logger.Debug($"Logout processed for {identityUser}'");
+            }
 
             return RedirectToUmbracoPage(_airFlowHelper.GetContentId("Login"));
         }

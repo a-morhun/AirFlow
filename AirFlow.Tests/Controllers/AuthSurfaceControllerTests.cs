@@ -7,6 +7,7 @@ using NUnit.Framework;
 using NSubstitute;
 using System;
 using System.Linq.Expressions;
+using System.Web;
 using System.Web.Mvc;
 using Umbraco.Web;
 using Umbraco.Web.Mvc;
@@ -33,7 +34,13 @@ namespace AirFlow.Tests.Controllers
             _formsAuthentication = Substitute.For<IFormsAuthentication>();
             _airFlowHelper = Substitute.For<IAirFlowHelper>();
 
-            _authController = new AuthSurfaceController(_authService, _formsAuthentication, _airFlowHelper);
+            _authController = new AuthSurfaceController(_authService, _formsAuthentication, _airFlowHelper)
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = Substitute.For<HttpContextBase>()
+                }
+            };
         }
 
         [TearDown]
@@ -128,16 +135,32 @@ namespace AirFlow.Tests.Controllers
         #region Logout
 
         [Test]
-        public void AuthSurfaceController_Logout_Success()
+        public void AuthSurfaceController_Logout_UserWasLoggedIn_RedirectToLoginPage()
         {
             // Arrange
             ArrangeAirFlowHelper_GetContentId("Login", ExpectedContentId);
 
             // Act
+            _authController.ControllerContext.HttpContext.User.Identity.Name.Returns("Name");
             var result = _authController.Logout() as RedirectToUmbracoPageResult;
 
             // Assert
             _formsAuthentication.Received(1).SignOut();
+            Common.AssertRedirectToUmbracoPageResult(result, ExpectedContentId);
+        }
+
+        [Test]
+        public void AuthSurfaceController_Logout_UserWasLoggedOut_RedirectToLoginPage()
+        {
+            // Arrange
+            ArrangeAirFlowHelper_GetContentId("Login", ExpectedContentId);
+
+            // Act
+            _authController.ControllerContext.HttpContext.User.Identity.Name.Returns("");
+            var result = _authController.Logout() as RedirectToUmbracoPageResult;
+
+            // Assert
+            _formsAuthentication.Received(0).SignOut();
             Common.AssertRedirectToUmbracoPageResult(result, ExpectedContentId);
         }
 

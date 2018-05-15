@@ -3,17 +3,7 @@
     Layout = "AuthAndAccountBase.cshtml";
 }
 
-@* the fun starts here *@
-
-@if (Umbraco.MemberIsLoggedOn())
-{
-    <h1>Welcome, @User.Identity.Name</h1>
-    { Html.RenderPartial("~/Views/Partials/Auth/_Logout.cshtml"); }
-}
-else
-{
-    { Html.RenderPartial("~/Views/Partials/Auth/_Login.cshtml", new UserLoginViewModel()); }
-}
+@{ Html.RenderPartial("~/Views/Partials/Auth/_Login.cshtml", new UserLoginViewModel()); }
 
 @section scripts
 {

@@ -10,5 +10,7 @@
         void ConfirmEmail(int userId);
 
         bool IsEmailConfirmed(string email);
+
+        bool IsRegistrationInfoSaved(int userId);
     }
 }

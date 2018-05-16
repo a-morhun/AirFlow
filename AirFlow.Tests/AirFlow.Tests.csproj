@@ -113,6 +113,8 @@
     <Compile Include="Controllers\AccountSurfaceControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\Account\AccountServiceTests.cs" />
+    <Compile Include="Services\Account\ConfirmationEmailMessageOptionsResemblance.cs" />
+    <Compile Include="Services\Account\UserAccountDtoResemblance.cs" />
     <Compile Include="Services\Account\UserRegistrationTests.cs" />
     <Compile Include="Services\AirConditionUnits\AirConditionUnitServiceTests.cs" />
     <Compile Include="Services\Auth\AuthServiceTests.cs" />

@@ -11,7 +11,7 @@ using Umbraco.Core.Services;
 
 namespace AirFlow.Tests.Services.Account
 {
-    [TestFixture]
+    [TestFixture(TestName = "User registration tests")]
     public class UserRegistrationTests
     {
         private IMemberService _memberService;
@@ -46,23 +46,41 @@ namespace AirFlow.Tests.Services.Account
         private const string GeneratedToken = "token";
         private const int RegisteredMemberId = 123;
 
-        [Test]
-        public void UserRegistration_Register_ValtechUkUserType_MemberCreated_PasswordSaved_ConfirmationEmailSent()
+        [Test(Description = "A member filled up and sent a registration form")]
+        public void Register_ValtechUkUserType_MemberCreated_PasswordSaved_ConfirmationEmailSent()
         {
             // Arrange & Act & Assert
             UserToRegister user = GetUserToRegister(isValtechUkEmail: true);
-            UserRegistration_Register_MemberCreated_PasswordSaved_ConfirmationEmailSent(user);
+            Register_MemberCreated_PasswordSaved_ConfirmationEmailSent(user);
         }
 
-        [Test]
-        public void UserRegistration_Register_OtherUserType_MemberCreated_PasswordSaved_ConfirmationEmailSent()
+        [Test(Description = "A member filled up and sent a registration form")]
+        public void Register_OtherUserType_MemberCreated_PasswordSaved_ConfirmationEmailSent()
         {
             // Arrange & Act & Assert
             UserToRegister user = GetUserToRegister(isValtechUkEmail: false);
-            UserRegistration_Register_MemberCreated_PasswordSaved_ConfirmationEmailSent(user);
+            Register_MemberCreated_PasswordSaved_ConfirmationEmailSent(user);
         }
 
-        private void UserRegistration_Register_MemberCreated_PasswordSaved_ConfirmationEmailSent(UserToRegister user)
+        [Test(Description = "A member was added in the backoffice. Confirmation email message was sent")]
+        public void CompleteRegistrationFromBackoffice_Successful_ConfirmationEmailSent()
+        {
+            // Arrange
+            const string userEmail = "email@user.com";
+            var member = Substitute.For<IMember>();
+            member.Id.Returns(RegisteredMemberId);
+            member.Email.Returns(userEmail);
+            _tokenGenerator.Generate().Returns(GeneratedToken);
+
+            // Act
+            _userRegistration.CompleteRegistrationFromBackoffice(member);
+
+            // Assert
+            AsserrIfConfirmationDataWasSaved();
+            AssertIfConfirmationEmailWasSent(userEmail);
+        }
+
+        private void Register_MemberCreated_PasswordSaved_ConfirmationEmailSent(UserToRegister user)
         {
             ReturnDefaultMemberType();
             IMember registeredUser = GetRegisteredMember(user);
@@ -105,19 +123,16 @@ namespace AirFlow.Tests.Services.Account
 
         private void AsserrIfConfirmationDataWasSaved()
         {
-            _accountRepository.Received(1).Save(Arg.Is<UserAccountDto>(a =>
-                a.UserId == RegisteredMemberId &&
-                a.ConfirmationToken == GeneratedToken &&
-                a.ConfirmationExpirationDate > DateTime.UtcNow));
+            var expected = UserAccountDtoResemblance.Construct(RegisteredMemberId, GeneratedToken, DateTime.UtcNow);
+            _accountRepository.Received(1).Save(Arg.Is<UserAccountDto>(a => expected.Equals(a)));
         }
 
         private void AssertIfConfirmationEmailWasSent(string userEmail)
         {
+            var expected = new ConfirmationEmailMessageOptionsResemblance(userEmail, GeneratedToken, DateTime.Now);
+
             _emailSender.Received(1).Send(EmailMessageType.EmailConfirmation,
-                Arg.Is<ConfirmationEmailMessageOptions>(o => 
-                    o != null &&
-                    o.Token == GeneratedToken &&
-                    o.SendTo == userEmail));
+                Arg.Is<ConfirmationEmailMessageOptions>(o => expected.Equals(o)));
         }
 
         private UserToRegister GetUserToRegister(bool isValtechUkEmail) => new UserToRegister(new UserRegistrationViewModel

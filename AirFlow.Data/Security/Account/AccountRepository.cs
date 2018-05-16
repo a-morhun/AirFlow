@@ -81,5 +81,25 @@ namespace AirFlow.Data.Security.Account
                 }
             }
         }
+
+        public bool IsRegistrationInfoSaved(int userId)
+        {
+            using (var db = new Database(Config.ConnectionStringName))
+            {
+                var sql = Sql.Builder
+                    .Select("1")
+                    .From("airFlowMemberRegistration")
+                    .Where("nodeId = @0", userId);
+
+                try
+                {
+                    return db.Fetch<bool>(sql).FirstOrDefault();
+                }
+                catch (Exception e)
+                {
+                    throw new AccountRepositoryException("Failed to check if user has a registration info", e);
+                }
+            }
+        }
     }
 }

@@ -531,6 +531,7 @@
     <Compile Include="Controllers\AirConditionUnitsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Models\Account\BackofficeMemberCreationHandler.cs" />
     <Compile Include="Models\Account\MemberServiceException.cs" />
     <Compile Include="Models\Account\UserRoleType.cs" />
     <Compile Include="Models\AirConditionUnits\TemperatureRequestHistoryResponse.cs" />

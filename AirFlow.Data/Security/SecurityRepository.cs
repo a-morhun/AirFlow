@@ -53,5 +53,10 @@ namespace AirFlow.Data.Security
         {
             return _loginRepository.GetAdditionalLoginInfo(email);
         }
+
+        public bool IsRegistrationInfoSaved(int userId)
+        {
+            return _accountRepository.IsRegistrationInfoSaved(userId);
+        }
     }
 }

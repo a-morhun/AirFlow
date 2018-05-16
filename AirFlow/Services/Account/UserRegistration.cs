@@ -78,6 +78,12 @@ namespace AirFlow.Services.Account
             return RegularMemberGroup;
         }
 
+        public void CompleteRegistrationFromBackoffice(IMember registeredUser)
+        {
+            SaveRegistrationConfirmation(registeredUser.Id, LoginType.Regular, out string token);
+            SendConfirmationEmail(token, registeredUser.Email);
+        }
+
         private void SaveRegistrationConfirmation(int userId, LoginType type, out string token)
         {
             token = _tokenGenerator.Generate();
